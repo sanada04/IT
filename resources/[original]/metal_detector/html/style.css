@@ -1,0 +1,315 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: transparent;
+    font-family: 'Segoe UI', 'Meiryo', sans-serif;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ランキングパネル */
+.panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+    color: #eee;
+    padding: 24px 32px;
+    border-radius: 24px;
+    width: 720px;
+    max-width: 94vw;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,212,100,0.15);
+}
+
+.panel h1 {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+    color: #ffd464;
+    text-align: center;
+}
+
+.panel .sub {
+    font-size: 0.8rem;
+    color: #888;
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+/* タブ */
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.08);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s, color 0.2s;
+}
+
+.tab-btn:hover {
+    background: rgba(255,255,255,0.12);
+    color: #eee;
+}
+
+.tab-btn.active {
+    background: rgba(255,212,100,0.25);
+    color: #ffd464;
+    border-color: rgba(255,212,100,0.4);
+}
+
+.tab-content {
+    display: none;
+    min-height: 400px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-hint {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 20px;
+    line-height: 1.5;
+}
+
+/* 購入タブ */
+.shop-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    margin-bottom: 16px;
+}
+
+.shop-label {
+    flex: 1;
+    font-weight: bold;
+}
+
+.shop-price {
+    color: #7bed9f;
+    font-weight: bold;
+}
+
+.btn-buy {
+    padding: 16px 32px;
+    background: linear-gradient(180deg, #ffd464 0%, #e6b84d 100%);
+    color: #1a1a2e;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-buy:hover {
+    opacity: 0.9;
+}
+
+/* 売却タブ */
+.sell-list {
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+.sell-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sell-list::-webkit-scrollbar-track {
+    background: #0f0f1a;
+    border-radius: 3px;
+}
+
+.sell-list::-webkit-scrollbar-thumb {
+    background: #ffd464;
+    border-radius: 3px;
+}
+
+.sell-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+}
+
+.sell-item .name { flex: 1; }
+.sell-item .amount { color: #aaa; font-size: 0.9rem; min-width: 52px; text-align: right; }
+.sell-item .price { color: #7bed9f; font-weight: bold; min-width: 80px; text-align: right; }
+.sell-item .btn-sell {
+    padding: 12px 22px;
+    background: rgba(123, 237, 159, 0.25);
+    color: #7bed9f;
+    border: 1px solid rgba(123, 237, 159, 0.4);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+.sell-item .btn-sell:hover { background: rgba(123, 237, 159, 0.35); }
+
+.ranking {
+    max-height: 440px;
+    overflow-y: auto;
+}
+
+.ranking::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ranking::-webkit-scrollbar-track {
+    background: #0f0f1a;
+    border-radius: 3px;
+}
+
+.ranking::-webkit-scrollbar-thumb {
+    background: #ffd464;
+    border-radius: 3px;
+}
+
+.rank-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    border-left: 4px solid transparent;
+}
+
+.rank-item.top1 { border-left-color: #ffd700; }
+.rank-item.top2 { border-left-color: #c0c0c0; }
+.rank-item.top3 { border-left-color: #cd7f32; }
+
+.rank-item .rank-num {
+    font-weight: bold;
+    color: #ffd464;
+    min-width: 44px;
+}
+
+.rank-item .citizenid,
+.rank-item .rank-name {
+    flex: 1;
+    margin: 0 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rank-item .rare-count {
+    color: #7bed9f;
+    font-weight: bold;
+}
+
+.btn-close-x {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    border: none;
+    background: rgba(0, 0, 0, 0.25);
+    color: #fff;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.btn-close-x:hover {
+    background: rgba(0, 0, 0, 0.45);
+    transform: scale(1.05);
+}
+
+.btn-sell-all-global {
+    margin-top: 14px;
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 212, 100, 0.6);
+    background: rgba(255, 212, 100, 0.1);
+    color: #ffd464;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-sell-all-global:hover {
+    background: rgba(255, 212, 100, 0.25);
+    color: #fff8d0;
+}
+
+/* 掘削プログレス */
+.progress-wrap {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 460px;
+    text-align: center;
+}
+
+.progress-bar {
+    height: 20px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ffd464, #f0b840);
+    border-radius: 10px;
+    transition: width 0.05s linear;
+}
+
+.progress-label {
+    color: #fff;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 3px #000;
+}
+
+/* 日本語ワールドラベル（NUIで表示・文字化けしない） */
+.world-label {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 12px 24px;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    font-size: 0.95rem;
+    font-family: "Meiryo", "Yu Gothic", "MS Gothic", sans-serif;
+    white-space: nowrap;
+    pointer-events: none;
+    border-radius: 6px;
+    text-shadow: 0 1px 2px #000;
+    z-index: 100;
+}
+.world-label.hidden {
+    display: none !important;
+}

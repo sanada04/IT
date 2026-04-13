@@ -1,0 +1,18 @@
+{
+  "unlocked_door": "ドアを開錠しました",
+  "locked_door": "ドアを施錠しました",
+  "lock_door": "[E] 施錠",
+  "unlock_door": "[E] 開錠",
+  "door_lock": "ドアロック",
+  "passcode": "パスコード",
+  "lockpick_broke": "ロックピックが折れました",
+  "pick_lock": "ピッキング",
+  "add_lock": "ドアロックを追加",
+  "edit_lock": "ドアロックを編集",
+  "remove_lock": "ドアロックを削除",
+  "cannot_unlock": "ドアを開錠できません",
+  "cannot_lock": "ドアを施錠できません",
+  "create_modify_lock": "ドアロックを新規作成するか、既存のものを編集します",
+  "add_door_textui": "**新しいドアを作成**  \n[LMB] で操作  \n[RMB] でキャンセル",
+  "command_closest": "最寄りのドアロックのUIを直接開く"
+}

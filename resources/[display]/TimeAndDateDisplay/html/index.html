@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TimeAndDateDisplay-FiveM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="main.css">
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: transparent;
+            font-family: system-ui, -apple-system, "Segoe UI", "Meiryo", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        body {
+            pointer-events: none;
+        }
+        #hud.hud {
+            position: fixed;
+            top: 16px;
+            right: 20px;
+            left: auto;
+            bottom: auto;
+            z-index: auto;
+            display: block;
+            width: max-content;
+            max-width: min(340px, 100vw);
+            margin: 0;
+            padding: 0;
+            visibility: visible;
+            opacity: 1;
+            pointer-events: none;
+            background: transparent;
+            box-shadow: none;
+        }
+        .time-card {
+            position: relative;
+            z-index: var(--hud-z-index, 1);
+            display: inline-block;
+            vertical-align: top;
+            width: 240px;
+            border-radius: 14px;
+            background: rgba(15, 18, 28, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            opacity: 1;
+            visibility: visible;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+        .time-card__accent {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #5eead4 0%, #38bdf8 100%);
+            border-radius: 14px 0 0 14px;
+        }
+        .time-card__body {
+            padding: 14px 18px 14px 20px;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .time-card__extra {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #64748b;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            gap: 8px;
+            align-items: stretch;
+        }
+        .time-card__extra.hidden {
+            display: none;
+        }
+        .time-card__box {
+            flex: 0 0 auto;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            border-radius: 10px;
+            padding: 8px 10px;
+        }
+        .time-card__box-label {
+            font-weight: 600;
+            color: #94a3b8;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+        .time-card__box-value {
+            font-weight: 700;
+            color: #f8fafc;
+            font-size: 13px;
+            word-break: break-word;
+        }
+        .time-card__extra-row {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: baseline;
+            -ms-flex-align: baseline;
+            align-items: baseline;
+            margin-top: 4px;
+        }
+        .time-card__extra-row:first-child {
+            margin-top: 0;
+        }
+        .time-card__extra-label {
+            font-weight: 600;
+            color: #94a3b8;
+            min-width: 4.5em;
+            margin-right: 6px;
+        }
+        .time-card__extra-value {
+            color: #94a3b8;
+            word-break: break-word;
+        }
+        .time-card__server {
+            font-weight: 600;
+            color: #5eead4;
+            letter-spacing: 0.03em;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="hud" class="hud" aria-live="polite">
+        <div class="time-card">
+            <div class="time-card__accent" aria-hidden="true"></div>
+            <div class="time-card__body">
+                <div id="extraBlock" class="time-card__extra hidden"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+(function () {
+    var extraBlock = document.getElementById('extraBlock')
+    var hudRoot = document.getElementById('hud')
+    var timeCard = document.querySelector('.time-card')
+
+    function escapeHtml(s) {
+        var div = document.createElement('div')
+        div.textContent = s
+        return div.innerHTML
+    }
+
+    function formatMoney(v) {
+        if (v === undefined || v === null) return ''
+        var n = Number(v)
+        if (!isFinite(n)) return String(v)
+        var s = Math.floor(n).toString()
+        return s.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '円'
+    }
+
+    function render(payload) {
+        var parts = []
+        if (payload.serverName) {
+            parts.push('<div class="time-card__box"><div class="time-card__box-label">Server</div><div class="time-card__box-value" style="color:#5eead4;">' + escapeHtml(payload.serverName) + '</div></div>')
+        }
+        if (payload.serverId !== undefined && payload.serverId !== null) {
+            parts.push('<div class="time-card__box"><div class="time-card__box-label">サーバーID</div><div class="time-card__box-value">' + escapeHtml(String(payload.serverId)) + '</div></div>')
+        }
+        if (payload.cash !== undefined && payload.cash !== null) {
+            parts.push('<div class="time-card__box"><div class="time-card__box-label">所持金</div><div class="time-card__box-value">' + escapeHtml(formatMoney(payload.cash)) + '</div></div>')
+        }
+        if (payload.bank !== undefined && payload.bank !== null) {
+            parts.push('<div class="time-card__box"><div class="time-card__box-label">銀行</div><div class="time-card__box-value">' + escapeHtml(formatMoney(payload.bank)) + '</div></div>')
+        }
+        if (payload.playerName) {
+            parts.push('<div class="time-card__box"><div class="time-card__box-label">Name</div><div class="time-card__box-value">' + escapeHtml(String(payload.playerName)) + '</div></div>')
+        }
+        if (payload.playerId !== undefined && payload.playerId !== null) {
+            parts.push('<div class="time-card__box"><div class="time-card__box-label">ID</div><div class="time-card__box-value">' + escapeHtml(String(payload.playerId)) + '</div></div>')
+        }
+
+        if (parts.length) {
+            extraBlock.innerHTML = parts.join('')
+            extraBlock.classList.remove('hidden')
+            if (timeCard) timeCard.style.display = 'inline-block'
+        } else {
+            extraBlock.innerHTML = ''
+            extraBlock.classList.add('hidden')
+            if (timeCard) timeCard.style.display = 'none'
+        }
+    }
+
+    window.addEventListener('message', function (event) {
+        var data = event.data
+        if (!data || !data.action) return
+
+        if (data.action === 'setHudVisible') {
+            if (!hudRoot) return
+            hudRoot.style.display = data.visible ? 'block' : 'none'
+            return
+        }
+
+        if (data.action === 'setTimeAndDate') {
+            if (data.datetime !== undefined) {
+                render(data)
+            } else if (typeof data.time === 'string') {
+                render({
+                    serverName: null,
+                    playerName: null,
+                    playerId: null
+                })
+            }
+        }
+    })
+})()
+    </script>
+</body>
+</html>

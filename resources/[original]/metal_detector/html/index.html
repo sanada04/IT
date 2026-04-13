@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="ui" class="panel hidden">
+    <button type="button" id="btn-close-x" class="btn-close-x">×</button>
+    <h1 data-i18n="menu_title">🏆 金属探知メニュー</h1>
+    <p class="sub" data-i18n="menu_sub">金属探知・買取・XPランキング</p>
+
+    <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="buy" data-i18n="tab_buy">購入</button>
+        <button type="button" class="tab-btn" data-tab="ranking" data-i18n="tab_ranking">ランキング</button>
+        <button type="button" class="tab-btn" data-tab="sell" data-i18n="tab_sell">売却</button>
+    </div>
+
+    <div id="tab-buy" class="tab-content active">
+        <div class="shop-item">
+            <span class="shop-label" data-i18n="shop_label">金属探知機</span>
+            <span class="shop-price" id="detector-price">$---</span>
+            <button type="button" class="btn-buy" id="btn-buy-detector" data-i18n="btn_buy">購入する</button>
+        </div>
+        <p class="tab-hint" data-i18n="tab_hint_buy">金属を探知して宝探しができるアイテムです。</p>
+    </div>
+
+    <div id="tab-ranking" class="tab-content">
+        <div id="ranking" class="ranking"></div>
+    </div>
+
+    <div id="tab-sell" class="tab-content">
+        <div id="sell-list" class="sell-list"></div>
+        <p id="sell-empty" class="tab-hint hidden" data-i18n-html="sell_empty">売却できるアイテムがありません。<br>掘削で手に入れたアイテムを売却できます。</p>
+        <button type="button" id="btn-sell-all-global" class="btn-sell-all-global" data-i18n="btn_sell_all">今持っているものを全部売る</button>
+    </div>
+</div>
+
+<div id="dig-progress" class="progress-wrap hidden">
+    <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill"></div>
+    </div>
+    <p class="progress-label" data-i18n="progress_digging">掘削中...</p>
+</div>
+
+<!-- 日本語3Dラベル（ゲームのネイティブ描画だと文字化けするためNUIで表示） -->
+<div id="world-label" class="world-label hidden"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

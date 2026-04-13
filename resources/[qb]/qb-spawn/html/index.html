@@ -1,0 +1,71 @@
+<html lang="en">
+
+    <head>
+
+        <meta charset="UTF-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+        <title>Victro - Spawn </title>
+
+        <link rel="stylesheet" type="text/css" href="reset.css"> <!-- RESET CSS -->
+
+        <link rel="stylesheet" type="text/css" href="style.css"> <!-- STYLE CSS -->
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+
+    </head>
+
+    <body>
+
+        <div class="container Stylecontainer" id="noselect">
+
+            <h1 class="choose">スポーン位置を選択</h1>
+
+            <h2 class="spawn">スポーン位置を選択</h2>
+
+
+
+            <img src="./victro-map.png" class="MapStyle">
+
+            <div class="spawn-locations-new">
+                <i id="spawn-active-pin" class="fas fa-map-marker-alt spawn-active-pin hidden IconClassStyle" aria-hidden="true"></i>
+            </div>
+
+            <div class="spawn-action-bar">
+                <div class="BTNStyleForSelect QuickSpawnBTN spawn-picker-btn" data-location="lspd" data-type="normal" data-label="LSPD">本署にスポーン</div>
+                <div class="BTNStyleForSelect QuickSpawnBTN spawn-picker-btn" data-location="cityhall" data-type="normal" data-label="市役所">市役所にスポーン</div>
+                <div class="BTNStyleForSelect LastBTN spawn-picker-btn" data-location="current" data-type="current" data-label="最後の位置">最後の位置</div>
+                <div class="BTNStyleForSelect GreenBTN">スポーンする</div>
+            </div>
+
+
+
+            <div class="BtnBodyClass">
+
+                <div class="TextFoJSCode">スポーン位置を選択</div>
+
+                <div class="SelectLoc-Border-Btn"></div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+        <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+
+        <script type="text/javascript" src="script.js"></script>
+
+    </body>
+
+</html>
+

@@ -1,0 +1,407 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Bebas Neue');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --spawn-btn-radius: 14px;
+    --spawn-btn-font: "Inter", "Roboto", system-ui, -apple-system, sans-serif;
+    --spawn-shadow: 0 4px 16px rgba(15, 23, 42, 0.14);
+    --spawn-shadow-hover: 0 10px 28px rgba(15, 23, 42, 0.22);
+    --spawn-ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.container {
+    font-family: sans-serif;
+    font-weight: 200;
+}
+
+.Stylecontainer{
+    display: none;
+    position: relative;
+    background: #1f3836;
+    max-width: auto;
+    max-height: auto;
+    object-fit: cover;
+    overflow: hidden;
+    min-height: 100vh;
+}
+
+.MapStyle{
+    height: 110%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    overflow: hidden;
+
+}
+
+.choose{
+    position: absolute;
+    height: 4.3vh;
+    width: 33%;
+    margin-top: 42px;
+    margin-left: -155px;
+    color: white;
+    font-family: sans-serif;
+    line-height: 5.4vh;
+    font-weight: 200;
+    font-size: 30px;
+    text-align: center;
+    overflow: hidden;
+
+}
+
+.spawn{ 
+    position: absolute;
+    height: 4.3vh;
+    width: 33%;
+    margin-top: 90px;
+    margin-left: -88px;
+    color: #ff0;
+    font-family: sans-serif;
+    line-height: 5.4h;
+    font-weight: 200;
+    font-size: 90px;
+    text-align: center;
+    overflow: hidden;
+
+}
+
+.selected {
+    color: rgba(248, 250, 252, 0.98) !important;
+    transition: color 0.2s var(--spawn-ease), box-shadow 0.2s var(--spawn-ease), background-color 0.2s var(--spawn-ease), border-color 0.2s var(--spawn-ease), transform 0.2s var(--spawn-ease);
+}
+.selected:hover {
+    color: rgba(248, 250, 252, 0.98) !important;
+}
+
+.spawn-locations-new{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.spawn-locations-new .spawn-picker-btn {
+    pointer-events: auto;
+}
+
+.spawn-active-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    pointer-events: none;
+    transition: top 0.22s var(--spawn-ease), left 0.22s var(--spawn-ease), opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.spawn-active-pin.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.IconClassStyle{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    color: rgb(255, 0, 0);
+    font-size: 3.4vh;
+    transition: 0.15s;
+    animation: hithere 1s ease infinite;
+}
+
+.IconClassStyle:hover{
+    color: whitesmoke;
+}
+
+@keyframes hithere {
+    0% {
+    transform: scale(0.3, 0.3);
+    }
+    50% {
+    transform: scale(0.8, 0.8);
+    }
+    100% {
+    transform: scale(0.3, 0.3);
+    }
+}
+
+.IconClassStyle2{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    color: red;
+    font-size: 2.4vh;
+    text-shadow: 0px 2px 2px black;
+    transition: 0.15s;
+    animation: hithere 1s ease infinite;
+}
+
+.IconClassStyle2:hover{
+    color: white;
+}
+
+.BtnBodyClass{
+    position: absolute;
+    display: block;
+    bottom: 0%;
+    left: 10%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 20%;
+    padding: 0.6% 0;
+    text-align: center;
+    font-family: sans-serif;
+    font-weight: 200;
+    font-size: 2.5vh;
+    text-shadow: 0 0 20px white;
+}
+
+.BTNStyleForSelect{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: var(--spawn-btn-radius);
+    color: inherit;
+    padding: 0;
+    font-family: var(--spawn-btn-font);
+    font-weight: 600;
+    font-size: clamp(13px, 2.2vh, 18px);
+    letter-spacing: 0.01em;
+    box-shadow: var(--spawn-shadow);
+    transition:
+        transform 0.22s var(--spawn-ease),
+        box-shadow 0.22s var(--spawn-ease),
+        background-color 0.22s var(--spawn-ease),
+        border-color 0.22s var(--spawn-ease),
+        color 0.22s var(--spawn-ease);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.BTNStyleForSelect:focus-visible {
+    outline: 2px solid rgba(96, 165, 250, 0.9);
+    outline-offset: 3px;
+}
+
+.spawn-action-bar {
+    position: absolute;
+    right: 5vh;
+    bottom: 5.5vh;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 6px;
+    z-index: 6;
+    max-width: min(96vw, 720px);
+}
+
+.spawn-action-bar .GreenBTN,
+.spawn-action-bar .LastBTN,
+.spawn-action-bar .QuickSpawnBTN {
+    position: static;
+    flex: 0 1 auto;
+}
+
+.QuickSpawnBTN {
+    position: static;
+    width: auto;
+    min-height: 40px;
+    padding: 8px 14px;
+    text-align: center;
+    cursor: pointer;
+    outline: 0;
+    font-weight: 600;
+    font-size: clamp(12px, 1.9vh, 16px);
+    color: #f8fafc !important;
+    background: rgba(15, 23, 42, 0.72) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: var(--spawn-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.QuickSpawnBTN:hover {
+    background: rgba(30, 41, 59, 0.88) !important;
+    border-color: rgba(148, 163, 184, 0.35);
+    transform: translateY(-2px);
+    box-shadow: var(--spawn-shadow-hover), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.QuickSpawnBTN:active {
+    transform: translateY(0);
+}
+
+.GreenBTN{
+    min-width: 132px;
+    min-height: 40px;
+    padding: 8px 18px;
+    text-align: center;
+    cursor: pointer;
+    overflow: visible;
+    outline: 0;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: #0f172a;
+    font-weight: 600;
+    background: linear-gradient(165deg, #ffffff 0%, #f1f5f9 55%, #e2e8f0 100%);
+    box-shadow: var(--spawn-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.GreenBTN:hover{
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.75);
+    background: linear-gradient(165deg, #ffffff 0%, #f8fafc 100%);
+    box-shadow: var(--spawn-shadow-hover), inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.GreenBTN:active {
+    transform: translateY(-1px);
+}
+
+.LastBTN{
+    min-width: 132px;
+    min-height: 40px;
+    padding: 8px 16px;
+    text-align: center;
+    cursor: pointer;
+    overflow: visible;
+    outline: 0;
+    font-weight: 600;
+    color: #f1f5f9;
+    background: rgba(255, 255, 255, 0.07) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.LastBTN:hover{
+    background: rgba(255, 255, 255, 0.14) !important;
+    border-color: rgba(255, 255, 255, 0.42);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+.LastBTN:active {
+    transform: translateY(-1px);
+}
+
+.LastBTN.selected,
+.QuickSpawnBTN.selected {
+    color: #ffffff !important;
+    background: rgba(99, 102, 241, 0.38) !important;
+    border-color: rgba(165, 180, 252, 0.75);
+    box-shadow:
+        0 0 0 1px rgba(129, 140, 248, 0.45),
+        0 10px 36px rgba(79, 70, 229, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.LastBTN.selected:hover,
+.QuickSpawnBTN.selected:hover {
+    background: rgba(99, 102, 241, 0.48) !important;
+    border-color: rgba(199, 210, 254, 0.9);
+}
+
+.SelectLoc-Border-Btn{
+    margin: 4% 10%;
+    width: 80%;
+    border-bottom: 0.3vh solid  white;
+}
+
+.AddCoord{
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.AddCoordBody{
+    position: absolute;
+    display: block;
+    top: 5%;
+    left: 1%;
+    z-index: 1;
+    width: 15%;
+    background: #202731;
+    padding: 0.6%;
+    box-shadow: 1px 1px 6px rgb(5, 5, 5);
+    color: whitesmoke;
+    font-family: sans-serif;
+    font-size: 1.8vh;
+    border-radius: 5px;
+}
+
+.StyleTextBTNN{
+    display: inline;
+}
+
+.InputStule{
+    position: relative;
+    margin-left: 1%;
+    margin-bottom: 5%;
+    width: 82%;
+    border: none;
+    background: none;
+    outline: none;
+    text-indent: 1vh;
+    text-align: left;
+    line-height: 3.9vh;
+    font-size: 1.75vh;
+    overflow: hidden;
+    color: white;
+    border-bottom: .1vh solid #f5f5f5ad;
+    transition: 0.25s;
+}
+
+.InputStule:focus {
+    border-bottom: .1vh solid #8ee074;
+}
+
+.InputStule::-webkit-inner-spin-button {
+    display: none;
+}
+
+.AddBlipForMap{
+    width: 100%;
+    height: 100%;
+}
+
+.BTNStyleForCopy{
+    display: inline-block;
+    border-radius: 10px;
+    color: black;
+    padding: 2%;
+    margin: 1% 0;
+    box-shadow: 1px 1px 6px rgba(5, 5, 5, 0.152);
+    transition: 0.25s;
+    font-weight: bold;
+    font-size: 1.4vh;
+    width: 85%;
+}
+
+.ApartBTN{
+    background: #44cafa;
+}
+.ApartBTN:hover{
+    background: #3aaad3;
+}
+
+.SpawnBTN{
+    background: #8ee074;
+}
+.SpawnBTN:hover{
+    background: #6cac59;
+}
+
+.CloseBTN{
+    background: #f5a15b;
+}
+.CloseBTN:hover{
+    background: #c27e47;
+}
+

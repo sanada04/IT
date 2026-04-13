@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IT Drugs Process UI</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: transparent; }
+    #app { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,.55); z-index: 99999; }
+    .panel { width: 820px; background: #161a21; color: #fff; border: 1px solid #2b3442; border-radius: 12px; padding: 16px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+    .col { background: #0f1218; border: 1px solid #2f3848; border-radius: 10px; padding: 10px; min-height: 280px; }
+    .row { margin-top: 10px; }
+    label { display: block; margin-bottom: 6px; }
+    select, input { width: 100%; height: 40px; border-radius: 8px; border: 1px solid #3a4353; background: #0f1218; color: #fff; padding: 0 10px; }
+    .materials { display: flex; flex-direction: column; gap: 8px; max-height: 310px; overflow-y: auto; }
+    .material-btn { width: 100%; min-height: 56px; border: 1px solid #354054; border-radius: 8px; background: #1a202a; color: #fff; text-align: left; padding: 8px; cursor: pointer; }
+    .material-btn.active { border-color: #4cd07a; background: #213326; }
+    .actions { margin-top: 14px; display: flex; gap: 8px; justify-content: flex-end; }
+    button { height: 38px; min-width: 110px; border: 0; border-radius: 8px; cursor: pointer; }
+    #submitBtn { background: #4cd07a; color: #111; font-weight: 700; }
+    #cancelBtn, #closeBtn { background: #2f3642; color: #fff; }
+    #closeBtn { float: right; min-width: 34px; }
+    #recipeInfo { margin-top: 8px; color: #9edfaf; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="panel">
+      <button id="closeBtn" type="button">×</button>
+      <h2 style="margin:0;">薬物精製ラボ</h2>
+      <p style="margin:6px 0 10px; color:#b8c1cf;">左で素材選択、右で個数指定して作成</p>
+
+      <div class="grid">
+        <div class="col">
+          <label>素材一覧 (serial = it_drugs)</label>
+          <div id="materialsList" class="materials"></div>
+        </div>
+
+        <div class="col">
+          <label>選択中の素材</label>
+          <div id="selectedInfo" style="color:#9edfaf; min-height:40px;">素材を選択してください</div>
+
+          <div class="row">
+            <label for="amountInput">投入量（原料個数）</label>
+            <input id="amountInput" type="number" min="1" max="100" value="3" />
+          </div>
+
+          <div id="recipeInfo"></div>
+
+          <div class="actions" style="justify-content:flex-start; margin-top: 20px;">
+            <button id="submitBtn" type="button">作成</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="cancelBtn" type="button">キャンセル</button>
+      </div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
