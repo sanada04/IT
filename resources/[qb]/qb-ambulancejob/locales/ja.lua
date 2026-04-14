@@ -14,11 +14,11 @@ local Translations = {
         not_online = 'プレイヤーはオフライン'
     },
     success = {
-        revived = 'この人を蘇生した',
-        healthy_player = 'プレイヤーは健康です',
-        helped_player = 'この人を助けた',
-        wounds_healed = '傷が癒えた！',
-        being_helped = '救助されています...'
+        --revived = 'この人を蘇生した',
+        --healthy_player = 'プレイヤーは健康です',
+        --helped_player = 'この人を助けた',
+        --wounds_healed = '傷が癒えた！',
+        --being_helped = '救助されています...'
     },
     info = {
         civ_died = '民間人死亡',
@@ -38,7 +38,7 @@ local Translations = {
         is_staus = '%{status}',
         healthy = '完治しました！',
         safe = 'Hospital Safe',
-        pb_hospital = 'Pillbox病院',
+        pb_hospital = 'ピルボックス病院',
         pain_message = '%{limb}が%{severity}',
         many_places = 'いたるところが痛い...',
         bleed_alert = '%{bleedstate}',
