@@ -94,6 +94,17 @@ RegisterNetEvent('hospital:server:ambulanceAlert', function(text)
 	local src = source
 	local ped = GetPlayerPed(src)
 	local coords = GetEntityCoords(ped)
+	if GetResourceState('ps-dispatch') == 'started' then
+		TriggerEvent('ps-dispatch:server:notify', {
+			message = text or Lang:t('info.civ_call'),
+			codeName = '311call',
+			code = '10-52',
+			icon = 'fas fa-ambulance',
+			priority = 2,
+			coords = coords,
+			jobs = { 'ems' }
+		})
+	end
 	local players = QBCore.Functions.GetQBPlayers()
 	for _, v in pairs(players) do
 		if v.PlayerData.job.name == 'ambulance' and v.PlayerData.job.onduty then
@@ -352,6 +363,17 @@ QBCore.Commands.Add('911e', Lang:t('info.ems_report'), { { name = 'message', hel
 	if args[1] then message = table.concat(args, ' ') else message = Lang:t('info.civ_call') end
 	local ped = GetPlayerPed(src)
 	local coords = GetEntityCoords(ped)
+	if GetResourceState('ps-dispatch') == 'started' then
+		TriggerEvent('ps-dispatch:server:notify', {
+			message = message,
+			codeName = '311call',
+			code = '10-52',
+			icon = 'fas fa-ambulance',
+			priority = 2,
+			coords = coords,
+			jobs = { 'ems' }
+		})
+	end
 	local players = QBCore.Functions.GetQBPlayers()
 	for _, v in pairs(players) do
 		if v.PlayerData.job.name == 'ambulance' and v.PlayerData.job.onduty then
