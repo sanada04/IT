@@ -18,7 +18,8 @@ local Translations = {
         healthy_player = 'プレイヤーは健康です',
         helped_player = '包帯でプレイヤーを治療しました',
         wounds_healed = '傷が癒えた！',
-        being_helped = '治療を受けています...'
+        being_helped = '治療を受けています...',
+        doctor_called = '医師に連絡しました'
     },
     info = {
         civ_died = '民間人死亡',

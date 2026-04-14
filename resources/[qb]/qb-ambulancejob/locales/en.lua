@@ -18,7 +18,8 @@ local Translations = {
         healthy_player = 'Player is Healthy',
         helped_player = 'You helped the person',
         wounds_healed = 'Your wounds have been healed!',
-        being_helped = 'You are being helped...'
+        being_helped = 'You are being helped...',
+        doctor_called = 'Called a Doctor'
     },
     info = {
         civ_died = 'Civilian Died',
