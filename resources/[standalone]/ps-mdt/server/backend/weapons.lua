@@ -305,7 +305,8 @@ CreateThread(function()
     if GetResourceState('ox_inventory') ~= 'started' then return end
     if not Config.RegisterWeaponsAutomatically then return end
 
-    exports.ox_inventory:registerHook('buyItem', function(payload)
+    local hookOk = pcall(function()
+        exports.ox_inventory:registerHook('buyItem', function(payload)
         if not payload.itemName or not string.find(payload.itemName, 'WEAPON_') then return true end
         CreateThread(function()
             if not QBCore then return end
@@ -322,12 +323,19 @@ CreateThread(function()
             end
         end)
         return true
-    end, {
-        typeFilter = { ['player'] = true }
-    })
+        end, {
+            typeFilter = { ['player'] = true }
+        })
+    end)
+
+    if not hookOk then
+        ps.warn('ox_inventory:registerHook(buyItem) is unavailable; auto weapon registration hook disabled.')
+        return
+    end
 
     if Config.RegisterCreatedWeapons then
-        exports.ox_inventory:registerHook('createItem', function(payload)
+        local createHookOk = pcall(function()
+            exports.ox_inventory:registerHook('createItem', function(payload)
             if not payload.item or not payload.item.name or not string.find(payload.item.name, 'WEAPON_') then return true end
             CreateThread(function()
                 if not QBCore then return end
@@ -344,9 +352,14 @@ CreateThread(function()
                 end
             end)
             return true
-        end, {
-            typeFilter = { ['player'] = true }
-        })
+            end, {
+                typeFilter = { ['player'] = true }
+            })
+        end)
+
+        if not createHookOk then
+            ps.warn('ox_inventory:registerHook(createItem) is unavailable; createItem hook disabled.')
+        end
     end
 end)
 

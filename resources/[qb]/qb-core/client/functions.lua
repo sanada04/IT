@@ -45,7 +45,43 @@ function QBCore.Functions.GetCoords(entity)
 end
 
 function QBCore.Functions.HasItem(items, amount)
-    return exports['qb-inventory']:HasItem(items, amount)
+    local requiredAmount = amount or 1
+
+    if GetResourceState('qb-inventory') == 'started' then
+        local ok, result = pcall(function()
+            return exports['qb-inventory']:HasItem(items, requiredAmount)
+        end)
+        if ok then return result end
+    end
+
+    if GetResourceState('ox_inventory') == 'started' then
+        local function hasItemCount(itemName, itemAmount)
+            local count = exports.ox_inventory:Search('count', itemName) or 0
+            return count >= (itemAmount or 1)
+        end
+
+        if type(items) == 'string' then
+            return hasItemCount(items, requiredAmount)
+        elseif type(items) == 'table' then
+            if #items > 0 then
+                for i = 1, #items do
+                    if not hasItemCount(items[i], requiredAmount) then
+                        return false
+                    end
+                end
+                return true
+            end
+
+            for itemName, itemAmount in pairs(items) do
+                if not hasItemCount(itemName, itemAmount) then
+                    return false
+                end
+            end
+            return true
+        end
+    end
+
+    return false
 end
 
 ---Returns the full character name

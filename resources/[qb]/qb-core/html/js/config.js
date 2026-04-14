@@ -31,15 +31,18 @@ const defaultConfig = {
 };
 
 export const determineStyleFromVariant = (variant) => {
-    const variantData = NOTIFY_CONFIG.VariantDefinitions[variant];
-    if (!variantData) throw new Error(`Style of type: ${variant}, does not exist in the config`);
+    const safeConfig = NOTIFY_CONFIG && NOTIFY_CONFIG.VariantDefinitions
+        ? NOTIFY_CONFIG
+        : defaultConfig;
+
+    const variantData = safeConfig.VariantDefinitions[variant] || safeConfig.VariantDefinitions.primary;
     return variantData;
 };
 
 export const fetchNotifyConfig = async () => {
     try {
         NOTIFY_CONFIG = await window.fetchNui("getNotifyConfig", {});
-        if (!NOTIFY_CONFIG) {
+        if (!NOTIFY_CONFIG || !NOTIFY_CONFIG.VariantDefinitions) {
             NOTIFY_CONFIG = defaultConfig;
         }
     } catch (error) {

@@ -50,8 +50,19 @@ end
 -- 所持アイテム数取得（ox_inventory / qb-inventory 対応）
 local function GetItemCount(src, itemName)
     if GetResourceState("ox_inventory") == "started" then
-        local count = exports.ox_inventory:GetItemCount(src, itemName)
-        return count or 0
+        local ok, count = pcall(function()
+            return exports.ox_inventory:GetItemCount(src, itemName)
+        end)
+        if ok then
+            return count or 0
+        end
+
+        local okSearch, searchCount = pcall(function()
+            return exports.ox_inventory:Search(src, 'count', itemName)
+        end)
+        if okSearch then
+            return searchCount or 0
+        end
     end
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return 0 end

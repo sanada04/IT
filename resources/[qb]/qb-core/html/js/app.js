@@ -27,16 +27,14 @@ const app = Vue.createApp({
             if (data?.action !== "notify") return;
 
             const { text, length, type, caption, icon: dataIcon } = data;
+            if (!NOTIFY_CONFIG || !NOTIFY_CONFIG.VariantDefinitions) {
+                await fetchNotifyConfig();
+            }
+
             let { classes, icon } = determineStyleFromVariant(type);
 
             if (dataIcon) {
                 icon = dataIcon;
-            }
-
-            if (!NOTIFY_CONFIG) {
-                console.error("The notification config did not load properly, trying again for next time");
-                await fetchNotifyConfig();
-                if (NOTIFY_CONFIG) return showNotif({ data });
             }
 
             $q.notify({
