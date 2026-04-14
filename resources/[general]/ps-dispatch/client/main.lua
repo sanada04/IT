@@ -235,17 +235,32 @@ local function createBlip(data, blipData)
     RemoveBlip(blip)
 end
 
+--ディスパッチアラート音再生
+local function playAlertSound(blipData)
+    if alertsMuted then return end
+
+    local soundName = blipData.sound or (blipData.alert and blipData.alert.sound) or 'Lose_1st'
+    local soundSet = blipData.sound2 or (blipData.alert and blipData.alert.sound2) or 'GTAO_FM_Events_Soundset'
+
+    if soundName == "Lose_1st" then
+        PlaySound(-1, soundName, soundSet, 0, 0, 1)
+        return
+    end
+
+    if GetResourceState('InteractSound') == 'started' then
+        TriggerServerEvent("InteractSound_SV:PlayOnSource", soundName, 0.25)
+        return
+    end
+
+    -- Fallback so notifications still have audio without InteractSound.
+    PlaySound(-1, 'Lose_1st', 'GTAO_FM_Events_Soundset', 0, 0, 1)
+end
+
 local function addBlip(data, blipData)
     CreateThread(function()
         createBlip(data, blipData)
     end)
-    if not alertsMuted then
-        if blipData.sound == "Lose_1st" then
-            PlaySound(-1, blipData.sound, blipData.sound2, 0, 0, 1)
-        else
-            TriggerServerEvent("InteractSound_SV:PlayOnSource", blipData.sound or blipData.alert.sound, 0.25)
-        end
-    end
+    playAlertSound(blipData)
 end
 
 -- Keybind
