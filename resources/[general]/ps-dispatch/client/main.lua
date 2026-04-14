@@ -44,7 +44,7 @@ local function createZones()
                 local huntingradius = AddBlipForRadius(hunting.coords.x, hunting.coords.y, hunting.coords.z, hunting.radius)
                 SetBlipSprite(blip, 442)
                 SetBlipAsShortRange(blip, true)
-                SetBlipScale(blip, 1.0)
+                SetBlipScale(blip, 0.8)
                 SetBlipColour(blip, 0)
                 SetBlipColour(huntingradius, 0)
                 SetBlipAlpha(huntingradius, 40)
@@ -189,7 +189,7 @@ local function createBlipData(coords, radius, sprite, color, scale, flash)
     SetBlipFlashes(blip, flash)
     SetBlipSprite(blip, sprite or 161)
     SetBlipHighDetail(blip, true)
-    SetBlipScale(blip, 1.0)
+    SetBlipScale(blip, scale or 1.0)
     SetBlipColour(blip, color or 84)
     SetBlipAlpha(blip, 255)
     SetBlipAsShortRange(blip, false)
@@ -308,17 +308,13 @@ RegisterNetEvent('ps-dispatch:client:openMenu', function(data)
     if not isJobValid(PlayerData.job.type) then return end
     if not IsOnDuty() then return end
 
-    toggleUI(true)
-    SendNUIMessage({ action = 'setDispatchs', data = data or {}, })
-
-    if not data or #data == 0 then
-        lib.notify({ description = locale('no_calls'), position = 'top', type = 'inform' })
+    if #data == 0 then
+        lib.notify({ description = locale('no_calls'), position = 'top', type = 'error' })
+    else
+        toggleUI(true)
+        SendNUIMessage({ action = 'setDispatchs', data = data, })
     end
 end)
-
-RegisterCommand('dispatch', function()
-    openMenu()
-end, false)
 
 -- EventHandlers
 RegisterNetEvent("QBCore:Client:OnJobUpdate", setupDispatch)

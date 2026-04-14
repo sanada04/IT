@@ -8,7 +8,7 @@ Config.OpenDispatchMenu = 'O'
 Config.AlertTime = 5     -- Specify the duration for the alert to appear on the screen. The default time is 5 seconds for all alerts. To set a different duration for specific alerts, change the value in `alertTime = nil` found in the alerts.lua file.
 
 Config.MaxCallList = 25 -- maximum dispatch calls in dispatch list
-Config.OnDutyOnly = false -- Set true if only on duty players can see the alert
+Config.OnDutyOnly = true -- Set true if only on duty players can see the alert
 Config.Jobs = { -- Job Types or names that can access the dispatch menu. If you want to allow more jobs to see certain dispatch alerts. Go to alerts.lua and add the job name to the alert.
     "leo",
     "ems"
@@ -18,7 +18,7 @@ Config.AlertCommandCooldown = 60 -- this would make the command work every 60 se
 
 Config.DefaultAlertsDelay = 5 -- Delay between each default alert, prevent spamming
 Config.DefaultAlerts = {
-    Speeding = false,
+    Speeding = true,
     Shooting = true,
     Autotheft = true,
     Melee = true,

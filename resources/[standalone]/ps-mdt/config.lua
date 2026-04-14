@@ -1,29 +1,29 @@
 Config = {}
 ps = exports.ps_lib:init()
 
--- Basic Settings
-Config.Debug = false -- Enable/disable debug mode (boolean)
-Config.OnlyShowOnDuty = false -- Only allow the MDT to be opened when on duty (boolean)
+-- 基本設定
+Config.Debug = false -- デバッグモードの有効/無効（boolean）
+Config.OnlyShowOnDuty = false -- 勤務中のみMDTを開けるようにする（boolean）
 
--- Civilian Access Settings
+-- 市民アクセス設定
 Config.CivilianAccess = {
-    enabled = true,   -- Allow civilians to open the MDT (profile + legislation view only)
-    command = true,   -- Allow /mdt command for civilians
-    showWarrants = true, -- Show active warrants on civilian profile
-    showBolos = true,    -- Show active BOLOs on civilian profile
+    enabled = true,   -- 市民がMDTを開けるようにする（プロフィール+法令閲覧のみ）
+    command = true,   -- 市民に /mdt コマンドを許可
+    showWarrants = true, -- 市民プロフィールに有効な令状を表示
+    showBolos = true,    -- 市民プロフィールに有効なBOLOを表示
 }
 
--- Time and Date Settings
+-- 時刻と日付の設定
 Config.DateTime = {
-    GameTime = true, -- If set to true, the game time will be used instead of the server time (boolean)
-    TimeFormat = '24', -- Format for displaying time ('24' or '12')
-    DateFormat = "MM-DD-YYYY" -- Format for displaying date (string: "MM-DD-YYYY", "DD-MM-YYYY", or "YYYY-MM-DD")
+    GameTime = true, -- trueの場合、サーバー時刻ではなくゲーム内時刻を使用（boolean）
+    TimeFormat = '24', -- 時刻表示形式（'24' または '12'）
+    DateFormat = "MM-DD-YYYY" -- 日付表示形式（文字列: "MM-DD-YYYY", "DD-MM-YYYY", "YYYY-MM-DD"）
 }
 
--- Department data sharing
+-- 部署間データ共有
 Config.Sharing = {
-    -- Mutual Sharing (Bidirectional)
-    -- All departments in this group can see each other's data
+    -- 相互共有（双方向）
+    -- このグループ内の全部署が互いのデータを閲覧可能
     Mutual = {
         types = {
             'reports',
@@ -39,10 +39,10 @@ Config.Sharing = {
         }
     },
 
-    -- One-Way Sharing (Unidirectional)
-    -- Viewers can see target department data, but not vice versa
+    -- 片方向共有（一方向）
+    -- viewers は targets のデータを閲覧可能（逆方向は不可）
     OneWay = {
-        { -- Example: FIB and GOV 
+        { -- 例: FIB と GOV
             viewers = {
                 'fib',
                 'gov'
@@ -63,62 +63,62 @@ Config.Sharing = {
     },
 }
 
--- Keybinds
+-- キーバインド
 Config.Keys = {
-    -- https://docs.fivem.net/docs/game-references/controls/ | Default QWERTY
+    -- https://docs.fivem.net/docs/game-references/controls/ | デフォルトQWERTY
     OpenMDT = {
-        enabled = true, -- Enable/disable keybind (boolean)
-        key = 'F11', -- Key to open MDT (string)
+        enabled = true, -- キーバインドの有効/無効（boolean）
+        key = 'F11', -- MDTを開くキー（string）
     },
 }
 
--- Commands
+-- コマンド
 Config.Commands = {
     Open = {
-        enabled = true, -- Enable/disable command (boolean)
-        command = 'mdt', -- Command to open MDT (string)
+        enabled = true, -- コマンドの有効/無効（boolean）
+        command = 'mdt', -- MDTを開くコマンド（string）
     },
     MessageOfTheDay = {
-        enabled = true, -- Enable/disable command (boolean)
-        command = 'motd', -- Command to set message of the day (string)
+        enabled = true, -- コマンドの有効/無効（boolean）
+        command = 'motd', -- 本日のメッセージを設定するコマンド（string）
     },
 }
 
--- Dispatch Settings
+-- ディスパッチ設定
 Config.Dispatch = {
     Resource = 'ps-dispatch',
     FilterByJob = true,
 }
 
--- Wolfknight Plate Reader Settings
-Config.UseWolfknightRadar = true -- Enable/disable Wolfknight radar integration
-Config.WolfknightNotifyTime = 5000 -- Duration (ms) for plate reader notifications
-Config.PlateScanForDriversLicense = true -- Check driver's license on plate scan
+-- Wolfknight ナンバープレート読取設定
+Config.UseWolfknightRadar = true -- Wolfknightレーダー連携の有効/無効
+Config.WolfknightNotifyTime = 5000 -- ナンバープレート通知の表示時間（ms）
+Config.PlateScanForDriversLicense = true -- ナンバースキャン時に運転免許を確認
 
--- Fingerprint Settings
-Config.FingerprintAutoFilled = false -- Auto-populate fingerprints on citizen profiles (if false, officers must manually add fingerprints)
+-- 指紋設定
+Config.FingerprintAutoFilled = false -- 市民プロフィールへ指紋を自動入力（false の場合は警官が手動で追加）
 
--- Fingerprint Scan Integration
+-- 指紋スキャン連携
 Config.FingerprintScan = {
-    enabled = false,                                         -- Enable fingerprint scan trigger from MDT
-    officerEvent = 'police:client:showFingerprint',          -- Client event triggered on the officer
-    suspectEvent = 'police:client:showFingerprint',          -- Client event triggered on the suspect
+    enabled = false,                                         -- MDTからの指紋スキャン起動を有効化
+    officerEvent = 'police:client:showFingerprint',          -- 警官側で実行されるクライアントイベント
+    suspectEvent = 'police:client:showFingerprint',          -- 容疑者側で実行されるクライアントイベント
 }
 
--- Fuel Resource Name
-Config.Fuel = 'cdn-fuel' -- Fuel resource name for vehicle fuel management
+-- 燃料リソース名
+Config.Fuel = 'cdn-fuel' -- 車両燃料管理に使用する燃料リソース名
 
--- Weapon Registration
-Config.RegisterWeaponsAutomatically = true -- Auto-register weapons on purchase (ox_inventory and qb-inventory/qb-weapons)
-Config.RegisterCreatedWeapons = false -- Also auto-register weapons on item creation (ox_inventory only)
+-- 武器登録
+Config.RegisterWeaponsAutomatically = true -- 購入時に武器を自動登録（ox_inventory と qb-inventory/qb-weapons）
+Config.RegisterCreatedWeapons = false -- アイテム生成時も武器を自動登録（ox_inventory のみ）
 
--- Impound Locations (vector4: x, y, z, heading)
+-- 押収車両保管場所（vector4: x, y, z, heading）
 Config.ImpoundLocations = {
-    [1] = vector4(409.09, -1623.37, 29.29, 232.07), -- LSPD Impound
-    [2] = vector4(-436.42, 5982.29, 31.34, 136.0),  -- Paleto Impound
+    [1] = vector4(409.09, -1623.37, 29.29, 232.07), -- LSPD 保管所
+    [2] = vector4(-436.42, 5982.29, 31.34, 136.0),  -- パレト保管所
 }
 
--- Job Settings
+-- ジョブ設定
 Config.PoliceJobType = "leo"
 Config.PoliceJobs = {
     'police',
@@ -142,7 +142,7 @@ Config.MedicalJobs = {
 
 Config.Uploads = {
     MaxBytes = 5242880, -- 5 MB
-    RateLimitPerMinute = 10, -- Max uploads per player per minute (0 = unlimited)
+    RateLimitPerMinute = 10, -- プレイヤーごとの1分あたり最大アップロード数（0 = 無制限）
     AllowedAttachmentTypes = {
         'image/jpeg',
         'image/png',
@@ -156,38 +156,38 @@ Config.Uploads = {
     }
 }
 
--- Pagination Limits
+-- ページネーション上限
 Config.Pagination = {
-    Citizens = 20, -- Citizens per page
-    CitizenSearch = 20, -- Max citizen search results
-    Cases = 20, -- Cases per page
+    Citizens = 20, -- 1ページあたりの市民数
+    CitizenSearch = 20, -- 市民検索の最大件数
+    Cases = 20, -- 1ページあたりのケース数
 }
 
--- Fine Processing
+-- 罰金処理
 Config.Fines = {
-    MaxAmount = 100000,   -- Maximum fine amount ($) to prevent economy exploits
-    CooldownMs = 30000,   -- Anti-spam cooldown between fines (milliseconds)
+    MaxAmount = 100000,   -- 経済悪用防止のための罰金上限額（$）
+    CooldownMs = 30000,   -- 罰金処理間のスパム防止クールダウン（ミリ秒）
 }
 
--- Warrant Defaults
+-- 令状のデフォルト設定
 Config.Warrants = {
-    DefaultExpiryDays = 7, -- Default warrant expiry when no date is provided
+    DefaultExpiryDays = 7, -- 日付未指定時の令状有効期限（日数）
 }
 
--- Dashboard Cache TTLs (seconds)
+-- ダッシュボードキャッシュTTL（秒）
 Config.CacheTTL = {
     ReportStats = 30,
     ActiveUnits = 10,
     UsageMetrics = 60,
 }
 
--- Tablet Animation
+-- タブレットアニメーション
 Config.Animation = {
     Dict = 'amb@world_human_tourist_map@male@base',
     Name = 'base',
 }
 
--- Mugshot Camera
+-- マグショットカメラ
 Config.MugshotCamera = {
     DefaultFov = 50.0,
     FovMin = 15.0,
@@ -195,7 +195,7 @@ Config.MugshotCamera = {
     FovSpeed = 5.0,
 }
 
--- Security Camera Viewer
+-- 監視カメラビューア
 Config.CameraViewer = {
     RotationSpeed = 0.15,
     ZoomClamp = { min = 0.25, max = 10.0 },
@@ -206,49 +206,49 @@ Config.CameraViewer = {
     FovStep = 2.0,
 }
 
--- Management permissions and defaults (per job grade)
+-- 管理権限とデフォルト値（ジョブグレードごと）
 Config.ManagementPermissions = {
-    -- Citizens
+    -- 市民
     'citizens_search',
     'citizens_edit_licenses',
-    -- BOLOs
+    -- BOLO
     'bolos_view',
     'bolos_create',
-    -- Vehicles
+    -- 車両
     'vehicles_search',
     'vehicles_edit_dmv',
-    -- Weapons
+    -- 武器
     'weapons_search',
-    -- Cases
+    -- ケース
     'cases_view',
     'cases_create',
     'cases_edit',
     'cases_delete',
-    -- Evidence
+    -- 証拠
     'evidence_view',
     'evidence_create',
     'evidence_transfer',
     'evidence_upload',
-    -- Reports
+    -- レポート
     'reports_view',
     'reports_create',
     'reports_delete',
-    -- Warrants
+    -- 令状
     'warrants_view',
     'warrants_issue',
     'warrants_close',
-    -- Charges
+    -- 罪状
     'charges_view',
     'charges_edit',
-    -- Dispatch
+    -- ディスパッチ
     'dispatch_attach',
     'dispatch_route',
-    -- Cameras & Bodycams
+    -- カメラとボディカム
     'cameras_view',
     'bodycams_view',
-    -- Notes
+    -- メモ
     'notes_edit_department',
-    -- Roster
+    -- 名簿
     'roster_manage_certifications',
     'roster_manage_officers',
     -- PPR
@@ -257,13 +257,13 @@ Config.ManagementPermissions = {
     -- FTO
     'fto_view',
     'fto_manage',
-    -- Management
+    -- 管理
     'management_permissions',
     'management_bulletins',
     'management_activity',
 }
 
--- Bodycam Settings
+-- ボディカム設定
 Config.Bodycam = {
     DutyEvent = 'QBCore:Server:OnJobUpdate',
     DutyEventMode = 'qbcore',
@@ -272,8 +272,8 @@ Config.Bodycam = {
     MultiJobResource = 'ps-multijob',
 }
 
--- Optional defaults for role permissions by job/grade
--- Example:
+-- ジョブ/グレードごとのロール権限デフォルト（任意）
+-- 例:
 -- Config.PermissionDefaults = {
 --     police = {
 --         ['0'] = { 'access_reports' },
@@ -294,30 +294,30 @@ Config.PermissionDefaults = Config.PermissionDefaults or {
     }
 }
 
--- HIGHLY recommended not tuse this natively. Use FiveManage for this.
--- Activity Tracking - Controls which actions are logged to the audit trail
--- Categories can be toggled on/off from the Settings page in the MDT
--- These are the DEFAULT values; runtime changes are stored in the mdt_settings table
+-- ネイティブ利用は非推奨です。FiveManage の使用を推奨します。
+-- アクティビティ追跡 - 監査ログに記録する操作を制御
+-- 各カテゴリはMDTの設定ページでON/OFF切替可能
+-- ここはデフォルト値です。実行時の変更は mdt_settings テーブルに保存されます
 Config.AuditTracking = {
-    authentication = true,   -- Login/logout events
-    reports = true,          -- Report create, update, delete
-    cases = true,            -- Case CRUD, officer assignments, attachments
-    evidence = true,         -- Evidence CRUD, transfers, images
-    warrants = true,         -- Warrant issued/closed
-    vehicles = true,         -- Vehicle updates, impound/release
-    weapons = true,          -- Weapon create, update, delete
-    charges = true,          -- Fines processed, charges updated
-    searches = false,        -- Citizen/player/officer searches (high volume)
-    dispatch = true,         -- Signal 100 activate/deactivate
-    officers = true,         -- Callsign changes
-    sentencing = true,       -- Jail sentencing
-    arrests = true,          -- Arrest logging
-    icu = true,              -- ICU record deletion
-    cameras = true,          -- Security camera access
-    bodycams = true,         -- Officer bodycam access
+    authentication = true,   -- ログイン/ログアウトイベント
+    reports = true,          -- レポートの作成・更新・削除
+    cases = true,            -- ケースCRUD、担当警官割当、添付
+    evidence = true,         -- 証拠CRUD、移管、画像
+    warrants = true,         -- 令状の発行/クローズ
+    vehicles = true,         -- 車両更新、押収/解放
+    weapons = true,          -- 武器の作成・更新・削除
+    charges = true,          -- 罰金処理、罪状更新
+    searches = false,        -- 市民/プレイヤー/警官検索（高頻度）
+    dispatch = true,         -- Signal 100 の有効化/無効化
+    officers = true,         -- コールサイン変更
+    sentencing = true,       -- 収監判決
+    arrests = true,          -- 逮捕記録
+    icu = true,              -- ICU記録削除
+    cameras = true,          -- 監視カメラアクセス
+    bodycams = true,         -- 警官ボディカムアクセス
 }
 
--- Camera models available for static camera placement
+-- 固定カメラ設置で利用可能なカメラモデル
 Config.CameraModels = {
     ['security_cam_01'] = 'v_serv_securitycam_1a',
     ['security_cam_02'] = 'v_serv_securitycam_03',
