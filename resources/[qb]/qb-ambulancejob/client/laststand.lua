@@ -39,6 +39,7 @@ end
 function SetLaststand(bool)
     local ped = PlayerPedId()
     if bool then
+        emsNotified = false
         Wait(1000)
         while GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped) do Wait(10) end
         local pos = GetEntityCoords(ped)
@@ -105,6 +106,7 @@ function SetLaststand(bool)
         TaskPlayAnim(ped, lastStandDict, 'exit', 1.0, 8.0, -1, 1, -1, false, false, false)
         InLaststand = false
         LaststandTime = 0
+        emsNotified = false
     end
     TriggerServerEvent('hospital:server:SetLaststandStatus', bool)
 end
