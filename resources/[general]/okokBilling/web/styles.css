@@ -1,3 +1,1053 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500;600&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css');
+
+:root {
+	--overlay: rgba(9, 11, 15, 0.88);
+	--card: #202633;
+	--card-2: #1a202b;
+	--line: rgba(255, 255, 255, 0.1);
+	--text: #e8edf9;
+	--text-soft: #bac4db;
+	--primary: #5c7cff;
+	--primary-hover: #4a69e6;
+	--danger: #d34b63;
+	--danger-hover: #bc3e56;
+	--ok: #64d09a;
+	--radius-xl: 22px;
+	--radius-lg: 14px;
+	--radius-md: 10px;
+	--shadow: 0 22px 56px rgba(0, 0, 0, 0.45);
+}
+
+*,
+*:focus,
+*:hover {
+	outline: none;
+}
+
+body {
+	font-family: 'DM Mono', monospace;
+	background: none;
+	color: var(--text);
+}
+
+/* Modal above menus */
+.modal-backdrop.show {
+	z-index: 12000;
+}
+
+.modal.show {
+	z-index: 12010;
+}
+
+/* Full-screen menus */
+.selection_menu,
+.loading_menu,
+.invoices_menu,
+.societyinvoices_menu,
+.cityinvoices_menu,
+.createinvoice_menu,
+.payreference_menu,
+.police_menu {
+	display: none;
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	padding: 24px;
+	z-index: 9999;
+	background: var(--overlay);
+}
+
+.selection_card,
+.invoices_card,
+.societyinvoices_card,
+.cityinvoices_card,
+.createinvoice_card,
+.payreference_card,
+.police_card,
+.loading_card {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	max-width: 1080px;
+	border-radius: var(--radius-xl);
+	background: transparent;
+	border: 1px solid var(--line);
+	box-shadow: var(--shadow);
+}
+
+.loading_card {
+	max-width: 420px;
+}
+
+.card,
+.card-header {
+	border: none;
+	background: transparent;
+}
+
+.card-body,
+.selection_card-body,
+.invoices_card-body,
+.societyinvoices_card-body,
+.cityinvoices_card-body,
+.createinvoice_card-body,
+.payreference_card-body,
+.police_card-body,
+.loading_card-body {
+	position: relative;
+	min-height: 320px;
+	padding: 20px;
+	border-radius: var(--radius-xl);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	background: linear-gradient(180deg, rgba(36, 44, 59, 0.98) 0%, rgba(27, 33, 44, 0.98) 100%);
+	color: var(--text-soft);
+}
+
+/* NOTE: keep section transparent to avoid double-background look */
+.section {
+	min-height: 100%;
+	padding: 14px;
+	border-radius: var(--radius-lg);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: transparent;
+}
+
+hr {
+	margin: 10px 0 16px;
+	border: 0;
+	height: 1px;
+	opacity: 1;
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04));
+}
+
+.page-title,
+.menutitle {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--text);
+	font-size: 24px;
+	font-weight: 700;
+	letter-spacing: 0.3px;
+}
+
+.page-title::before {
+	content: '';
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: var(--primary);
+	box-shadow: 0 0 0 4px rgba(92, 124, 255, 0.2);
+}
+
+.close-button {
+	position: absolute;
+	top: 14px;
+	right: 14px;
+	z-index: 2;
+	width: 36px;
+	height: 36px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-soft);
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: var(--radius-md);
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.close-button:hover {
+	background: rgba(255, 255, 255, 0.13);
+	color: var(--text);
+}
+
+.btn {
+	border: none;
+	border-radius: 12px;
+	font-size: 15px;
+	font-weight: 600;
+	padding: 11px 16px;
+	letter-spacing: 0.2px;
+	transition: all 0.18s ease;
+}
+
+.btn:focus {
+	box-shadow: none !important;
+}
+
+.btn.btn-blue,
+.btn.btn-bluesociety {
+	background: linear-gradient(180deg, #6f8cff 0%, var(--primary) 100%);
+	color: #fff;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn.btn-blue:hover,
+.btn.btn-bluesociety:hover {
+	background: linear-gradient(180deg, #607df3 0%, var(--primary-hover) 100%);
+	color: #fff;
+	transform: translateY(-1px);
+}
+
+.btn.btn-red {
+	background: linear-gradient(180deg, #df5872 0%, var(--danger) 100%);
+	color: #fff;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn.btn-red:hover {
+	background: linear-gradient(180deg, #c94b64 0%, var(--danger-hover) 100%);
+	transform: translateY(-1px);
+}
+
+.btn.btn-odark {
+	background: rgba(255, 255, 255, 0.06);
+	color: var(--text);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn.btn-odark:hover {
+	background: rgba(255, 255, 255, 0.12);
+	color: var(--text);
+}
+
+.btn:disabled,
+.btn.disabled {
+	opacity: 0.45;
+	filter: grayscale(20%);
+}
+
+#menu .btn {
+	height: 120px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	border-radius: 16px;
+}
+
+#menu .btn i {
+	font-size: 23px;
+}
+
+#view_invoice_payall,
+#createinvoice,
+#openTargetSelector,
+#payreference,
+#police_lookup,
+#payreference_lookup {
+	height: 46px;
+	font-size: 14px !important;
+}
+
+input,
+textarea,
+select,
+.form-control,
+.form-select,
+.input-group-text {
+	border-radius: 10px !important;
+	background: rgba(255, 255, 255, 0.06) !important;
+	border: 1px solid rgba(255, 255, 255, 0.12) !important;
+	color: var(--text) !important;
+	font-weight: 500 !important;
+}
+
+input {
+	height: 48px;
+}
+
+textarea {
+	resize: none;
+	min-height: 90px;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: rgba(217, 224, 241, 0.55);
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.form-control:focus,
+.form-select:focus {
+	color: var(--text) !important;
+	border-color: rgba(110, 143, 255, 0.82) !important;
+	box-shadow: 0 0 0 3px rgba(92, 124, 255, 0.2) !important;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+	opacity: 0;
+}
+
+#invoicesFirstMenu,
+#invoicesSecondMenu {
+	padding: 5px;
+	border-radius: 14px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ci-option {
+	border-radius: 10px !important;
+	font-size: 14px !important;
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+}
+
+#createinvoice_options {
+	margin-top: 12px;
+	padding: 14px;
+	border-radius: 14px;
+	background: rgba(0, 0, 0, 0.18);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#selectedTargetsLabel,
+.pendingdiv,
+.payreference_noinfo,
+.police_noinfo {
+	padding: 8px 10px;
+	border-radius: 10px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #c8d2e7;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pendingdiv {
+	margin-bottom: 10px;
+}
+
+table {
+	width: 100%;
+	border-collapse: separate !important;
+	border-spacing: 0 10px;
+}
+
+table thead th {
+	border: none !important;
+	color: #ced8ed;
+	font-weight: 600;
+	padding-bottom: 4px !important;
+}
+
+table tbody tr {
+	background: rgba(255, 255, 255, 0.03);
+	transition: all 0.2s ease;
+}
+
+table tbody tr:hover {
+	background: rgba(92, 124, 255, 0.12) !important;
+	transform: translateY(-1px);
+}
+
+table tbody td {
+	border: none !important;
+	color: var(--text);
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+}
+
+table tbody td:first-child {
+	border-radius: 10px 0 0 10px;
+}
+
+table tbody td:last-child {
+	border-radius: 0 10px 10px 0;
+}
+
+.dataTable-info {
+	display: none;
+}
+
+.dataTable-top,
+.dataTable-bottom {
+	color: #c2cbe0;
+}
+
+.dataTable-input,
+.dataTable-selector {
+	background: rgba(255, 255, 255, 0.06) !important;
+	color: var(--text) !important;
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+	border-radius: 10px !important;
+}
+
+.badge {
+	border-radius: 10px;
+	padding: 6px 9px;
+	font-weight: 600;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bg-success {
+	background: rgba(100, 208, 154, 0.2) !important;
+	color: #9ef0c5 !important;
+}
+
+.bg-info {
+	background: rgba(102, 138, 255, 0.2) !important;
+	color: #bbccff !important;
+}
+
+.bg-danger {
+	background: rgba(211, 75, 99, 0.23) !important;
+	color: #ffc4cf !important;
+}
+
+.bg-secondary {
+	background: rgba(145, 156, 178, 0.2) !important;
+	color: #d8dff0 !important;
+}
+
+.itemWithPay {
+	white-space: nowrap;
+}
+
+.payInvoiceBtn {
+	white-space: nowrap;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 8px;
+	padding: 5px 10px;
+	font-size: 13px !important;
+	line-height: 1.2;
+}
+
+.selectPlayerToSendInvoice_modal-dialog {
+	max-width: 560px;
+}
+
+.modal-content,
+.myinvoices_modal-content,
+#selectPlayerToSendInvoiceModal .modal-content {
+	background: linear-gradient(180deg, rgba(34, 41, 55, 0.99) 0%, rgba(24, 30, 40, 0.99) 100%);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 18px;
+	box-shadow: var(--shadow);
+}
+
+.modal-body {
+	background: transparent;
+	color: var(--text-soft);
+	border-radius: 18px !important;
+}
+
+.p-1111 {
+	padding: 16px !important;
+}
+
+.targetList {
+	max-height: 280px;
+	overflow-y: auto;
+	padding: 6px 4px;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 10px;
+	background: rgba(0, 0, 0, 0.18);
+}
+
+.targetRow {
+	padding: 8px 10px;
+	margin-bottom: 6px;
+	border-radius: 8px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(255, 255, 255, 0.04);
+	color: var(--text);
+	cursor: pointer;
+}
+
+.targetRow:hover {
+	background: rgba(92, 124, 255, 0.16);
+}
+
+.targetRow:last-child {
+	margin-bottom: 0;
+}
+
+.view_invoice_title {
+	font-size: 24px;
+	font-weight: 700;
+	color: var(--text);
+}
+
+.view_invoice_sdtf {
+	font-size: 14px;
+	color: #c8d1e5;
+}
+
+.subtotal,
+.vat,
+.total,
+.view_invoice_paid {
+	color: #d7dff1;
+}
+
+.notes-window {
+	padding: 10px 12px;
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(255, 255, 255, 0.04);
+	color: #dce3f3;
+}
+
+.load {
+	width: 36px;
+	height: 36px;
+	border: 3px solid rgba(255, 255, 255, 0.18);
+	border-top-color: var(--primary);
+	border-radius: 50%;
+	animation: spin 0.8s linear infinite;
+}
+
+.ldata-txt {
+	color: #d5dcef;
+	font-weight: 600;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500;600&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css');
+
+:root {
+	--bg-overlay: rgba(10, 12, 16, 0.9);
+	--surface: #1b1f27;
+	--surface-2: #222836;
+	--surface-soft: rgba(255, 255, 255, 0.04);
+	--border: rgba(255, 255, 255, 0.1);
+	--text: #e9edf8;
+	--text-soft: #b4bdd2;
+	--primary: #5c7cff;
+	--primary-hover: #4a69e6;
+	--danger: #d34b63;
+	--danger-hover: #bc3e56;
+	--ok: #5fc98a;
+	--warn: #e7c167;
+	--radius-lg: 22px;
+	--radius-md: 14px;
+	--radius-sm: 10px;
+	--shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+*,
+*:focus,
+*:hover {
+	outline: none;
+}
+
+body {
+	font-family: 'DM Mono', monospace;
+	background: none;
+	color: var(--text);
+}
+
+/* Keep Bootstrap modal above custom menus */
+.modal-backdrop.show {
+	z-index: 12000;
+}
+
+.modal.show {
+	z-index: 12010;
+}
+
+/* Fullscreen menu layers */
+.selection_menu,
+.loading_menu,
+.invoices_menu,
+.societyinvoices_menu,
+.cityinvoices_menu,
+.createinvoice_menu,
+.payreference_menu,
+.police_menu {
+	display: none;
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	padding: 24px;
+	z-index: 9999;
+	background: var(--bg-overlay);
+}
+
+.selection_card,
+.invoices_card,
+.societyinvoices_card,
+.cityinvoices_card,
+.createinvoice_card,
+.payreference_card,
+.police_card,
+.loading_card {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	max-width: 1080px;
+	border-radius: var(--radius-lg);
+	border: 1px solid var(--border);
+	background: transparent;
+	box-shadow: var(--shadow);
+}
+
+.loading_card {
+	max-width: 420px;
+}
+
+.card,
+.card-header {
+	border: none;
+	background: transparent;
+}
+
+.card-body,
+.selection_card-body,
+.invoices_card-body,
+.societyinvoices_card-body,
+.cityinvoices_card-body,
+.createinvoice_card-body,
+.payreference_card-body,
+.police_card-body,
+.loading_card-body {
+	position: relative;
+	min-height: 320px;
+	padding: 22px 22px 18px;
+	border-radius: var(--radius-lg);
+	background: linear-gradient(180deg, rgba(35, 41, 55, 0.98) 0%, rgba(24, 28, 37, 0.98) 100%);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	color: var(--text-soft);
+}
+
+.section {
+	min-height: 100%;
+	padding: 18px;
+	border-radius: var(--radius-md);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: var(--surface-soft);
+}
+
+hr {
+	margin: 10px 0 16px;
+	border: 0;
+	height: 1px;
+	opacity: 1;
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.06));
+}
+
+.page-title,
+.menutitle {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--text);
+	font-weight: 700;
+	font-size: 24px;
+	letter-spacing: 0.4px;
+}
+
+.page-title::before {
+	content: '';
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: var(--primary);
+	box-shadow: 0 0 0 4px rgba(92, 124, 255, 0.2);
+}
+
+.close-button {
+	position: absolute;
+	top: 14px;
+	right: 14px;
+	z-index: 2;
+	width: 36px;
+	height: 36px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-soft);
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: var(--radius-sm);
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.close-button:hover {
+	background: rgba(255, 255, 255, 0.14);
+	color: var(--text);
+}
+
+/* Buttons */
+.btn {
+	border: none;
+	border-radius: 12px;
+	font-weight: 600;
+	letter-spacing: 0.25px;
+	padding: 12px 16px;
+	font-size: 15px;
+	transition: all 0.18s ease;
+}
+
+.btn:focus {
+	box-shadow: none !important;
+}
+
+.btn.btn-blue,
+.btn.btn-bluesociety {
+	background: linear-gradient(180deg, #6e8cff 0%, var(--primary) 100%);
+	color: #fff;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn.btn-blue:hover,
+.btn.btn-bluesociety:hover {
+	background: linear-gradient(180deg, #5f7cf3 0%, var(--primary-hover) 100%);
+	color: #fff;
+	transform: translateY(-1px);
+}
+
+.btn.btn-red {
+	background: linear-gradient(180deg, #e05973 0%, var(--danger) 100%);
+	color: #fff;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn.btn-red:hover {
+	background: linear-gradient(180deg, #cb4b64 0%, var(--danger-hover) 100%);
+	transform: translateY(-1px);
+}
+
+.btn.btn-odark {
+	background: rgba(255, 255, 255, 0.06);
+	color: var(--text);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.btn.btn-odark:hover {
+	background: rgba(255, 255, 255, 0.12);
+	color: var(--text);
+}
+
+.btn:disabled,
+.btn.disabled {
+	opacity: 0.45;
+	filter: grayscale(20%);
+}
+
+#menu .btn {
+	height: 120px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	border-radius: 16px;
+}
+
+#menu .btn i {
+	font-size: 23px;
+}
+
+#view_invoice_payall,
+#createinvoice,
+#openTargetSelector,
+#payreference,
+#police_lookup,
+#payreference_lookup {
+	height: 46px;
+	font-size: 14px !important;
+}
+
+/* Form controls */
+input,
+textarea,
+select,
+.form-control,
+.form-select,
+.input-group-text {
+	border-radius: 10px !important;
+	background: rgba(255, 255, 255, 0.06) !important;
+	color: var(--text) !important;
+	border: 1px solid rgba(255, 255, 255, 0.12) !important;
+	font-weight: 500 !important;
+}
+
+input {
+	height: 48px;
+}
+
+textarea {
+	resize: none;
+	min-height: 90px;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: rgba(216, 223, 240, 0.55);
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.form-control:focus,
+.form-select:focus {
+	color: var(--text) !important;
+	border-color: rgba(108, 141, 255, 0.8) !important;
+	box-shadow: 0 0 0 3px rgba(92, 124, 255, 0.2) !important;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+	opacity: 0;
+}
+
+#invoicesFirstMenu,
+#invoicesSecondMenu {
+	padding: 5px;
+	border-radius: 14px;
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ci-option {
+	border-radius: 10px !important;
+	font-size: 14px !important;
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+}
+
+#createinvoice_options {
+	margin-top: 12px;
+	padding: 14px;
+	border-radius: 14px;
+	background: rgba(0, 0, 0, 0.18);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#selectedTargetsLabel,
+.pendingdiv,
+.payreference_noinfo,
+.police_noinfo {
+	padding: 8px 10px;
+	border-radius: 10px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #c8d2e7;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pendingdiv {
+	margin-bottom: 10px;
+}
+
+/* Tables */
+table {
+	width: 100%;
+	border-collapse: separate !important;
+	border-spacing: 0 10px;
+}
+
+table thead th {
+	border: none !important;
+	color: #cfd8ee;
+	font-weight: 600;
+	padding-bottom: 4px !important;
+}
+
+table tbody tr {
+	background: rgba(255, 255, 255, 0.03);
+	transition: all 0.2s ease;
+}
+
+table tbody tr:hover {
+	background: rgba(92, 124, 255, 0.12) !important;
+	transform: translateY(-1px);
+}
+
+table tbody td {
+	border: none !important;
+	color: var(--text);
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+}
+
+table tbody td:first-child {
+	border-radius: 10px 0 0 10px;
+}
+
+table tbody td:last-child {
+	border-radius: 0 10px 10px 0;
+}
+
+.dataTable-info {
+	display: none;
+}
+
+.dataTable-top,
+.dataTable-bottom {
+	color: #c2cbe0;
+}
+
+.dataTable-input,
+.dataTable-selector {
+	background: rgba(255, 255, 255, 0.06) !important;
+	color: var(--text) !important;
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+	border-radius: 10px !important;
+}
+
+/* Status badges */
+.badge {
+	border-radius: 10px;
+	padding: 6px 9px;
+	font-weight: 600;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bg-success {
+	background: rgba(95, 201, 138, 0.18) !important;
+	color: #96e7b8 !important;
+}
+
+.bg-info {
+	background: rgba(102, 138, 255, 0.2) !important;
+	color: #bbccff !important;
+}
+
+.bg-danger {
+	background: rgba(211, 75, 99, 0.22) !important;
+	color: #ffc4cf !important;
+}
+
+.bg-secondary {
+	background: rgba(145, 156, 178, 0.2) !important;
+	color: #d8dff0 !important;
+}
+
+.itemWithPay {
+	white-space: nowrap;
+}
+
+.payInvoiceBtn {
+	white-space: nowrap;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 8px;
+	padding: 5px 10px;
+	font-size: 13px !important;
+	line-height: 1.2;
+}
+
+/* Target selection modal */
+.selectPlayerToSendInvoice_modal-dialog {
+	max-width: 560px;
+}
+
+#selectPlayerToSendInvoiceModal .modal-content,
+.myinvoices_modal-content,
+.modal-content {
+	background: linear-gradient(180deg, rgba(33, 39, 52, 0.99) 0%, rgba(24, 29, 38, 0.99) 100%);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 18px;
+	box-shadow: var(--shadow);
+}
+
+.modal-body {
+	background: transparent;
+	color: var(--text-soft);
+	border-radius: 18px !important;
+}
+
+.p-1111 {
+	padding: 16px !important;
+}
+
+.targetList {
+	max-height: 280px;
+	overflow-y: auto;
+	padding: 6px 4px;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 10px;
+	background: rgba(0, 0, 0, 0.18);
+}
+
+.targetRow {
+	padding: 8px 10px;
+	margin-bottom: 6px;
+	border-radius: 8px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(255, 255, 255, 0.04);
+	color: var(--text);
+	cursor: pointer;
+}
+
+.targetRow:hover {
+	background: rgba(92, 124, 255, 0.16);
+}
+
+.targetRow:last-child {
+	margin-bottom: 0;
+}
+
+/* Invoice detail modal blocks */
+.view_invoice_title {
+	font-size: 24px;
+	font-weight: 700;
+	color: var(--text);
+}
+
+.view_invoice_sdtf {
+	font-size: 14px;
+	color: #c8d1e5;
+}
+
+.subtotal,
+.vat,
+.total,
+.view_invoice_paid {
+	color: #d6ddef;
+}
+
+.notes-window {
+	padding: 10px 12px;
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(255, 255, 255, 0.04);
+	color: #dce3f3;
+}
+
+/* Loading */
+.load {
+	width: 36px;
+	height: 36px;
+	border: 3px solid rgba(255, 255, 255, 0.18);
+	border-top-color: var(--primary);
+	border-radius: 50%;
+	animation: spin 0.8s linear infinite;
+}
+
+.ldata-txt {
+	color: #d5dcef;
+	font-weight: 600;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap');
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
@@ -9,6 +1059,85 @@
 body {
 	font-family: 'DM Mono', monospace;
 	background: none;
+}
+
+/* Keep Bootstrap modal above custom full-screen menus */
+.modal-backdrop.show {
+	z-index: 12000;
+}
+
+.modal.show {
+	z-index: 12010;
+}
+
+/* New UI layout containers */
+.selection_menu,
+.loading_menu,
+.invoices_menu,
+.societyinvoices_menu,
+.cityinvoices_menu,
+.createinvoice_menu,
+.payreference_menu,
+.police_menu {
+	display: none;
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 9999;
+	padding: 24px;
+}
+
+.selection_card,
+.invoices_card,
+.societyinvoices_card,
+.cityinvoices_card,
+.createinvoice_card,
+.payreference_card,
+.police_card,
+.loading_card {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	margin: 0;
+	width: 100%;
+	max-width: 980px;
+	box-shadow: 0px 0px 12px rgba(10, 10, 10, 0.35);
+	border-radius: 20px;
+}
+
+.loading_card {
+	max-width: 380px;
+}
+
+.selection_card-body,
+.invoices_card-body,
+.societyinvoices_card-body,
+.cityinvoices_card-body,
+.createinvoice_card-body,
+.payreference_card-body,
+.police_card-body,
+.loading_card-body {
+	position: relative;
+	min-height: 320px;
+}
+
+.close-button {
+	position: absolute;
+	top: 18px;
+	right: 20px;
+	font-size: 20px;
+	color: #2f3037;
+	cursor: pointer;
+	z-index: 2;
+}
+
+.page-title {
+	display: block;
+	font-size: 28px;
+	font-weight: 600;
+	color: #2f3037;
 }
 
 textarea {
@@ -33,7 +1162,7 @@ textarea {
 }
 
 .card-body {
-	background-color: #090a18;
+	background-color: #ffffff;
 	color: rgba(110, 113, 121, 1);
 	font-size: 15px;
 	font-weight: 500;
@@ -238,6 +1367,39 @@ textarea {
 	box-shadow: none;
 }
 
+.itemWithPay {
+	white-space: nowrap;
+}
+
+.payInvoiceBtn {
+	white-space: nowrap;
+	display: inline-block;
+	vertical-align: middle;
+	padding: 4px 10px;
+	font-size: 13px !important;
+	line-height: 1.2;
+}
+
+.targetList {
+	max-height: 280px;
+	overflow-y: auto;
+	padding: 6px 2px;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	border-radius: 10px;
+}
+
+.targetRow {
+	padding: 8px 10px;
+	margin-bottom: 6px;
+	background: #f6f7fb;
+	border-radius: 8px;
+	cursor: pointer;
+}
+
+.targetRow:last-child {
+	margin-bottom: 0;
+}
+
 .btn-close {
 	background-color: #fff;
 	border-radius: 5px;
@@ -299,7 +1461,8 @@ input[type=number]::-webkit-inner-spin-button {
 .input-group-text {
 	background-color: #eeeff3 !important;
 	border: none;
-	border-radius: 0 10px 10px 0;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
 	font-weight: 500;
 }
 
@@ -373,3 +1536,424 @@ tbody tr:hover {
 }
 
 /* END MYINVOICES MODAL */
+
+/* ===================================================================
+   Chic Theme Overrides
+   =================================================================== */
+
+:root {
+	--theme-bg: #101216;
+	--theme-bg-soft: #171a20;
+	--theme-surface: #1b1f27;
+	--theme-surface-2: #212632;
+	--theme-border: rgba(255, 255, 255, 0.1);
+	--theme-text: #e8ebf2;
+	--theme-text-soft: #afb7c9;
+	--theme-primary: #5c7cff;
+	--theme-primary-hover: #4a69e6;
+	--theme-danger: #d34b63;
+	--theme-danger-hover: #bb3f57;
+	--theme-shadow: 0 22px 55px rgba(0, 0, 0, 0.45);
+}
+
+body {
+	color: var(--theme-text);
+}
+
+.selection_menu,
+.loading_menu,
+.invoices_menu,
+.societyinvoices_menu,
+.cityinvoices_menu,
+.createinvoice_menu,
+.payreference_menu,
+.police_menu {
+	background: rgba(10, 11, 14, 0.86);
+	backdrop-filter: none;
+}
+
+.selection_card,
+.invoices_card,
+.societyinvoices_card,
+.cityinvoices_card,
+.createinvoice_card,
+.payreference_card,
+.police_card,
+.loading_card {
+	border: 1px solid var(--theme-border);
+	box-shadow: var(--theme-shadow);
+}
+
+.card-body,
+.selection_card-body,
+.invoices_card-body,
+.societyinvoices_card-body,
+.cityinvoices_card-body,
+.createinvoice_card-body,
+.payreference_card-body,
+.police_card-body,
+.loading_card-body {
+	background: linear-gradient(180deg, rgba(33, 38, 50, 0.98) 0%, rgba(24, 28, 36, 0.98) 100%);
+	color: var(--theme-text-soft);
+	border-radius: 20px;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.page-title,
+.menutitle {
+	color: var(--theme-text);
+	letter-spacing: 0.6px;
+}
+
+hr {
+	border: 0;
+	height: 1px;
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06));
+	opacity: 1;
+}
+
+.close-button {
+	color: var(--theme-text-soft);
+	width: 36px;
+	height: 36px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.04);
+	transition: all 0.2s ease;
+}
+
+.close-button:hover {
+	background: rgba(255, 255, 255, 0.12);
+	color: var(--theme-text);
+}
+
+.btn {
+	border-radius: 12px;
+	font-weight: 600;
+	letter-spacing: 0.4px;
+	transition: all 0.2s ease;
+}
+
+.btn.btn-blue {
+	background: linear-gradient(180deg, #6e8bff 0%, var(--theme-primary) 100%);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	color: #ffffff;
+}
+
+.btn.btn-blue:hover {
+	background: linear-gradient(180deg, #5f7cf2 0%, var(--theme-primary-hover) 100%);
+	transform: translateY(-1px);
+}
+
+.btn.btn-red {
+	background: linear-gradient(180deg, #e25b74 0%, var(--theme-danger) 100%);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	color: #fff;
+}
+
+.btn.btn-red:hover {
+	background: linear-gradient(180deg, #cf4e66 0%, var(--theme-danger-hover) 100%);
+	transform: translateY(-1px);
+}
+
+.btn.btn-odark {
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	color: var(--theme-text);
+}
+
+.btn.btn-odark:hover {
+	background: rgba(255, 255, 255, 0.12);
+	color: #ffffff;
+}
+
+.btn:disabled,
+.btn.disabled {
+	opacity: 0.45;
+	filter: grayscale(15%);
+}
+
+input,
+textarea,
+select,
+.form-control,
+.form-select,
+.input-group-text {
+	background-color: rgba(255, 255, 255, 0.06) !important;
+	color: var(--theme-text) !important;
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: rgba(214, 220, 234, 0.55);
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.form-control:focus,
+.form-select:focus {
+	border-color: rgba(116, 143, 255, 0.8) !important;
+	box-shadow: 0 0 0 3px rgba(92, 124, 255, 0.2) !important;
+}
+
+table {
+	border-collapse: separate !important;
+	border-spacing: 0 8px;
+}
+
+table thead th {
+	color: #cfd7ea;
+	font-weight: 600;
+	border: none !important;
+	padding-bottom: 6px !important;
+}
+
+table tbody tr {
+	background: rgba(255, 255, 255, 0.03);
+	transition: background 0.2s ease, transform 0.2s ease;
+}
+
+table tbody tr:hover {
+	background: rgba(92, 124, 255, 0.12) !important;
+	transform: translateY(-1px);
+}
+
+table tbody td {
+	color: var(--theme-text);
+	border: none !important;
+	padding-top: 11px !important;
+	padding-bottom: 11px !important;
+}
+
+.badge {
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	font-weight: 600;
+	padding: 6px 9px;
+}
+
+.bg-success {
+	background-color: rgba(72, 171, 119, 0.18) !important;
+	color: #8fe3b5 !important;
+}
+
+.bg-info {
+	background-color: rgba(84, 126, 255, 0.2) !important;
+	color: #b9cbff !important;
+}
+
+.bg-danger {
+	background-color: rgba(205, 86, 111, 0.2) !important;
+	color: #ffc3cf !important;
+}
+
+.bg-secondary {
+	background-color: rgba(130, 140, 160, 0.2) !important;
+	color: #d2d8e6 !important;
+}
+
+#selectedTargetsLabel,
+.pendingdiv,
+.payreference_noinfo,
+.police_noinfo {
+	color: #c8d0e3;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 10px;
+	padding: 8px 10px;
+}
+
+.targetList {
+	background: rgba(0, 0, 0, 0.22);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.targetRow {
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	color: var(--theme-text);
+}
+
+.targetRow:hover {
+	background: rgba(92, 124, 255, 0.2);
+}
+
+.modal-content,
+.myinvoices_modal-content,
+#selectPlayerToSendInvoiceModal .modal-content {
+	background: linear-gradient(180deg, rgba(30, 35, 46, 0.98) 0%, rgba(21, 25, 33, 0.98) 100%);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	box-shadow: var(--theme-shadow);
+}
+
+.modal-body {
+	background: transparent;
+	color: var(--theme-text-soft);
+}
+
+.dataTable-top,
+.dataTable-bottom {
+	color: #c2cbe0;
+}
+
+.dataTable-input,
+.dataTable-selector {
+	background-color: rgba(255, 255, 255, 0.06) !important;
+	color: var(--theme-text);
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+	border-radius: 10px;
+}
+
+/* ===================================================================
+   App-like Layout Polish
+   =================================================================== */
+
+.selection_card,
+.invoices_card,
+.societyinvoices_card,
+.cityinvoices_card,
+.createinvoice_card,
+.payreference_card,
+.police_card {
+	max-width: 1080px;
+	border-radius: 24px;
+}
+
+.selection_card-body,
+.invoices_card-body,
+.societyinvoices_card-body,
+.cityinvoices_card-body,
+.createinvoice_card-body,
+.payreference_card-body,
+.police_card-body {
+	padding: 22px 22px 18px;
+}
+
+.section {
+	background: rgba(255, 255, 255, 0.02);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	border-radius: 16px;
+	padding: 18px 18px 14px;
+	min-height: 100%;
+}
+
+.page-title {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.page-title::before {
+	content: '';
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: var(--theme-primary);
+	box-shadow: 0 0 0 4px rgba(92, 124, 255, 0.18);
+}
+
+#menu .btn {
+	height: 120px;
+	border-radius: 16px;
+	font-size: 16px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+}
+
+#menu .btn i {
+	font-size: 22px;
+}
+
+#invoicesFirstMenu,
+#invoicesSecondMenu {
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 14px;
+	padding: 5px;
+}
+
+.ci-option {
+	border-radius: 10px !important;
+	font-size: 14px !important;
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+}
+
+#createinvoice_options {
+	background: rgba(0, 0, 0, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 14px;
+	padding: 14px;
+}
+
+#selectedTargetsLabel {
+	font-weight: 600;
+	font-size: 13px;
+	letter-spacing: 0.2px;
+}
+
+#view_invoice_payall,
+#createinvoice,
+#openTargetSelector,
+#payreference,
+#police_lookup,
+#payreference_lookup {
+	height: 46px;
+	font-size: 14px !important;
+}
+
+.pendingdiv {
+	font-size: 14px;
+	font-weight: 600;
+	margin-bottom: 10px;
+}
+
+table {
+	border-spacing: 0 10px;
+}
+
+table tbody td:first-child {
+	border-radius: 10px 0 0 10px;
+}
+
+table tbody td:last-child {
+	border-radius: 0 10px 10px 0;
+}
+
+.modal-dialog {
+	max-width: 560px;
+}
+
+.view_invoice_title {
+	font-size: 24px;
+	font-weight: 700;
+	color: var(--theme-text);
+}
+
+.view_invoice_sdtf {
+	color: #c6cfe3;
+	font-size: 14px;
+}
+
+.notes-window {
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.09);
+	border-radius: 10px;
+	padding: 10px 12px;
+	color: #d9e0ef;
+}
+
+.subtotal,
+.vat,
+.total {
+	color: #d7deef;
+}

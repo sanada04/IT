@@ -1,603 +1,435 @@
-var table = []
+var tableInstances = []
 var windowIsOpened = false
-var selectedWindow = "none"
-var item = null
-var dataTableLabels = {
-	placeholder: "検索...",
-	noRows: "表示できるデータがありません",
-	info: "全 {rows} 件中 {start} - {end} 件を表示"
+var selectedWindow = 'none'
+var selectedInvoiceType = 'society'
+var currentMyInvoices = []
+var nearbyPlayers = []
+var selectedTargets = []
+var pendingTargetModalOpen = false
+
+function postAction(payload) {
+	$.post('https://okokBilling/action', JSON.stringify(payload))
 }
 
-// Windows
+function playOpenSound() {
+	var popup = new Audio('popup.mp3')
+	popup.volume = 0.4
+	popup.play()
+}
+
+function playCloseSound() {
+	var popuprev = new Audio('popupreverse.mp3')
+	popuprev.volume = 0.4
+	popuprev.play()
+}
+
+function destroyTables() {
+	for (var i = 0; i < tableInstances.length; i++) {
+		tableInstances[i].destroy()
+	}
+	tableInstances = []
+}
+
+function closeAllMenus() {
+	$('.selection_menu, .invoices_menu, .societyinvoices_menu, .createinvoice_menu, .cityinvoices_menu, .payreference_menu, .police_menu, .loading_menu').fadeOut(100)
+	$('.modal').modal('hide')
+	destroyTables()
+	windowIsOpened = false
+	selectedWindow = 'none'
+}
+
+function escapeHtml(str) {
+	return String(str || '')
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#039;')
+}
+
+function syncSelectedTargetsWithNearby() {
+	var validIds = {}
+	for (var i = 0; i < nearbyPlayers.length; i++) {
+		validIds[String(nearbyPlayers[i].id)] = true
+	}
+	selectedTargets = selectedTargets.filter(function(id) {
+		return validIds[String(id)] === true
+	})
+}
+
+function updateSelectedTargetsLabel() {
+	var text = '送信先: 未選択'
+	if (selectedTargets.length > 0) {
+		text = '送信先: ' + selectedTargets.length + '人を選択中'
+	}
+	$('#selectedTargetsLabel').text(text)
+}
+
+function renderTargetList() {
+	var html = ''
+	if (!nearbyPlayers.length) {
+		html = '<div class="text-center py-2">近くに送信可能なプレイヤーがいません。</div>'
+	} else {
+		html += '<div class="d-flex justify-content-between mb-2">'
+		html += '<button type="button" class="btn btn-blue btn-sm" id="selectAllTargets">全員選択</button>'
+		html += '<button type="button" class="btn btn-red btn-sm" id="clearAllTargets">全解除</button>'
+		html += '</div>'
+		html += '<div class="targetList">'
+		for (var i = 0; i < nearbyPlayers.length; i++) {
+			var p = nearbyPlayers[i]
+			var checked = selectedTargets.indexOf(p.id) !== -1 ? 'checked' : ''
+			html += '<label class="targetRow d-flex align-items-center justify-content-between">'
+			html += '<span><input type="checkbox" class="targetCheckbox me-2" data-server-id="' + p.id + '" ' + checked + '> '
+			html += escapeHtml(p.name) + ' (ID: ' + p.id + ')</span>'
+			html += '<span class="text-muted">' + Number(p.distance || 0).toFixed(1) + 'm</span>'
+			html += '</label>'
+		}
+		html += '</div>'
+	}
+	html += '<div class="d-flex justify-content-center mt-3">'
+	html += '<button type="button" class="btn btn-blue w-100" id="confirmTargetSelection">選択を確定</button>'
+	html += '</div>'
+	$('#nearPlayersDiv').html(html)
+}
+
+function openTargetSelectorModal() {
+	renderTargetList()
+	var modalEl = document.getElementById('selectPlayerToSendInvoiceModal')
+	if (!modalEl) return
+	var modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl)
+	modalInstance.show()
+}
+
+function openSelectionMenu(data) {
+	var row = ''
+	if (data.society === true) {
+		row = `
+			<div class="col-md-4 mb-3">
+				<button type="button" class="btn btn-blue w-100 py-4" id="menuMyInvoices"><i class="fas fa-user"></i><br>個人請求書</button>
+			</div>
+			<div class="col-md-4 mb-3">
+				<button type="button" class="btn btn-blue w-100 py-4" id="menuSocietyInvoices"><i class="fas fa-building"></i><br>組織請求書</button>
+			</div>
+			<div class="col-md-4 mb-3">
+				<button type="button" class="btn btn-blue w-100 py-4" id="menuCreateInvoice"><i class="fas fa-file-invoice"></i><br>請求書作成</button>
+			</div>
+		`
+	} else if (data.create && !data.society) {
+		row = `
+			<div class="col-md-6 mb-3">
+				<button type="button" class="btn btn-blue w-100 py-4" id="menuMyInvoices"><i class="fas fa-user"></i><br>個人請求書</button>
+			</div>
+			<div class="col-md-6 mb-3">
+				<button type="button" class="btn btn-blue w-100 py-4" id="menuCreateInvoice"><i class="fas fa-file-invoice"></i><br>請求書作成</button>
+			</div>
+		`
+	} else {
+		row = `
+			<div class="col-md-12 mb-3">
+				<button type="button" class="btn btn-blue w-100 py-4" id="menuMyInvoices"><i class="fas fa-user"></i><br>個人請求書</button>
+			</div>
+		`
+	}
+
+	$('#menu').html(row)
+	$('.selection_menu').fadeIn(150)
+	windowIsOpened = true
+	selectedWindow = 'mainMenu'
+}
+
+function statusBadge(status) {
+	if (status === 'paid') return '<span class="badge bg-success">支払い済み</span>'
+	if (status === 'unpaid') return '<span class="badge bg-danger">未払い</span>'
+	if (status === 'autopaid') return '<span class="badge bg-info">自動支払い</span>'
+	if (status === 'cancelled') return '<span class="badge bg-secondary">キャンセル</span>'
+	return '<span class="badge bg-secondary">不明</span>'
+}
+
+function openMyInvoices(data) {
+	var rows = ''
+	var unpaidTotal = 0
+	var invoices = data.invoices || []
+	currentMyInvoices = invoices
+	for (var i = 0; i < invoices.length; i++) {
+		var inv = invoices[i]
+		if (inv.status === 'unpaid') unpaidTotal += Number(inv.invoice_value || 0)
+		var payButton = inv.status === 'unpaid'
+			? `<button type="button" class="btn btn-blue btn-sm payInvoiceBtn ms-2" data-invoice-id="${inv.id}">支払う</button>`
+			: ''
+		rows += `
+			<tr>
+				<td class="text-center">${inv.id}</td>
+				<td class="text-center">${statusBadge(inv.status)}</td>
+				<td class="text-center">${inv.author_name || inv.society_name || '-'}</td>
+				<td class="text-center">${Number(inv.invoice_value || 0).toLocaleString()}円</td>
+				<td class="text-center itemWithPay">${inv.item || '-'}${payButton}</td>
+			</tr>
+		`
+	}
+
+	$('#invoicesTableData').html(rows)
+	$('#view_invoice_payall').text('全て支払う (' + unpaidTotal.toLocaleString() + '円)')
+
+	var invoicesTable = document.getElementById('invoicesTable')
+	if (invoicesTable) {
+		tableInstances.push(new simpleDatatables.DataTable(invoicesTable, {
+			searchable: true,
+			perPageSelect: false,
+			perPage: 8
+		}))
+	}
+
+	$('.invoices_menu').fadeIn(150)
+	windowIsOpened = true
+	selectedWindow = 'myinvoices'
+}
+
+function openSocietyInvoices(data) {
+	var rows = ''
+	var invoices = data.invoices || []
+	for (var i = 0; i < invoices.length; i++) {
+		var inv = invoices[i]
+		var action = inv.status === 'unpaid'
+			? `<button class="btn btn-red btn-sm cancelInvoice" data-invoice-id="${inv.id}">キャンセル</button>`
+			: '-'
+		rows += `
+			<tr>
+				<td class="text-center">${inv.id}</td>
+				<td class="text-center">${statusBadge(inv.status)}</td>
+				<td class="text-center">${inv.author_name || '-'}</td>
+				<td class="text-center">${Number(inv.invoice_value || 0).toLocaleString()}円</td>
+				<td class="text-center">${inv.item || '-'}</td>
+			</tr>
+		`
+	}
+
+	$('#societyInvoicesTableData').html(rows)
+	$('#totalpending_value').text(Number(data.awaitedIncome || 0).toLocaleString())
+
+	var societyTable = document.getElementById('societyInvoicesTable')
+	if (societyTable) {
+		tableInstances.push(new simpleDatatables.DataTable(societyTable, {
+			searchable: true,
+			perPageSelect: false,
+			perPage: 8
+		}))
+	}
+
+	$('.societyinvoices_menu').fadeIn(150)
+	windowIsOpened = true
+	selectedWindow = 'societyinvoices'
+}
+
+function openCreateInvoice(data) {
+	$('#normal_createinvoice_item, #normal_createinvoice_price, #normal_createinvoice_note, #custom_createinvoice_item, #custom_createinvoice_price, #custom_createinvoice_note').val('')
+	$('#createinvoice').prop('disabled', true)
+	selectedInvoiceType = 'society'
+	nearbyPlayers = data.nearPlayers || []
+	selectedTargets = []
+	if (nearbyPlayers.length === 1) {
+		selectedTargets = [nearbyPlayers[0].id]
+	}
+	updateSelectedTargetsLabel()
+	$('#invoiceBillsList').show()
+	$('#invoiceCustom').hide()
+	$('.createinvoice_menu').fadeIn(150)
+	windowIsOpened = true
+	selectedWindow = 'createinvoice'
+}
+
 window.addEventListener('message', function(event) {
-	item = event.data;
-	switch (event.data.action) {
+	var data = event.data || {}
+	switch (data.action) {
 		case 'mainmenu':
-			if (!windowIsOpened) {
-				var popup = new Audio('popup.mp3');
-				popup.volume = 0.4;
-				popup.play();
-
-				windowIsOpened = true
-				
-				if (event.data.society == true){
-					row = `	<div class="col col-md-4">
-								<div class="card h-100">
-								  <div class="card-body text-center mainmenu-subcard" id="menuMyInvoices" style="background-color: #eeeff3; color: #2f3037;">
-								    <span class="card-title" style="font-size: 30px;"><i class="fas fa-user"></i></span>
-								    <p class="card-text">個人請求書</p>
-								  </div>
-								</div>
-							</div>
-							<div class="col col-md-4">
-								<div class="card h-100">
-								  <div class="card-body text-center mainmenu-subcard" id="menuSocietyInvoices" style="background-color: #eeeff3; color: #2f3037;">
-								    <span class="card-title" style="font-size: 30px;"><i class="fas fa-building"></i></span>
-								    <p class="card-text">組織請求書</p>
-								  </div>
-								</div>
-							</div>
-							<div class="col col-md-4">
-								<div class="card h-100">
-								  <div class="card-body text-center mainmenu-subcard" id="menuCreateInvoice" style="background-color: #eeeff3; color: #2f3037;">
-								    <span class="card-title" style="font-size: 30px;"><i class="fas fa-paper-plane"></i></span>
-								    <p class="card-text">請求書作成</p>
-								  </div>
-								</div>
-							</div>
-						  `
-				} else if(event.data.create & !event.data.society){
-					row = `	<div class="d-flex justify-content-center">
-								<div class="col col-md-4">
-									<div class="card h-100">
-									  <div class="card-body text-center mainmenu-subcard" id="menuMyInvoices" style="background-color: #eeeff3; color: #2f3037;">
-									    <span class="card-title" style="font-size: 30px;"><i class="fas fa-user"></i></span>
-									    <p class="card-text">個人請求書</p>
-									  </div>
-									</div>
-								</div>
-								<div class="col col-md-4" style="margin-left: 25px;">
-									<div class="card h-100">
-									  <div class="card-body text-center mainmenu-subcard" id="menuCreateInvoice" style="background-color: #eeeff3; color: #2f3037;">
-									    <span class="card-title" style="font-size: 30px;"><i class="fas fa-paper-plane"></i></span>
-									    <p class="card-text">請求書作成</p>
-									  </div>
-									</div>
-								</div>
-							</div>
-						  `
-				} else if(!event.data.create & !event.data.society){
-					row = `	<div class="d-flex justify-content-center">
-								<div class="col col-md-4">
-									<div class="card h-100">
-									  <div class="card-body text-center mainmenu-subcard" id="menuMyInvoices" style="background-color: #eeeff3; color: #2f3037;">
-									    <span class="card-title" style="font-size: 30px;"><i class="fas fa-user"></i></span>
-									    <p class="card-text">個人請求書</p>
-									  </div>
-									</div>
-								</div>
-							</div>
-						  `
-				}
-
-				$(".mainmenu").fadeIn();
-				$("#mainMenuData").html(row);
-				selectedWindow = "mainMenu"
-			}
+			playOpenSound()
+			closeAllMenus()
+			openSelectionMenu(data)
 			break
 		case 'myinvoices':
-			if (!windowIsOpened) {
-				var popup = new Audio('popup.mp3');
-				popup.volume = 0.4;
-				popup.play();
-
-				var row = "";
-
-				for(var i=0; i<event.data.invoices.length; i++)
-				{
-					var invoices = event.data.invoices[i];
-					var tablestatus = "";
-
-					if (invoices.status == 'paid') {
-						tablestatus = '<td class="text-center align-middle"><span class="badge bg-success" style="font-size: 14px;"><i class="fas fa-check-circle"></i> 支払い済み</span></td>';
-						modalstatus = '<span class="badge bg-success" style="position: absolute; right: 5%; top: 5%; font-size: 18px;"><i class="fas fa-check-circle"></i> 支払い済み</span>';
-						payment_status = `<span style="font-size: 20px; color: #2f3037; font-weight: 600;">支払日: ${invoices.paid_date}</span>`;
-					}
-					else if (invoices.status == 'unpaid') {
-						tablestatus = '<td class="text-center align-middle"><span class="badge bg-danger" style="font-size: 14px;"><i class="fas fa-times-circle"></i> 未払い</span></td>';
-						modalstatus = '<span class="badge bg-danger" style="position: absolute; right: 5%; top: 5%; font-size: 18px;"><i class="fas fa-times-circle"></i> 未払い</span>';
-						payment_status = `<button type="button" id="" class="btn btn-blue flex-grow-1 payInvoice" style="border-radius: 10px; flex-basis: 100%;" data-invoiceId="${invoices.id}" data-invoiceMoney="${invoices.invoice_value}" data-bs-dismiss="modal"><i class="fas fa-shopping-bag"></i> 支払う ${invoices.invoice_value.toLocaleString()}￥</button>`;
-					}
-					else if (invoices.status == 'autopaid') {
-						tablestatus = '<td class="text-center align-middle"><span class="badge bg-info" style="font-size: 14px;"><i class="fas fa-clock"></i> 自動支払い</span></td>';
-						modalstatus = '<span class="badge bg-info" style="position: absolute; right: 5%; top: 5%; font-size: 18px;"><i class="fas fa-clock"></i> 自動支払い</span>';
-						payment_status = `<span style="font-size: 20px; color: #2f3037; font-weight: 600;">自動支払日: ${invoices.paid_date}</span>`;
-					}
-					else if (invoices.status == 'cancelled') {
-						tablestatus = '<td class="text-center align-middle"><span class="badge bg-secondary" style="font-size: 14px;"><i class="fas fa-minus-circle"></i> キャンセル</span></td>';
-						modalstatus = '<span class="badge bg-secondary" style="position: absolute; right: 5%; top: 5%; font-size: 18px;"><i class="fas fa-minus-circle"></i> キャンセル</span>';
-						payment_status = '<span style="font-size: 20px; color: #2f3037; font-weight: 600;">キャンセル済み</span>'
-					}
-
-					if (invoices.limit_pay_date == 'N/A') {
-						limit_pay_date = ''
-					} else {
-						limit_pay_date = `<h6>支払期限: ${invoices.limit_pay_date}</h6>`
-					}
-
-					row += `
-						<tr>
-							<td class="text-center align-middle">${invoices.id}</td>
-							${tablestatus}
-							<td class="text-center align-middle">${invoices.society_name}</td>
-							<td class="text-center align-middle">${invoices.item}</td>
-							<td class="text-center align-middle">${invoices.invoice_value.toLocaleString()}￥</td>
-							<td class="text-center align-middle"><button type="button" class="btn btn-blue showInvoice" style="border-radius: 10px; flex-basis: 100%;" data-toggle="modal" data-target="#showInvoiceModal${invoices.id}" data-invoiceId="${invoices.id}""><i class="fas fa-eye"></i> 表示</button></td>
-						</tr>
-					`;
-
-					var modal = `<div class="modal fade" id="showInvoiceModal${invoices.id}" tabindex="-1">
-									<div class="modal-dialog modal-dialog-centered">
-										<div class="modal-content myinvoices_modal-content">
-											<div class="modal-body p-4">
-												<span class="menutitle">請求書 #${invoices.id}</span>
-												${modalstatus}
-												<h6 class="" id="" style="">送信日: ${invoices.sent_date}</h6>
-												${limit_pay_date}
-												<h6 class="" id="" style="margin-top: 20px;">宛先: <span style="color: #2f3037;">${invoices.receiver_name}</span></h6>
-												<h6 class="" id="" style="">差出人: <span style="color: #2f3037;">${invoices.author_name}</span></h6>
-												<hr>
-												<div class="d-flex justify-content-between">
-													<span class="" id="" style="color: #2f3037; font-size: 20px;">${invoices.item}</span> <span class="" id="" style="font-size: 18px;">${Math.round(invoices.invoice_value - Math.round(invoices.invoice_value * (event.data.VAT/100))).toLocaleString()} ￥</span>
-												</div>
-												<hr>
-												<div class="d-flex justify-content-between">
-													<span class="" id="" style="color: #2f3037; font-size: 20px;">小計</span> <span class="" id="" style="font-size: 18px;">${Math.round(invoices.invoice_value - Math.round(invoices.invoice_value * (event.data.VAT/100))).toLocaleString()} ￥</span>
-												</div>
-												<div class="d-flex justify-content-between">
-													<span class="" id="" style="color: #2f3037; font-size: 20px;">税 (${event.data.VAT}%)</span> <span class="" id="" style="font-size: 18px;">${Math.round(invoices.invoice_value * (event.data.VAT/100)).toLocaleString()} ￥</span>
-												</div>
-												<br>
-												<div class="d-flex justify-content-between">
-													<span class="" id="" style="color: #2f3037; font-size: 20px; font-weight: 700;">合計</span> <span class="" id="" style="font-size: 18px;">${Math.round(invoices.invoice_value).toLocaleString()} ￥</span>
-												</div>
-												<br>
-												<div class="d-flex justify-content-center">
-													${payment_status}
-												</div>
-												<br>
-												<div class="d-flex justify-content-center">
-													<textarea class="form-control" readonly>${invoices.notes}</textarea>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								`;
-					$("body").append(modal);
-				}
-				$("#myInvoicesData").html(row);
-
-				const myinvoices = document.getElementById('myInvoices');
-				table.push(new simpleDatatables.DataTable(myinvoices, {
-					searchable: true,
-					perPageSelect: false,
-					perPage: 5,
-					labels: dataTableLabels
-				}));
-
-				windowIsOpened = true
-
-				selectedWindow = "myinvoices"
-				$(".myinvoices").fadeIn();
-			}
-			break
-		case 'createinvoice':
-			if (!windowIsOpened) {
-				windowIsOpened = true
-				$("#sendInvoiceSubtitle").html(event.data.society);
-				$(".sendinvoice").fadeIn();
-				selectedWindow = "createinvoice"
-			}
+			playOpenSound()
+			closeAllMenus()
+			openMyInvoices(data)
 			break
 		case 'societyinvoices':
-			if (!windowIsOpened) {
-				var popup = new Audio('popup.mp3');
-				popup.volume = 0.4;
-				popup.play();
-
-				var row = "";
-
-				for(var i=0; i<event.data.invoices.length; i++)
-				{
-					var invoices = event.data.invoices[i];
-					var data = event.data
-					var tablestatus = "";
-
-					$("#societyInvoicesTitle").html(invoices.society_name);
-					$("#totalInvoices").html(data.totalInvoices);
-					$("#totalIncome").html(`${data.totalIncome.toLocaleString()}￥`);
-					$("#unpaidInvoices").html(data.totalUnpaid);
-					$("#awaitedIncome").html(`${data.awaitedIncome.toLocaleString()}￥`);
-
-					if (invoices.status == 'paid') {
-						tablestatus = '<td class="text-center align-middle"><span class="badge bg-success" style="font-size: 14px;"><i class="fas fa-check-circle"></i> 支払い済み</span></td>';
-						modalstatus = '<span class="badge bg-success" style="position: absolute; right: 5%; top: 5%; font-size: 18px;"><i class="fas fa-check-circle"></i> 支払い済み</span>';
-						payment_status = `<span style="font-size: 20px; color: #2f3037; font-weight: 600;">支払日: ${invoices.paid_date}</span>`;
-					}
-					else if (invoices.status == 'unpaid') {
-						tablestatus = '<td class="text-center align-middle"><span class="badge bg-danger" style="font-size: 14px;"><i class="fas fa-times-circle"></i> 未払い</span></td>';
-						modalstatus = '<span class="badge bg-danger" style="position: absolute; right: 5%; top: 5%; font-size: 18px;"><i class="fas fa-times-circle"></i> 未払い</span>';
-						payment_status = `<button type="button" id="" class="btn btn-red flex-grow-1 cancelInvoice" style="border-radius: 10px; flex-basis: 100%;" data-invoiceId="${invoices.id}" data-invoiceMoney="${invoices.invoice_value}" data-bs-dismiss="modal"><i class="fas fa-times-circle"></i> 請求書をキャンセル</button>`;
-					}
-					else if (invoices.status == 'autopaid') {
-						tablestatus = '<td class="text-center align-middle"><span class="badge bg-info" style="font-size: 14px;"><i class="fas fa-clock"></i> 自動支払い</span></td>';
-						modalstatus = '<span class="badge bg-info" style="position: absolute; right: 5%; top: 5%; font-size: 18px;"><i class="fas fa-clock"></i> 自動支払い</span>';
-						payment_status = `<span style="font-size: 20px; color: #2f3037; font-weight: 600;">自動支払日: ${invoices.paid_date}</span>`;
-					}
-					else if (invoices.status == 'cancelled') {
-						tablestatus = '<td class="text-center align-middle"><span class="badge bg-secondary" style="font-size: 14px;"><i class="fas fa-minus-circle"></i> キャンセル</span></td>';
-						modalstatus = '<span class="badge bg-secondary" style="position: absolute; right: 5%; top: 5%; font-size: 18px;"><i class="fas fa-minus-circle"></i> キャンセル</span>';
-						payment_status = '<span style="font-size: 20px; color: #2f3037; font-weight: 600;">キャンセル済み</span>'
-					}
-
-					if (invoices.limit_pay_date == 'N/A') {
-						limit_pay_date = ''
-					} else {
-						limit_pay_date = `<h6>支払期限: ${invoices.limit_pay_date}</h6>`
-					}
-
-					row += `
-						<tr>
-							<td class="text-center align-middle">${invoices.id}</td>
-							${tablestatus}
-							<td class="text-center align-middle">${invoices.receiver_name}</td>
-							<td class="text-center align-middle">${invoices.item}</td>
-							<td class="text-center align-middle">${invoices.invoice_value.toLocaleString()}￥</td>
-							<td class="text-center align-middle"><button type="button" class="btn btn-blue showInvoice" style="border-radius: 10px; flex-basis: 100%;" data-toggle="modal" data-target="#showInvoiceModal${invoices.id}" data-invoiceId="${invoices.id}""><i class="fas fa-eye"></i> 表示</button></td>
-						</tr>
-					`;
-
-					var modal = `<div class="modal fade" id="showInvoiceModal${invoices.id}" tabindex="-1">
-									<div class="modal-dialog modal-dialog-centered">
-										<div class="modal-content myinvoices_modal-content">
-											<div class="modal-body p-4">
-												<span class="menutitle">請求書 #${invoices.id}</span>
-												${modalstatus}
-												<h6 class="" id="" style="">送信日: ${invoices.sent_date}</h6>
-												${limit_pay_date}
-												<h6 class="" id="" style="margin-top: 20px;">宛先: <span style="color: #2f3037;">${invoices.receiver_name}</span></h6>
-												<h6 class="" id="" style="">差出人: <span style="color: #2f3037;">${invoices.author_name}</span></h6>
-												<hr>
-												<div class="d-flex justify-content-between">
-													<span class="" id="" style="color: #2f3037; font-size: 20px;">${invoices.item}</span> <span class="" id="" style="font-size: 18px;">${Math.round(invoices.invoice_value - Math.round(invoices.invoice_value * (event.data.VAT/100))).toLocaleString()} ￥</span>
-												</div>
-												<hr>
-												<div class="d-flex justify-content-between">
-													<span class="" id="" style="color: #2f3037; font-size: 20px;">小計</span> <span class="" id="" style="font-size: 18px;">${Math.round(invoices.invoice_value - Math.round(invoices.invoice_value * (event.data.VAT/100))).toLocaleString()} ￥</span>
-												</div>
-												<div class="d-flex justify-content-between">
-													<span class="" id="" style="color: #2f3037; font-size: 20px;">税 (${event.data.VAT}%)</span> <span class="" id="" style="font-size: 18px;">${Math.round(invoices.invoice_value * (event.data.VAT/100)).toLocaleString()} ￥</span>
-												</div>
-												<br>
-												<div class="d-flex justify-content-between">
-													<span class="" id="" style="color: #2f3037; font-size: 20px; font-weight: 700;">合計</span> <span class="" id="" style="font-size: 18px;">${Math.round(invoices.invoice_value).toLocaleString()} ￥</span>
-												</div>
-												<br>
-												<div class="d-flex justify-content-center">
-													${payment_status}
-												</div>
-												<br>
-												<div class="d-flex justify-content-center">
-													<textarea class="form-control" readonly>${invoices.notes}</textarea>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								`;
-					$("body").append(modal);
-				}
-				$("#societyInvoicesData").html(row);
-
-				const societyinvoices = document.getElementById('societyInvoices');
-				table.push(new simpleDatatables.DataTable(societyinvoices, {
-					searchable: true,
-					perPageSelect: false,
-					perPage: 5,
-					labels: dataTableLabels
-				}));
-
-				windowIsOpened = true
-
-				selectedWindow = "societyinvoices"
-				$(".societyinvoices").fadeIn();
+			playOpenSound()
+			closeAllMenus()
+			openSocietyInvoices(data)
+			break
+		case 'createinvoice':
+			closeAllMenus()
+			openCreateInvoice(data)
+			break
+		case 'updateNearbyPlayers':
+			nearbyPlayers = data.nearPlayers || []
+			syncSelectedTargetsWithNearby()
+			updateSelectedTargetsLabel()
+			if (pendingTargetModalOpen) {
+				pendingTargetModalOpen = false
+				openTargetSelectorModal()
 			}
 			break
 	}
-});
+})
 
-// Button Actions
-$(document).on('click', ".showInvoice", function() {
-	var modalId = $(this).attr('data-target');
-	var invoiceModal = new bootstrap.Modal(modalId);
-	invoiceModal.show()
-});
+function getInvoiceFormData() {
+	var item = ''
+	var value = ''
+	var note = ''
 
-$(document).on('click', ".payInvoice", function() {
-	var invoiceId = $(this).attr('data-invoiceId');
+	if (selectedInvoiceType === 'personal') {
+		item = $('#custom_createinvoice_item').val()
+		value = $('#custom_createinvoice_price').val()
+		note = $('#custom_createinvoice_note').val()
+	} else {
+		item = $('#normal_createinvoice_item').val()
+		value = $('#normal_createinvoice_price').val()
+		note = $('#normal_createinvoice_note').val()
+	}
 
-	$.post('https://okokBilling/action', JSON.stringify ({
-		action: "payInvoice",
-		invoice_id: invoiceId,
-	}));
+	if (!note) note = '特になし'
+	return { item: item, value: value, note: note }
+}
 
-	$(".myinvoices").fadeOut();
+window.checkIfEmpty = function() {
+	var form = getInvoiceFormData()
+	var valid = form.item && form.value && Number(form.value) > 0
+	$('#createinvoice').prop('disabled', !valid)
+}
 
-	setTimeout(function(){
-		windowIsOpened = false
+window.checkReference = function() {}
+window.lookcitizen = function() {}
 
-		for(var i=0; i<table.length; i++) {
-			table[i].destroy();
-			table.splice(i, 1);
+$(document).on('click', '#openCustomInvoice', function() {
+	selectedInvoiceType = 'personal'
+	$('#invoiceBillsList').hide()
+	$('#invoiceCustom').show()
+	checkIfEmpty()
+})
+
+$(document).on('click', '#openBillsListInvoice', function() {
+	selectedInvoiceType = 'society'
+	$('#invoiceCustom').hide()
+	$('#invoiceBillsList').show()
+	checkIfEmpty()
+})
+
+$(document).on('click', '#createinvoice', function() {
+	var form = getInvoiceFormData()
+	if (!form.item || !form.value) {
+		postAction({ action: 'missingInfo' })
+		return
+	}
+	if (Number(form.value) <= 0) {
+		postAction({ action: 'negativeAmount' })
+		return
+	}
+	if (!selectedTargets.length) {
+		postAction({ action: 'noTargets' })
+		return
+	}
+
+	postAction({
+		action: 'createInvoice',
+		invoice_type: selectedInvoiceType,
+		targets: selectedTargets,
+		targetName: -1,
+		society: '',
+		society_name: '',
+		invoice_value: Number(form.value),
+		invoice_item: form.item,
+		invoice_notes: 'メモ: ' + form.note
+	})
+
+	closeAllMenus()
+	postAction({ action: 'close' })
+})
+
+$(document).on('click', '#view_invoice_payall', function() {
+	for (var i = 0; i < currentMyInvoices.length; i++) {
+		if (currentMyInvoices[i].status === 'unpaid') {
+			postAction({ action: 'payInvoice', invoice_id: currentMyInvoices[i].id })
 		}
+	}
+	postAction({ action: 'close' })
+	closeAllMenus()
+})
 
-		$(".modal").remove();
-	}, 400);
-});
+$(document).on('click', '.payInvoiceBtn', function() {
+	var id = $(this).data('invoice-id')
+	postAction({ action: 'payInvoice', invoice_id: id })
+	postAction({ action: 'close' })
+	closeAllMenus()
+})
 
-$(document).on('click', ".cancelInvoice", function() {
-	var invoiceId = $(this).attr('data-invoiceId');
-
-	$.post('https://okokBilling/action', JSON.stringify ({
-		action: "cancelInvoice",
-		invoice_id: invoiceId,
-	}));
-
-	$(".societyinvoices").fadeOut();
-
-	setTimeout(function(){
-		windowIsOpened = false
-
-		for(var i=0; i<table.length; i++) {
-			table[i].destroy();
-			table.splice(i, 1);
-		}
-
-		$(".modal").remove();
-	}, 400);
-});
+$(document).on('click', '.cancelInvoice', function() {
+	var id = $(this).data('invoice-id')
+	postAction({ action: 'cancelInvoice', invoice_id: id })
+	closeAllMenus()
+	postAction({ action: 'close' })
+})
 
 $(document).on('click', '#menuMyInvoices', function() {
-	windowIsOpened = false
-	$(".mainmenu").fadeOut();
-
-	$.post('http://okokBilling/action', JSON.stringify ({
-		action: "mainMenuOpenMyInvoices"
-	}));
+	closeAllMenus()
+	postAction({ action: 'mainMenuOpenMyInvoices' })
 })
 
 $(document).on('click', '#menuSocietyInvoices', function() {
-	windowIsOpened = false
-	$(".mainmenu").fadeOut();
-
-	$.post('http://okokBilling/action', JSON.stringify ({
-		action: "mainMenuOpenSocietyInvoices"
-	}));
+	closeAllMenus()
+	postAction({ action: 'mainMenuOpenSocietyInvoices' })
 })
 
 $(document).on('click', '#menuCreateInvoice', function() {
-	windowIsOpened = false
-	$(".mainmenu").fadeOut();
-
-	$.post('http://okokBilling/action', JSON.stringify ({
-		action: "mainMenuOpenCreateInvoice"
-	}));
+	closeAllMenus()
+	postAction({ action: 'mainMenuOpenCreateInvoice' })
 })
 
-$(document).on('click', '#sendInvoice', function() {
-	var invoice_value = $("#invoice_value").val();
-	var invoice_item = $("#invoice_item").val();
-	var invoice_notes = $("#invoice_notes").val();
+$(document).on('click', '#openTargetSelector', function() {
+	pendingTargetModalOpen = true
+	postAction({ action: 'requestNearbyPlayers' })
+})
 
-	if (document.getElementById("invoice_notes").value === "") {
-		invoice_notes = "特になし";
-	}
-
-	if(!invoice_value || !invoice_item) {
-		$.post('http://okokBilling/action', JSON.stringify({
-			action: "missingInfo",
-		}));
+$(document).on('change', '.targetCheckbox', function() {
+	var id = Number($(this).data('server-id'))
+	if (this.checked) {
+		if (selectedTargets.indexOf(id) === -1) selectedTargets.push(id)
 	} else {
-		if(invoice_value >= 0) {
-			$(".sendinvoice").fadeOut();
-			windowIsOpened = false
+		selectedTargets = selectedTargets.filter(function(v) { return v !== id })
+	}
+	updateSelectedTargetsLabel()
+})
 
-			$.post('http://okokBilling/action', JSON.stringify({
-				action: "createInvoice",
-				target: 0,
-				targetName: -1,
-				society: "",
-				society_name: "",
-				invoice_value: invoice_value,
-				invoice_item: invoice_item,
-				invoice_notes: "メモ: " + invoice_notes
-			}));
+$(document).on('click', '#selectAllTargets', function() {
+	selectedTargets = nearbyPlayers.map(function(p) { return p.id })
+	renderTargetList()
+	updateSelectedTargetsLabel()
+})
 
-			setTimeout(function() {
-				for(var i=0; i<table.length; i++) {
-					table[i].destroy();
-					table.splice(i, 1);
-				}
-				$("#invoice_value").val("");
-				$("#invoice_item").val("");
-				$("#invoice_notes").val("");
-			}, 400);
-		} else {
-			$.post('http://okokBilling/action', JSON.stringify({
-				action: "negativeAmount",
-			}));
-		}
+$(document).on('click', '#clearAllTargets', function() {
+	selectedTargets = []
+	renderTargetList()
+	updateSelectedTargetsLabel()
+})
+
+$(document).on('click', '#confirmTargetSelection', function() {
+	var modalEl = document.getElementById('selectPlayerToSendInvoiceModal')
+	if (modalEl) {
+		var modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl)
+		modalInstance.hide()
 	}
 })
 
-$(document).on('click', "#closeMainMenu", function() {
-	var popuprev = new Audio('popupreverse.mp3');
-	popuprev.volume = 0.4;
-	popuprev.play();
+$(document).on('click', '#closeSelectionMenu, #closeInvoicesMenu, #closeSocietyInvoicesMenu, #closeCreateInvoiceMenu, #closeCityInvoicesMenu, #closePayReferenceMenu, #closePoliceMenu', function() {
+	playCloseSound()
+	closeAllMenus()
+	postAction({ action: 'close' })
+})
 
-	windowIsOpened = false
-	$(".mainmenu").fadeOut();
-
-	$.post('https://okokBilling/action', JSON.stringify({
-		action: "close",
-	}));
-});
-
-$(document).on('click', "#closeSendInvoice", function() {
-	var popuprev = new Audio('popupreverse.mp3');
-	popuprev.volume = 0.4;
-	popuprev.play();
-
-	$(".sendinvoice").fadeOut();
-
-	setTimeout(function() {
-		windowIsOpened = false
-
-		for(var i=0; i<table.length; i++) {
-			table[i].destroy();
-			table.splice(i, 1);
-		}
-
-		$("#invoice_value").val("");
-		$("#invoice_item").val("");
-		$("#invoice_notes").val("");
-		$(".modal").remove();
-	}, 400);
-
-	$.post('https://okokBilling/action', JSON.stringify({
-		action: "close",
-	}));
-});
-
-$(document).on('click', "#closeSocietyInvoices", function() {
-	var popuprev = new Audio('popupreverse.mp3');
-	popuprev.volume = 0.4;
-	popuprev.play();
-
-	$(".societyinvoices").fadeOut();
-
-	setTimeout(function() {
-		windowIsOpened = false
-
-		for(var i=0; i<table.length; i++) {
-			table[i].destroy();
-			table.splice(i, 1);
-		}
-
-		$(".modal").remove();
-	}, 400);
-
-	$.post('https://okokBilling/action', JSON.stringify({
-		action: "close",
-	}));
-});
-
-$(document).on('click', "#closeMyInvoices", function() {
-	var popuprev = new Audio('popupreverse.mp3');
-	popuprev.volume = 0.4;
-	popuprev.play();
-
-	$(".myinvoices").fadeOut();
-
-	setTimeout(function() {
-		windowIsOpened = false
-
-		for(var i=0; i<table.length; i++) {
-			table[i].destroy();
-			table.splice(i, 1);
-		}
-
-		$(".modal").remove();
-	}, 400);
-
-	$.post('https://okokBilling/action', JSON.stringify({
-		action: "close",
-	}));
-});
-
-// Close ESC Key
 $(document).ready(function() {
 	document.onkeyup = function(data) {
-		if (data.which == 27) {
-			var popuprev = new Audio('popupreverse.mp3');
-			popuprev.volume = 0.4;
-			popuprev.play();
-			switch (selectedWindow) {
-				case 'myinvoices':
-					$(".myinvoices").fadeOut();
-
-					setTimeout(function() {
-						windowIsOpened = false
-
-						for(var i=0; i<table.length; i++) {
-							table[i].destroy();
-							table.splice(i, 1);
-						}
-
-						$(".modal").remove();
-					}, 400);
-
-					$.post('https://okokBilling/action', JSON.stringify({
-						action: "close",
-					}));
-					break
-				case 'mainMenu':
-					windowIsOpened = false
-
-					$(".mainmenu").fadeOut();
-
-					$.post('https://okokBilling/action', JSON.stringify({
-						action: "close",
-					}));
-					break
-				case 'societyinvoices':
-					$(".societyinvoices").fadeOut();
-
-				    setTimeout(function() {
-						windowIsOpened = false
-
-						for(var i=0; i<table.length; i++) {
-							table[i].destroy();
-							table.splice(i, 1);
-						}
-
-						$(".modal").remove();
-					}, 400);
-
-				    $.post('https://okokBilling/action', JSON.stringify({
-				        action: "close",
-				    }));
-					break
-				case 'createinvoice':
-					$(".sendinvoice").fadeOut();
-
-					setTimeout(function() {
-						windowIsOpened = false
-
-						for(var i=0; i<table.length; i++) {
-							table[i].destroy();
-							table.splice(i, 1);
-						}
-
-						$(".modal").remove();
-					}, 400);
-
-					$.post('https://okokBilling/action', JSON.stringify({
-						action: "close",
-					}));
-					break
-			}
+		if (data.which === 27) {
+			playCloseSound()
+			closeAllMenus()
+			postAction({ action: 'close' })
 		}
-	};
-});
+	}
+})
