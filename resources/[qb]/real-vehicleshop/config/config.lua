@@ -90,7 +90,7 @@ Config.ComplaintCharacterCheck = { -- Maximum and minimum character limit when f
 Config.VehiclesData = {
     -- qb-core/shared/vehicles.lua から同期（価格・カテゴリは QBCore に準拠）
     ['car'] = {
-        { name = 'asbo', label = 'Asbo', model = '', price = 4000, stock = 1, img = 'https://docs.fivem.net/vehicles/asbo.webp', category = 'compacts', discount = 0, information = {TopSpeed = 120, Braking = 70, Acceleration = 60, Suspension = 65, Handling = 62} },
+        { name = 'asbo', label = 'Asbo', model = '', price = 5000, stock = 1, img = 'https://docs.fivem.net/vehicles/asbo.webp', category = 'compacts', discount = 0, information = {TopSpeed = 120, Braking = 70, Acceleration = 60, Suspension = 65, Handling = 62} },
         { name = 'blista', label = 'Blista', model = '', price = 13000, stock = 1, img = 'https://docs.fivem.net/vehicles/blista.webp', category = 'compacts', discount = 0, information = {TopSpeed = 121, Braking = 70, Acceleration = 60, Suspension = 65, Handling = 62} },
         { name = 'brioso', label = 'Brioso R/A', model = '', price = 20000, stock = 1, img = 'https://docs.fivem.net/vehicles/brioso.webp', category = 'compacts', discount = 0, information = {TopSpeed = 122, Braking = 70, Acceleration = 60, Suspension = 65, Handling = 62} },
         { name = 'club', label = 'Club', model = '', price = 8000, stock = 1, img = 'https://docs.fivem.net/vehicles/club.webp', category = 'compacts', discount = 0, information = {TopSpeed = 121, Braking = 70, Acceleration = 60, Suspension = 65, Handling = 62} },
