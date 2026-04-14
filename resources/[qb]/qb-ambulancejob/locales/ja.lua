@@ -14,11 +14,11 @@ local Translations = {
         not_online = 'プレイヤーはオフライン'
     },
     success = {
-        revived = 'この人を蘇生した',
-        healthy_player = 'プレイヤーは健康です',
-        helped_player = 'この人を助けた',
+        --revived = 'この人を蘇生した',
+        --healthy_player = 'プレイヤーは健康です',
+       --helped_player = 'この人を助けた',
         wounds_healed = '傷が癒えた！',
-        being_helped = '救助されています...'
+        --being_helped = '救助されています...'
     },
     info = {
         civ_died = '民間人死亡',
