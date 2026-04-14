@@ -689,7 +689,7 @@ Config.VehiclesData = {
         { name = 'seashark3', label = 'Seashark Yacht', model = '', price = 40000, stock = 1, img = 'https://docs.fivem.net/vehicles/seashark3.webp', category = 'all', discount = 0, information = {TopSpeed = 125, Braking = 70, Acceleration = 60, Suspension = 65, Handling = 62} },
         { name = 'marquis', label = 'Marquis', model = '', price = 40000, stock = 1, img = 'https://docs.fivem.net/vehicles/marquis.webp', category = 'all', discount = 0, information = {TopSpeed = 125, Braking = 70, Acceleration = 60, Suspension = 65, Handling = 62} },
         { name = 'jetmax', label = 'Jetmax', model = '', price = 40000, stock = 1, img = 'https://docs.fivem.net/vehicles/jetmax.webp', category = 'all', discount = 0, information = {TopSpeed = 125, Braking = 70, Acceleration = 60, Suspension = 65, Handling = 62} },
-        { name = 'dinghy', label = 'Dinghy 4-Seater', model = '', price = 40000, stock = 1, img = 'https://docs.fivem.net/vehicles/dinghy.webp', category = 'all', discount = 0, information = {TopSpeed = 125, Braking = 70, Acceleration = 60, Suspension = 65, Handling = 62} },
+        { name = 'dinghy', label = 'Dinghy  4-Seater', model = '', price = 40000, stock = 1, img = 'https://docs.fivem.net/vehicles/dinghy.webp', category = 'all', discount = 0, information = {TopSpeed = 125, Braking = 70, Acceleration = 60, Suspension = 65, Handling = 62} },
         { name = 'dinghy2', label = 'Dinghy 2-Seater', model = '', price = 40000, stock = 1, img = 'https://docs.fivem.net/vehicles/dinghy2.webp', category = 'all', discount = 0, information = {TopSpeed = 125, Braking = 70, Acceleration = 60, Suspension = 65, Handling = 62} },
     },
 
@@ -702,7 +702,6 @@ Config.VehiclesData = {
         { name = 'supervolito', label = 'SuperVolito', model = '', price = 52000, stock = 1, img = 'https://docs.fivem.net/vehicles/supervolito.webp', category = 'helicopter', discount = 0, information = {TopSpeed = 126, Braking = 71, Acceleration = 61, Suspension = 66, Handling = 63} },
         { name = 'maverick', label = 'Maverick', model = '', price = 52000, stock = 1, img = 'https://docs.fivem.net/vehicles/maverick.webp', category = 'helicopter', discount = 0, information = {TopSpeed = 126, Braking = 71, Acceleration = 61, Suspension = 66, Handling = 63} },
         { name = 'frogger', label = 'Frogger', model = '', price = 52000, stock = 1, img = 'https://docs.fivem.net/vehicles/frogger.webp', category = 'helicopter', discount = 0, information = {TopSpeed = 126, Braking = 71, Acceleration = 61, Suspension = 66, Handling = 63} },
-        { name = 'buzzard', label = 'Buzzard Attack Chopper', model = '', price = 52000, stock = 1, img = 'https://docs.fivem.net/vehicles/buzzard.webp', category = 'helicopter', discount = 0, information = {TopSpeed = 126, Braking = 71, Acceleration = 61, Suspension = 66, Handling = 63} },
     },
 }
 Config.Categories = {
