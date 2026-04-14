@@ -11,6 +11,18 @@ QBShared.Jobs = {
 	garbage = { label = 'Garbage', defaultDuty = true, offDutyPay = false, grades = { ['0'] = { name = 'Collector', payment = 50000 } } },
 	vineyard = { label = 'Vineyard', defaultDuty = true, offDutyPay = false, grades = { ['0'] = { name = 'Picker', payment = 50000 } } },
 	hotdog = { label = 'Hotdog', defaultDuty = true, offDutyPay = false, grades = { ['0'] = { name = 'Sales', payment = 50000 } } },
+	burgershot = {
+		label = 'Burger Shot',
+		defaultDuty = true,
+		offDutyPay = false,
+		grades = {
+			['0'] = { name = 'Trainee', payment = 50 },
+			['1'] = { name = 'Employee', payment = 75 },
+			['2'] = { name = 'Cook', payment = 100 },
+			['3'] = { name = 'Supervisor', payment = 125 },
+			['4'] = { name = 'Manager', isboss = true, payment = 150 },
+		},
+	},
 
 	police = {
 		label = 'Law Enforcement',

@@ -84,6 +84,11 @@ local function Item(name, cb)
 end
 
 local ox_inventory = exports[shared.resource]
+
+-- Bandage tuning values
+local BANDAGE_HEAL_AMOUNT = 10          -- fixed HP amount
+local BANDAGE_CURE_BLEED_CHANCE = 50    -- %
+local BANDAGE_CURE_INJURY_CHANCE = 10   -- %
 -----------------------------------------------------------------------------------------------
 -- Clientside item use functions
 -----------------------------------------------------------------------------------------------
@@ -93,7 +98,18 @@ Item('bandage', function(data, slot)
 	local health = GetEntityHealth(cache.ped)
 	ox_inventory:useItem(data, function(data)
 		if data then
-			SetEntityHealth(cache.ped, math.min(maxHealth, math.floor(health + maxHealth / 16)))
+			SetEntityHealth(cache.ped, math.min(maxHealth, health + BANDAGE_HEAL_AMOUNT))
+
+			-- If qb-ambulancejob is present, partially heal wounds/bleeding by chance.
+			if GetResourceState('qb-ambulancejob') == 'started' then
+				local cureBleed = math.random(1, 100) <= BANDAGE_CURE_BLEED_CHANCE
+				local cureInjury = math.random(1, 100) <= BANDAGE_CURE_INJURY_CHANCE
+
+				if cureBleed or cureInjury then
+					TriggerEvent('hospital:client:HealInjuries', 'partial')
+				end
+			end
+
 			lib.notify({ description = 'You feel better already' })
 		end
 	end)

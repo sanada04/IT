@@ -19,6 +19,7 @@ Config.WhitelistJobs = {
 	["mechanic"] = true,
 	["judge"] = true,
 	["lawyer"] = true,
+	["burgershot"] = true,
 }
 
 Config.Descriptions = {
@@ -37,6 +38,7 @@ Config.Descriptions = {
 	["garbage"] = "Drive a garbage truck",
 	["vineyard"] = "Get them vines",
 	["hotdog"] = "Sell them glizzys",
+	["burgershot"] = "Cook burgers and serve customers",
 }
 
 -- Change the icons to any free font awesome icon, also add other jobs your server might have to the list
@@ -57,4 +59,5 @@ Config.FontAwesomeIcons = {
 	["garbage"] = "fa-solid fa-trash-can",
 	["vineyard"] = "fa-solid fa-wine-bottle",
 	["hotdog"] = "fa-solid fa-hotdog",
+	["burgershot"] = "fa-solid fa-burger",
 }

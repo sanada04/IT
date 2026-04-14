@@ -47,11 +47,26 @@ local function withinActionZone(src, action)
 end
 
 local function canCarry(src, item, amount)
-    return exports.ox_inventory:CanCarryItem(src, item, amount)
+    if GetResourceState('ox_inventory') ~= 'started' then
+        return true
+    end
+
+    local ok, result = pcall(function()
+        return exports.ox_inventory:CanCarryItem(src, item, amount)
+    end)
+
+    if ok then
+        return result
+    end
+
+    return true
 end
 
 local function hasItem(src, item, amount)
-    local count = exports.ox_inventory:Search(src, 'count', item)
+    local ok, count = pcall(function()
+        return exports.ox_inventory:Search(src, 'count', item)
+    end)
+    if not ok then return false end
     return (count or 0) >= amount
 end
 
