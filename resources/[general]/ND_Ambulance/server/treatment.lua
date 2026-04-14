@@ -7,7 +7,6 @@ local injuryTreatment = {
 }
 
 exports("treatment", function(event, item, inventory, slot, data)
-    event, item, inventory, slot = ND_AmbulanceNormalizeOxInvExport(event, item, inventory, slot, data)
     local treatment = Treatment[item.name]
     if not treatment then return false end
 
@@ -42,8 +41,8 @@ local function tryTreatment(src, targetPlayerSrc, item)
     if not Treatment[item] or exports.ox_inventory:GetItemCount(src, item) == 0 then return end
 
     local success, info, target = useItem(src, targetPlayerSrc, item)
-    if target and info then
-        Bridge.notify(src, info)
+    if target then
+        Bridge.notify(inventory.id, info)
     end
 
     if not success then return end

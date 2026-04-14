@@ -92,8 +92,7 @@ AddEventHandler("onResourceStop", function(name)
     resetWalk()
 end)
 
-exports("useBag", function(a, b, c)
-    local data = select(1, ND_AmbulanceNormalizeOxInvClientExport(a, b, c))
+exports("useBag", function(data)
     if not bagProp.entity or not DoesEntityExist(bagProp.entity) then return end
 
     local entity = bagProp.entity

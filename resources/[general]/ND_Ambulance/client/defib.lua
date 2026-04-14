@@ -44,8 +44,7 @@ AddEventHandler("onResourceStop", function(resourceName)
     enableDefib(false)
 end)
 
-exports("useDefib", function(a, b, c)
-    local data, slot = ND_AmbulanceNormalizeOxInvClientExport(a, b, c)
+exports("useDefib", function(data, slot)
     if not prop or not DoesEntityExist(prop) then return end
 
     lib.requestAnimDict("anim@heists@money_grab@briefcase")
