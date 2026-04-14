@@ -28,6 +28,19 @@ Config.InsertVehiclePrompt = "[E] 車を保管する"
 Config.ExitInteriorKeyBind = 38
 Config.ExitInteriorPrompt = "[E] ガレージを出る"
 
+-- Garage Markers
+Config.ForceGarageMarkers = true -- true: hideMarkers設定を無視して全ガレージでマーカー表示
+Config.ForcedGarageMarker = {
+  id = 36,
+  size = { x = 1.0, y = 1.0, z = 1.0 },
+  color = { r = 255, g = 255, b = 255, a = 120 },
+  bobUpAndDown = 0,
+  faceCamera = 0,
+  rotate = 1,
+  drawOnEnts = 0,
+  zOffset = 0.15
+}
+
 -- Target
 Config.UseTarget = false
 Config.Target = "qb-target" -- or "qb-target"
@@ -79,7 +92,7 @@ Config.GarageUniqueLocations = true
 Config.GarageEnableInteriors = true
 Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
   ["Legion Square"] = { -- If you change the name of this garage from Legion Square, you must change the default value of `garage_id` to the same name in the SQL table `players_vehicles`
-    coords = vector3(215.09, -805.17, 30.81),
+    coords = vector3(217.4652, -799.3210, 30.7774),
     spawn = {vector4(216.84, -802.02, 30.78, 69.82), vector4(218.09, -799.42, 30.76, 66.17), vector4(219.29, -797.23, 30.75, 65.4), vector4(219.59, -794.44, 30.75, 69.35), vector4(220.63, -792.03, 30.75, 63.76), vector4(206.81, -798.35, 30.99, 248.53)}, --  you can add multiple spawn locations into a table
     distance = 15,
     type = "car",
@@ -90,10 +103,10 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Islington South"] = {
-    coords = vector3(273.0, -343.85, 44.91),
+    coords = vector3(271.6268, -342.3491, 44.9198),
     spawn = vector4(270.75, -340.51, 44.92, 342.03),
     distance = 15,
     type = "car",
@@ -104,11 +117,11 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Grove Street"] = {
-    coords = vector3(14.66, -1728.52, 29.3),
-    spawn = vector4(23.93, -1722.9, 29.3, 310.58),
+    coords = vector3(35.8252, -1731.0726, 29.3032),
+    spawn = vector4(34.4227, -1727.9453, 28.5616, 49.9311),
     distance = 15,
     type = "car",
     hideBlip = false,
@@ -118,10 +131,10 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Mirror Park"] = {
-    coords = vector3(1032.84, -765.1, 58.18),
+    coords = vector3(1030.6956, -768.5131, 58.1784),
     spawn = vector4(1023.2, -764.27, 57.96, 319.66),
     distance = 15,
     type = "car",
@@ -132,10 +145,10 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Beach"] = {
-    coords = vector3(-1248.69, -1425.71, 4.32),
+    coords = vector3(-1241.8876, -1419.4966, 4.5080),
     spawn = vector4(-1244.27, -1422.08, 4.32, 37.12),
     distance = 15,
     type = "car",
@@ -146,11 +159,11 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Great Ocean Highway"] = {
-    coords = vector3(-2961.58, 375.93, 15.02),
-    spawn = vector4(-2964.96, 372.07, 14.78, 86.07),
+    coords = vector3(-2977.2148, 357.0679, 14.7843),
+    spawn = vector4(-2976.9033, 355.6165, 14.3493, 302.4220),
     distance = 15,
     type = "car",
     hideBlip = false,
@@ -160,7 +173,7 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Sandy South"] = {
     coords = vector3(217.33, 2605.65, 46.04),
@@ -174,7 +187,7 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Sandy North"] = {
     coords = vector3(1878.44, 3760.1, 32.94),
@@ -188,11 +201,11 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["North Vinewood Blvd"] = {
-    coords = vector3(365.21, 295.65, 103.46),
-    spawn = vector4(364.84, 289.73, 103.42, 164.23),
+    coords = vector3(367.2111, 291.9931, 103.3903),
+    spawn = vector4(365.2414, 287.3174, 102.6434, 338.4000),
     distance = 15,
     type = "car",
     hideBlip = false,
@@ -202,7 +215,7 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Grapeseed"] = {
     coords = vector3(1713.06, 4745.32, 41.96),
@@ -216,7 +229,7 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Paleto Bay"] = {
     coords = vector3(107.32, 6611.77, 31.98),
@@ -230,7 +243,7 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Boats"] = {
     coords = vector3(-795.15, -1510.79, 1.6),
@@ -244,11 +257,11 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 35, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Hangar"] = {
-    coords = vector3(-1243.49, -3391.88, 13.94),
-    spawn = vector4(-1258.4, -3394.56, 13.94, 328.23),
+    coords = vector3(-1263.1797, -3376.3813, 13.9402),
+    spawn = vector4(-1266.4543, -3371.6467, 13.9402, 330.9709),
     distance = 20,
     type = "air",
     hideBlip = false,
@@ -258,7 +271,21 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 34, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+  },
+  ["船着き場"] = {
+    coords = vector3(-724.6895, -1443.9911, 5.0005),
+    spawn = vector4(-745.2479, -1468.4196, 5.0005, 138.9999),
+    distance = 20,
+    type = "air",
+    hideBlip = false,
+    blip = {
+      id = 359,
+      color = 0,
+      scale = 0.7
+    },
+    hideMarkers = true,
+    markers = { id = 34, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   }
 }
 
@@ -298,7 +325,7 @@ Config.JobGarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = false,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
     vehiclesType = "spawner",
     vehicles = {
       [1] = {
@@ -340,7 +367,7 @@ Config.JobGarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = false,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
     vehiclesType = "spawner",
     vehicles = {
       [1] = {
@@ -428,7 +455,7 @@ Config.JobGarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = false,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
     vehiclesType = "spawner", -- Spawn a basic vehicle from a list
     showLiveriesExtrasMenu = true, -- Allow player to select a livery and extras before pulling vehicle out 
     vehicles = {
@@ -475,7 +502,7 @@ Config.GangGarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = false,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
     vehiclesType = "personal", -- Use personal vehicles
   }
 }
@@ -504,7 +531,7 @@ Config.ImpoundLocations = { -- IMPORTANT - Every impound name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
   ["Impound B"] = {
     coords = vector3(1649.71, 3789.61, 34.79),
@@ -519,7 +546,7 @@ Config.ImpoundLocations = { -- IMPORTANT - Every impound name must be unique
       scale = 0.7
     },
     hideMarkers = true,
-    markers = { id = 21, size = { x = 0.3, y = 0.3, z = 0.3 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   }
 }
 

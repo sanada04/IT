@@ -1,6 +1,15 @@
 local GARAGE_ZONE_Z_DIST = 4.0
 local inVehicle, blips, zones, peds = nil, {}, {}, {}
 local cachedGarageLocations
+local fallbackMarker = {
+  id = 36,
+  size = { x = 0.4, y = 0.4, z = 0.4 },
+  color = { r = 80, g = 160, b = 255, a = 140 },
+  bobUpAndDown = 0,
+  faceCamera = 0,
+  rotate = 1,
+  drawOnEnts = 0
+}
 
 function getAvailableGarageLocations()
   if not cachedGarageLocations then
@@ -18,8 +27,9 @@ end
 ---@param coords vector3
 ---@param marker table
 function drawMarkerOnFrame(coords, marker)
+  local zOffset = marker.zOffset or 0.15
   ---@diagnostic disable-next-line: missing-parameter
-  DrawMarker(marker.id, coords.x, coords.y, coords.z, 0, 0, 0, 0, 0, 0, marker.size.x,  marker.size.y, marker.size.z, marker.color.r, marker.color.g, marker.color.b, marker.color.a, marker.bobUpAndDown, marker.faceCamera, 0, marker.rotate, marker.drawOnEnts)
+  DrawMarker(marker.id, coords.x, coords.y, coords.z + zOffset, 0, 0, 0, 0, 0, 0, marker.size.x,  marker.size.y, marker.size.z, marker.color.r, marker.color.g, marker.color.b, marker.color.a, marker.bobUpAndDown, marker.faceCamera, 0, marker.rotate, marker.drawOnEnts)
 end
 
 ---@param name string
@@ -110,11 +120,27 @@ local function createTargetZones(garages)
   for _, ped in ipairs(peds) do
     Framework.Client.RemoveTarget(ped)
   end
+  for _, zone in ipairs(zones) do zone:remove() end -- Remove existing marker points
 
   for garageId, garage in pairs(garages) do
-    for _, zone in ipairs(zones) do zone:remove() end  -- Remove existing zones
+    local markerData = garage.markers or Config.ForcedGarageMarker or fallbackMarker
+    if garage.hideMarkers and not Config.ForceGarageMarkers then
+      markerData = false
+    end
 
-    entity = Framework.Client.RegisterTarget(false, garage.coords, garageId, garage.type, garage.garageType)
+    if markerData then
+      local markerPoint = lib.points.new({
+        coords = garage.coords,
+        distance = garage.distance * 4,
+        garageId = garageId
+      })
+      function markerPoint:nearby()
+        drawMarkerOnFrame(garage.coords, markerData)
+      end
+      zones[#zones+1] = markerPoint
+    end
+
+    local entity = Framework.Client.RegisterTarget(false, garage.coords, garageId, garage.type, garage.garageType)
 
     peds[#peds+1] = entity
   end
@@ -126,12 +152,17 @@ local function createZones(garages)
 
   for garageId, garage in pairs(garages) do
     if garage then
+      local markerData = garage.markers or Config.ForcedGarageMarker or fallbackMarker
+      if garage.hideMarkers and not Config.ForceGarageMarkers then
+        markerData = false
+      end
+
       -- Zone
       createLocation(
         garageId,
         garage.coords,
         garage.distance,
-        not garage.hideMarkers and garage.markers or false,
+        markerData,
         nil,
         function()
           if Config.UseRadialMenu then
