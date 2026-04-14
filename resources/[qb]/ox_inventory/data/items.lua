@@ -366,6 +366,9 @@ return {
 		weight = 15000,
 		stack = false,
 		consume = 1,
+		client = {
+			image = 'stretcher.png',
+		},
 		server = {
 			export = "ND_Ambulance.createStretcher"
 		}
@@ -376,6 +379,7 @@ return {
 		stack = false,
 		consume = 1,
 		client = {
+			image = 'defib.png',
 			export = "ND_Ambulance.useDefib",
 			add = function(total)
 				if total > 0 then
@@ -402,6 +406,7 @@ return {
 			export = "ND_Ambulance.useBag"
 		},
 		client = {
+			image = 'medbag.png',
 			export = "ND_Ambulance.useBag",
 			add = function(total)
 				if total > 0 then
@@ -426,6 +431,7 @@ return {
 			export = "ND_Ambulance.treatment"
 		},
 		client = {
+			image = 'burndressing.png',
 			anim = { dict = "missheistdockssetup1clipboard@idle_a", clip = "idle_a", flag = 49 },
 			prop = { model = `prop_toilet_roll_01`, pos = vec3(-0.14, -0.14, -0.08), rot = vec3(-50.0, -50.0, 0.0) },
 			disable = { move = true, car = true, combat = true },
@@ -439,6 +445,7 @@ return {
 			export = "ND_Ambulance.treatment"
 		},
 		client = {
+			image = 'splint.png',
 			anim = { dict = "missheistdockssetup1clipboard@idle_a", clip = "idle_a", flag = 49 },
 			prop = { model = `prop_toilet_roll_01`, pos = vec3(-0.14, -0.14, -0.08), rot = vec3(-50.0, -50.0, 0.0) },
 			disable = { move = true, car = true, combat = true },
@@ -452,6 +459,7 @@ return {
 			export = "ND_Ambulance.treatment"
 		},
 		client = {
+			image = 'gauze.png',
 			anim = { dict = "missheistdockssetup1clipboard@idle_a", clip = "idle_a", flag = 49 },
 			prop = { model = `prop_toilet_roll_01`, pos = vec3(-0.14, -0.14, -0.08), rot = vec3(-50.0, -50.0, 0.0) },
 			disable = { move = true, car = true, combat = true },
@@ -465,6 +473,7 @@ return {
 			export = "ND_Ambulance.treatment"
 		},
 		client = {
+			image = 'tourniquet.png',
 			anim = { dict = "missheistdockssetup1clipboard@idle_a", clip = "idle_a", flag = 49 },
 			prop = { model = `prop_rolled_sock_02`, pos = vec3(-0.14, -0.14, -0.08), rot = vec3(-50.0, -50.0, 0.0) },
 			disable = { move = true, car = true, combat = true },

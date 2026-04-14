@@ -63,8 +63,13 @@ function OxPlayer:getGroupByType(type)
     end
 end
 
-for method in pairs(exports.ox_core:GetPlayerCalls() or {}) do
-    if not rawget(OxPlayer, method) then OxPlayer[method] = OxPlayer.__call end
+local ok, calls = pcall(function()
+    return exports.ox_core:GetPlayerCalls()
+end)
+if ok and type(calls) == 'table' then
+    for method in pairs(calls) do
+        if not rawget(OxPlayer, method) then OxPlayer[method] = OxPlayer.__call end
+    end
 end
 
 local function CreatePlayerInstance(player)

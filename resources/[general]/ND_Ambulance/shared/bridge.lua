@@ -1,17 +1,18 @@
+-- qb-core を ox_core より先に検出（両方 ensure している QBCore サーバー向け。ox 単体は ox_core のみ起動で選ばれる）
 local bridgeResources = {
     { "ND_Core", "nd" },
     { "qbx_core", "qbx" },
-    { "ox_core", "ox" }
+    { "qb-core", "qb" },
+    { "ox_core", "ox" },
     -- { "es_extended", "esx" },
-    -- { "qb-core", "qb" }
 }
 
+-- Target ブリッジは未使用（client は exports.ox_target 固定）。ターゲット統一は server.cfg 側で調整。
 local targetResources = {
     "ox_target",
-    "qb-target"
 }
 
-local function getBridge()
+function ND_AmbulanceGetBridgePath()
     for i=1, #bridgeResources do
         local info = bridgeResources[i]
         if GetResourceState(info[1]):find("start") then
@@ -37,7 +38,19 @@ local function getBridgeTarget()
     return "bridge.target.standalone"
 end
 
-Bridge = lib.load(getBridge())
+if IsDuplicityVersion() then
+    -- Bridge is set in server/bridge.lua after framework resources are up.
+else
+    Bridge = lib.load(ND_AmbulanceGetBridgePath())
+end
+
+--- ox_inventory のクライアント item export は `fn(nil, ...)` で呼ばれる。
+function ND_AmbulanceNormalizeOxInvClientExport(a, b, c)
+	if a == nil then
+		return b, c
+	end
+	return a, b
+end
 
 -- if lib.context == "client" then
 --     Target = lib.load(getBridgeTarget())

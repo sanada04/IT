@@ -193,6 +193,7 @@ RegisterNetEvent("ND_Ambulance:detachStretcher", function(ambulanceNetId)
 end)
 
 exports("createStretcher", function(event, item, inventory, slot, data)
+    event, item, inventory, slot = ND_AmbulanceNormalizeOxInvExport(event, item, inventory, slot, data)
     if event ~= "usedItem" then return end
 
     local ped = GetPlayerPed(inventory.id)

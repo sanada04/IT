@@ -113,6 +113,7 @@ local function usingBag(inventory, slot, netId)
 end
 
 exports("useBag", function(event, item, inventory, slot, data)
+    event, item, inventory, slot = ND_AmbulanceNormalizeOxInvExport(event, item, inventory, slot, data)
     if event == "usingItem" then
         local bagInfo = bagEntities[inventory.id]
         local netId = bagInfo and bagInfo.netId
