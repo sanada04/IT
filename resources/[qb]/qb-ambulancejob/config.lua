@@ -35,6 +35,10 @@ Config.MajorArmoredBleedChance = 45 -- The chance, in percent, that a player wil
 Config.MaxInjuryChanceMulti = 3     -- How many times the HealthDamage value above can divide into damage taken before damage is forced to be applied
 Config.DamageMinorToMajor = 35      -- How much damage would have to be applied for a minor weapon to be considered a major damage event. Put this at 100 if you want to disable it
 Config.AlertShowInfo = 2            -- How many injuries a player must have before being alerted about them
+Config.DispatchAlertSound = {       -- 救急ディスパッチ受信時に再生する通知音
+    name = 'Lose_1st',
+    set = 'GTAO_FM_Events_Soundset',
+}
 
 Config.Locations = {                -- Edit the various interaction points for players or create new ones
     ['checking'] = {

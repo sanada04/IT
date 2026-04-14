@@ -504,7 +504,12 @@ RegisterNetEvent('hospital:client:ambulanceAlert', function(coords, text)
     local street1name = GetStreetNameFromHashKey(street1)
     local street2name = GetStreetNameFromHashKey(street2)
     QBCore.Functions.Notify({ text = text, caption = street1name .. ' ' .. street2name }, 'ambulance')
-    PlaySound(-1, 'Lose_1st', 'GTAO_FM_Events_Soundset', 0, 0, 1)
+    local dispatchSound = Config.DispatchAlertSound or {}
+    local soundName = dispatchSound.name or 'Lose_1st'
+    local soundSet = dispatchSound.set or 'GTAO_FM_Events_Soundset'
+    -- クライアント環境差で鳴らないケースを減らすため、Frontend音も再生する
+    PlaySoundFrontend(-1, soundName, soundSet, true)
+    PlaySound(-1, soundName, soundSet, 0, 0, 1)
     local transG = 250
     local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
     local blip2 = AddBlipForCoord(coords.x, coords.y, coords.z)
