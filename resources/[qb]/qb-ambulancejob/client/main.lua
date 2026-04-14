@@ -829,6 +829,40 @@ CreateThread(function()
 end)
 
 local listen = false
+local function StartAICheckIn(hospitalIndex)
+    TriggerEvent('animations:client:EmoteCommandStart', { 'notepad' })
+    QBCore.Functions.Progressbar('hospital_checkin', Lang:t('progress.checking_in'), 2000, false, true, {
+        disableMovement = true,
+        disableCarMovement = true,
+        disableMouse = false,
+        disableCombat = true,
+    }, {
+        animDict = 'missheistdockssetup1clipboard@base',
+        anim = 'base',
+        flags = 33,
+    }, {
+        model = 'prop_notepad_01',
+        bone = 18905,
+        coords = { x = 0.1, y = 0.02, z = 0.05 },
+        rotation = { x = 10.0, y = 0.0, z = 0.0 },
+    }, {
+        model = 'prop_pencil_01',
+        bone = 58866,
+        coords = { x = 0.11, y = -0.02, z = 0.001 },
+        rotation = { x = -120.0, y = 0.0, z = 0.0 },
+    }, function() -- Done
+        TriggerEvent('animations:client:EmoteCommandStart', { 'c' })
+
+        local bedId = getClosestAvailableBed(hospitalIndex)
+        if bedId then
+            TriggerServerEvent('hospital:server:SendToBed', bedId, true, hospitalIndex)
+            hospitalLocation = hospitalIndex
+        else
+            QBCore.Functions.Notify(Lang:t('error.beds_taken'), 'error')
+        end
+    end)
+end
+
 -- variable - 'checkin' or 'beds'
 -- hospitalIndex - index referring to the key of the hospital key/value pairs
 local function CheckInControls(variable, hospitalIndex, bedId)
@@ -857,43 +891,17 @@ RegisterNetEvent('qb-ambulancejob:checkin', function()
         local distance = #(coords - hospital)
         if distance < 3 then
             if doctorCount >= Config.MinimalDoctors then
-                TriggerServerEvent('hospital:server:SendDoctorAlert', Config.Locations['hospital'][i]['name'])
-                QBCore.Functions.Notify('Called a Doctor', 'primary')
+                TriggerServerEvent('hospital:server:SendDoctorAlert', Config.Locations['hospital'][i]['name'], i)
             else
-                TriggerEvent('animations:client:EmoteCommandStart', { 'notepad' })
-                QBCore.Functions.Progressbar('hospital_checkin', Lang:t('progress.checking_in'), 2000, false, true, {
-                    disableMovement = true,
-                    disableCarMovement = true,
-                    disableMouse = false,
-                    disableCombat = true,
-                }, {
-                    animDict = 'missheistdockssetup1clipboard@base',
-                    anim = 'base',
-                    flags = 33,
-                }, {
-                    model = 'prop_notepad_01',
-                    bone = 18905,
-                    coords = { x = 0.1, y = 0.02, z = 0.05 },
-                    rotation = { x = 10.0, y = 0.0, z = 0.0 },
-                }, {
-                    model = 'prop_pencil_01',
-                    bone = 58866,
-                    coords = { x = 0.11, y = -0.02, z = 0.001 },
-                    rotation = { x = -120.0, y = 0.0, z = 0.0 },
-                }, function() -- Done
-                    TriggerEvent('animations:client:EmoteCommandStart', { 'c' })
-
-                    local bedId = getClosestAvailableBed(i)
-                    if bedId then
-                        TriggerServerEvent('hospital:server:SendToBed', bedId, true, i)
-                        hospitalLocation = i
-                    else
-                        QBCore.Functions.Notify(Lang:t('error.beds_taken'), 'error')
-                    end
-                end)
+                StartAICheckIn(i)
             end
         end
     end
+end)
+
+RegisterNetEvent('hospital:client:NoDoctorsAvailable', function(hospitalIndex)
+    QBCore.Functions.Notify('No doctors available, AI doctor is handling check-in', 'primary')
+    StartAICheckIn(hospitalIndex)
 end)
 
 RegisterNetEvent('qb-ambulancejob:beds', function(hospitalIndex, bedId)

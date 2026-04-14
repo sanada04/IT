@@ -225,19 +225,28 @@ RegisterNetEvent('hospital:server:RevivePlayer', function(playerId, isOldMan)
 	end
 end)
 
-RegisterNetEvent('hospital:server:SendDoctorAlert', function(hospitalName)
+RegisterNetEvent('hospital:server:SendDoctorAlert', function(hospitalName, hospitalIndex)
 	local src = source
 	if not doctorCalled then
 		doctorCalled = true
 		local players = QBCore.Functions.GetQBPlayers()
+		local notifiedDoctors = 0
 		for _, v in pairs(players) do
 			if v.PlayerData.job.name == 'ambulance' and v.PlayerData.job.onduty then
 				TriggerClientEvent('QBCore:Notify', v.PlayerData.source, Lang:t('info.dr_needed', { hospital = hospitalName }), 'ambulance')
+				notifiedDoctors = notifiedDoctors + 1
 			end
 		end
-		SetTimeout(Config.DocCooldown * 60000, function()
+
+		if notifiedDoctors > 0 then
+			TriggerClientEvent('QBCore:Notify', src, 'Called a Doctor', 'primary')
+			SetTimeout(Config.DocCooldown * 60000, function()
+				doctorCalled = false
+			end)
+		else
 			doctorCalled = false
-		end)
+			TriggerClientEvent('hospital:client:NoDoctorsAvailable', src, hospitalIndex)
+		end
 	else
 		TriggerClientEvent('QBCore:Notify', src, 'Doctor has already been notified', 'error')
 	end
