@@ -23,7 +23,6 @@ end
 
 local function onJobUpdate(JobInfo)
     local job = JobInfo or ps.getJob()
-    ps.debug('Updated job info:', job)
 
     if MDTOpen then
         local authorized = isAuthorizedJob(job)
@@ -54,17 +53,14 @@ local function onSetDuty(duty)
 end
 
 RegisterNetEvent('QBCore:Client:SetDuty', function(duty)
-    ps.debug('SetDuty event received:', duty)
     onSetDuty(duty)
 end)
 
 RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
-    ps.debug('OnJobUpdate event received:', JobInfo)
     onJobUpdate(JobInfo)
 end)
 
 RegisterNetEvent('esx:setJob', function(job)
-    ps.debug('esx:setJob event received:', job)
     onJobUpdate(job)
 end)
 
