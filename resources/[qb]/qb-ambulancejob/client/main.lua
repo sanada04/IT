@@ -618,9 +618,14 @@ RegisterNetEvent('hospital:client:SendToBed', function(id, data, isRevive)
     CreateThread(function()
         Wait(5)
         if isRevive then
-            QBCore.Functions.Notify(Lang:t('success.being_helped'), 'success')
-            Wait(Config.AIHealTimer * 1000)
-            TriggerEvent('hospital:client:Revive')
+            QBCore.Functions.Progressbar('hospital_being_healed', Lang:t('progress.healing'), Config.AIHealTimer * 1000, true, false, {
+                disableMovement = true,
+                disableCarMovement = true,
+                disableMouse = false,
+                disableCombat = true,
+            }, {}, {}, {}, function()
+                TriggerEvent('hospital:client:Revive')
+            end)
         else
             canLeaveBed = true
         end
