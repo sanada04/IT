@@ -6,6 +6,7 @@ var currentMyInvoices = []
 var nearbyPlayers = []
 var selectedTargets = []
 var pendingTargetModalOpen = false
+var jobBills = []
 
 function postAction(payload) {
 	$.post('https://okokBilling/action', JSON.stringify(payload))
@@ -30,9 +31,22 @@ function destroyTables() {
 	tableInstances = []
 }
 
+function clearBootstrapBackdrop() {
+	$('.modal-backdrop').remove()
+	$('body').removeClass('modal-open')
+	$('body').css('padding-right', '')
+}
+
+function clearBootstrapBackdropDeep() {
+	clearBootstrapBackdrop()
+	setTimeout(clearBootstrapBackdrop, 30)
+	setTimeout(clearBootstrapBackdrop, 180)
+}
+
 function closeAllMenus() {
 	$('.selection_menu, .invoices_menu, .societyinvoices_menu, .createinvoice_menu, .cityinvoices_menu, .payreference_menu, .police_menu, .loading_menu').fadeOut(100)
 	$('.modal').modal('hide')
+	clearBootstrapBackdropDeep()
 	destroyTables()
 	windowIsOpened = false
 	selectedWindow = 'none'
@@ -63,6 +77,31 @@ function updateSelectedTargetsLabel() {
 		text = '送信先: ' + selectedTargets.length + '人を選択中'
 	}
 	$('#selectedTargetsLabel').text(text)
+}
+
+function renderJobBillOptions() {
+	var select = $('#normal_bill_select')
+	if (!select.length) return
+
+	if (!Array.isArray(jobBills) || jobBills.length === 0) {
+		select.hide().empty()
+		$('#normal_createinvoice_item').prop('readonly', false).attr('placeholder', '項目')
+		$('#normal_createinvoice_price').prop('readonly', false).attr('placeholder', '金額')
+		return
+	}
+
+	var options = '<option value="">請求項目を選択</option>'
+	for (var i = 0; i < jobBills.length; i++) {
+		var bill = jobBills[i] || {}
+		var label = escapeHtml(bill.label || ('項目' + (i + 1)))
+		var price = Number(bill.price)
+		var hasPrice = !isNaN(price) && price > 0
+		options += '<option value="' + i + '">' + label + (hasPrice ? (' (' + price.toLocaleString() + '円)') : '') + '</option>'
+	}
+
+	select.html(options).val('').show()
+	$('#normal_createinvoice_item').val('').prop('readonly', true).attr('placeholder', '項目')
+	$('#normal_createinvoice_price').val('').prop('readonly', false).attr('placeholder', '金額')
 }
 
 function renderTargetList() {
@@ -101,6 +140,7 @@ function openTargetSelectorModal() {
 }
 
 function openSelectionMenu(data) {
+	clearBootstrapBackdropDeep()
 	var row = ''
 	if (data.society === true) {
 		row = `
@@ -133,6 +173,7 @@ function openSelectionMenu(data) {
 
 	$('#menu').html(row)
 	$('.selection_menu').fadeIn(150)
+	clearBootstrapBackdropDeep()
 	windowIsOpened = true
 	selectedWindow = 'mainMenu'
 }
@@ -224,12 +265,14 @@ function openCreateInvoice(data) {
 	$('#normal_createinvoice_item, #normal_createinvoice_price, #normal_createinvoice_note, #custom_createinvoice_item, #custom_createinvoice_price, #custom_createinvoice_note').val('')
 	$('#createinvoice').prop('disabled', true)
 	selectedInvoiceType = 'society'
+	jobBills = Array.isArray(data.jobBills) ? data.jobBills : []
 	nearbyPlayers = data.nearPlayers || []
 	selectedTargets = []
 	if (nearbyPlayers.length === 1) {
 		selectedTargets = [nearbyPlayers[0].id]
 	}
 	updateSelectedTargetsLabel()
+	renderJobBillOptions()
 	$('#invoiceBillsList').show()
 	$('#invoiceCustom').hide()
 	$('.createinvoice_menu').fadeIn(150)
@@ -303,6 +346,9 @@ $(document).on('click', '#openCustomInvoice', function() {
 	selectedInvoiceType = 'personal'
 	$('#invoiceBillsList').hide()
 	$('#invoiceCustom').show()
+	$('#normal_bill_select').val('').hide()
+	$('#normal_createinvoice_item').prop('readonly', false).attr('placeholder', '項目')
+	$('#normal_createinvoice_price').prop('readonly', false).attr('placeholder', '金額')
 	checkIfEmpty()
 })
 
@@ -310,6 +356,36 @@ $(document).on('click', '#openBillsListInvoice', function() {
 	selectedInvoiceType = 'society'
 	$('#invoiceCustom').hide()
 	$('#invoiceBillsList').show()
+	renderJobBillOptions()
+	checkIfEmpty()
+})
+
+$(document).on('change', '#normal_bill_select', function() {
+	var index = Number($(this).val())
+	if (isNaN(index) || index < 0 || index >= jobBills.length) {
+		$('#normal_createinvoice_item').val('').prop('readonly', true)
+		$('#normal_createinvoice_price').val('').prop('readonly', false)
+		checkIfEmpty()
+		return
+	}
+
+	var bill = jobBills[index] || {}
+	var label = bill.label || ''
+	var price = Number(bill.price)
+	var hasPrice = !isNaN(price) && price > 0
+	var isCustom = String(label).toLowerCase() === 'custom'
+
+	if (isCustom) {
+		$('#normal_createinvoice_item').val('').prop('readonly', false).attr('placeholder', '項目（自由入力）')
+	} else {
+		$('#normal_createinvoice_item').val(label).prop('readonly', true).attr('placeholder', '項目')
+	}
+	if (hasPrice) {
+		$('#normal_createinvoice_price').val(price).prop('readonly', true)
+	} else {
+		$('#normal_createinvoice_price').val('').prop('readonly', false)
+	}
+
 	checkIfEmpty()
 })
 

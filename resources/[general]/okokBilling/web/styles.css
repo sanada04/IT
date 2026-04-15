@@ -1,545 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500;600&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600;700&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css');
 
 :root {
-	--overlay: rgba(9, 11, 15, 0.88);
-	--card: #202633;
-	--card-2: #1a202b;
-	--line: rgba(255, 255, 255, 0.1);
-	--text: #e8edf9;
-	--text-soft: #bac4db;
-	--primary: #5c7cff;
-	--primary-hover: #4a69e6;
-	--danger: #d34b63;
-	--danger-hover: #bc3e56;
-	--ok: #64d09a;
-	--radius-xl: 22px;
-	--radius-lg: 14px;
-	--radius-md: 10px;
-	--shadow: 0 22px 56px rgba(0, 0, 0, 0.45);
-}
-
-*,
-*:focus,
-*:hover {
-	outline: none;
-}
-
-body {
-	font-family: 'DM Mono', monospace;
-	background: none;
-	color: var(--text);
-}
-
-/* Modal above menus */
-.modal-backdrop.show {
-	z-index: 12000;
-}
-
-.modal.show {
-	z-index: 12010;
-}
-
-/* Full-screen menus */
-.selection_menu,
-.loading_menu,
-.invoices_menu,
-.societyinvoices_menu,
-.cityinvoices_menu,
-.createinvoice_menu,
-.payreference_menu,
-.police_menu {
-	display: none;
-	position: fixed;
-	inset: 0;
-	width: 100vw;
-	height: 100vh;
-	padding: 24px;
-	z-index: 9999;
-	background: var(--overlay);
-}
-
-.selection_card,
-.invoices_card,
-.societyinvoices_card,
-.cityinvoices_card,
-.createinvoice_card,
-.payreference_card,
-.police_card,
-.loading_card {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	width: 100%;
-	max-width: 1080px;
-	border-radius: var(--radius-xl);
-	background: transparent;
-	border: 1px solid var(--line);
-	box-shadow: var(--shadow);
-}
-
-.loading_card {
-	max-width: 420px;
-}
-
-.card,
-.card-header {
-	border: none;
-	background: transparent;
-}
-
-.card-body,
-.selection_card-body,
-.invoices_card-body,
-.societyinvoices_card-body,
-.cityinvoices_card-body,
-.createinvoice_card-body,
-.payreference_card-body,
-.police_card-body,
-.loading_card-body {
-	position: relative;
-	min-height: 320px;
-	padding: 20px;
-	border-radius: var(--radius-xl);
-	border: 1px solid rgba(255, 255, 255, 0.06);
-	background: linear-gradient(180deg, rgba(36, 44, 59, 0.98) 0%, rgba(27, 33, 44, 0.98) 100%);
-	color: var(--text-soft);
-}
-
-/* NOTE: keep section transparent to avoid double-background look */
-.section {
-	min-height: 100%;
-	padding: 14px;
-	border-radius: var(--radius-lg);
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	background: transparent;
-}
-
-hr {
-	margin: 10px 0 16px;
-	border: 0;
-	height: 1px;
-	opacity: 1;
-	background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04));
-}
-
-.page-title,
-.menutitle {
-	display: inline-flex;
-	align-items: center;
-	gap: 10px;
-	color: var(--text);
-	font-size: 24px;
-	font-weight: 700;
-	letter-spacing: 0.3px;
-}
-
-.page-title::before {
-	content: '';
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background: var(--primary);
-	box-shadow: 0 0 0 4px rgba(92, 124, 255, 0.2);
-}
-
-.close-button {
-	position: absolute;
-	top: 14px;
-	right: 14px;
-	z-index: 2;
-	width: 36px;
-	height: 36px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	color: var(--text-soft);
-	background: rgba(255, 255, 255, 0.05);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	border-radius: var(--radius-md);
-	cursor: pointer;
-	transition: all 0.2s ease;
-}
-
-.close-button:hover {
-	background: rgba(255, 255, 255, 0.13);
-	color: var(--text);
-}
-
-.btn {
-	border: none;
-	border-radius: 12px;
-	font-size: 15px;
-	font-weight: 600;
-	padding: 11px 16px;
-	letter-spacing: 0.2px;
-	transition: all 0.18s ease;
-}
-
-.btn:focus {
-	box-shadow: none !important;
-}
-
-.btn.btn-blue,
-.btn.btn-bluesociety {
-	background: linear-gradient(180deg, #6f8cff 0%, var(--primary) 100%);
-	color: #fff;
-	border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.btn.btn-blue:hover,
-.btn.btn-bluesociety:hover {
-	background: linear-gradient(180deg, #607df3 0%, var(--primary-hover) 100%);
-	color: #fff;
-	transform: translateY(-1px);
-}
-
-.btn.btn-red {
-	background: linear-gradient(180deg, #df5872 0%, var(--danger) 100%);
-	color: #fff;
-	border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.btn.btn-red:hover {
-	background: linear-gradient(180deg, #c94b64 0%, var(--danger-hover) 100%);
-	transform: translateY(-1px);
-}
-
-.btn.btn-odark {
-	background: rgba(255, 255, 255, 0.06);
-	color: var(--text);
-	border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.btn.btn-odark:hover {
-	background: rgba(255, 255, 255, 0.12);
-	color: var(--text);
-}
-
-.btn:disabled,
-.btn.disabled {
-	opacity: 0.45;
-	filter: grayscale(20%);
-}
-
-#menu .btn {
-	height: 120px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 6px;
-	border-radius: 16px;
-}
-
-#menu .btn i {
-	font-size: 23px;
-}
-
-#view_invoice_payall,
-#createinvoice,
-#openTargetSelector,
-#payreference,
-#police_lookup,
-#payreference_lookup {
-	height: 46px;
-	font-size: 14px !important;
-}
-
-input,
-textarea,
-select,
-.form-control,
-.form-select,
-.input-group-text {
-	border-radius: 10px !important;
-	background: rgba(255, 255, 255, 0.06) !important;
-	border: 1px solid rgba(255, 255, 255, 0.12) !important;
-	color: var(--text) !important;
-	font-weight: 500 !important;
-}
-
-input {
-	height: 48px;
-}
-
-textarea {
-	resize: none;
-	min-height: 90px;
-}
-
-input::placeholder,
-textarea::placeholder {
-	color: rgba(217, 224, 241, 0.55);
-}
-
-input:focus,
-textarea:focus,
-select:focus,
-.form-control:focus,
-.form-select:focus {
-	color: var(--text) !important;
-	border-color: rgba(110, 143, 255, 0.82) !important;
-	box-shadow: 0 0 0 3px rgba(92, 124, 255, 0.2) !important;
-}
-
-input[type=number]::-webkit-inner-spin-button {
-	opacity: 0;
-}
-
-#invoicesFirstMenu,
-#invoicesSecondMenu {
-	padding: 5px;
-	border-radius: 14px;
-	background: rgba(255, 255, 255, 0.03);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.ci-option {
-	border-radius: 10px !important;
-	font-size: 14px !important;
-	padding-top: 10px !important;
-	padding-bottom: 10px !important;
-}
-
-#createinvoice_options {
-	margin-top: 12px;
-	padding: 14px;
-	border-radius: 14px;
-	background: rgba(0, 0, 0, 0.18);
-	border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-#selectedTargetsLabel,
-.pendingdiv,
-.payreference_noinfo,
-.police_noinfo {
-	padding: 8px 10px;
-	border-radius: 10px;
-	font-size: 13px;
-	font-weight: 600;
-	color: #c8d2e7;
-	background: rgba(255, 255, 255, 0.04);
-	border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.pendingdiv {
-	margin-bottom: 10px;
-}
-
-table {
-	width: 100%;
-	border-collapse: separate !important;
-	border-spacing: 0 10px;
-}
-
-table thead th {
-	border: none !important;
-	color: #ced8ed;
-	font-weight: 600;
-	padding-bottom: 4px !important;
-}
-
-table tbody tr {
-	background: rgba(255, 255, 255, 0.03);
-	transition: all 0.2s ease;
-}
-
-table tbody tr:hover {
-	background: rgba(92, 124, 255, 0.12) !important;
-	transform: translateY(-1px);
-}
-
-table tbody td {
-	border: none !important;
-	color: var(--text);
-	padding-top: 10px !important;
-	padding-bottom: 10px !important;
-}
-
-table tbody td:first-child {
-	border-radius: 10px 0 0 10px;
-}
-
-table tbody td:last-child {
-	border-radius: 0 10px 10px 0;
-}
-
-.dataTable-info {
-	display: none;
-}
-
-.dataTable-top,
-.dataTable-bottom {
-	color: #c2cbe0;
-}
-
-.dataTable-input,
-.dataTable-selector {
-	background: rgba(255, 255, 255, 0.06) !important;
-	color: var(--text) !important;
-	border: 1px solid rgba(255, 255, 255, 0.1) !important;
-	border-radius: 10px !important;
-}
-
-.badge {
-	border-radius: 10px;
-	padding: 6px 9px;
-	font-weight: 600;
-	border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.bg-success {
-	background: rgba(100, 208, 154, 0.2) !important;
-	color: #9ef0c5 !important;
-}
-
-.bg-info {
-	background: rgba(102, 138, 255, 0.2) !important;
-	color: #bbccff !important;
-}
-
-.bg-danger {
-	background: rgba(211, 75, 99, 0.23) !important;
-	color: #ffc4cf !important;
-}
-
-.bg-secondary {
-	background: rgba(145, 156, 178, 0.2) !important;
-	color: #d8dff0 !important;
-}
-
-.itemWithPay {
-	white-space: nowrap;
-}
-
-.payInvoiceBtn {
-	white-space: nowrap;
-	display: inline-block;
-	vertical-align: middle;
-	margin-left: 8px;
-	padding: 5px 10px;
-	font-size: 13px !important;
-	line-height: 1.2;
-}
-
-.selectPlayerToSendInvoice_modal-dialog {
-	max-width: 560px;
-}
-
-.modal-content,
-.myinvoices_modal-content,
-#selectPlayerToSendInvoiceModal .modal-content {
-	background: linear-gradient(180deg, rgba(34, 41, 55, 0.99) 0%, rgba(24, 30, 40, 0.99) 100%);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	border-radius: 18px;
-	box-shadow: var(--shadow);
-}
-
-.modal-body {
-	background: transparent;
-	color: var(--text-soft);
-	border-radius: 18px !important;
-}
-
-.p-1111 {
-	padding: 16px !important;
-}
-
-.targetList {
-	max-height: 280px;
-	overflow-y: auto;
-	padding: 6px 4px;
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	border-radius: 10px;
-	background: rgba(0, 0, 0, 0.18);
-}
-
-.targetRow {
-	padding: 8px 10px;
-	margin-bottom: 6px;
-	border-radius: 8px;
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	background: rgba(255, 255, 255, 0.04);
-	color: var(--text);
-	cursor: pointer;
-}
-
-.targetRow:hover {
-	background: rgba(92, 124, 255, 0.16);
-}
-
-.targetRow:last-child {
-	margin-bottom: 0;
-}
-
-.view_invoice_title {
-	font-size: 24px;
-	font-weight: 700;
-	color: var(--text);
-}
-
-.view_invoice_sdtf {
-	font-size: 14px;
-	color: #c8d1e5;
-}
-
-.subtotal,
-.vat,
-.total,
-.view_invoice_paid {
-	color: #d7dff1;
-}
-
-.notes-window {
-	padding: 10px 12px;
-	border-radius: 10px;
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	background: rgba(255, 255, 255, 0.04);
-	color: #dce3f3;
-}
-
-.load {
-	width: 36px;
-	height: 36px;
-	border: 3px solid rgba(255, 255, 255, 0.18);
-	border-top-color: var(--primary);
-	border-radius: 50%;
-	animation: spin 0.8s linear infinite;
-}
-
-.ldata-txt {
-	color: #d5dcef;
-	font-weight: 600;
-}
-
-@keyframes spin {
-	to {
-		transform: rotate(360deg);
-	}
-}
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500;600&display=swap');
-@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css');
-
-:root {
-	--bg-overlay: rgba(10, 12, 16, 0.9);
-	--surface: #1b1f27;
-	--surface-2: #222836;
-	--surface-soft: rgba(255, 255, 255, 0.04);
-	--border: rgba(255, 255, 255, 0.1);
-	--text: #e9edf8;
-	--text-soft: #b4bdd2;
-	--primary: #5c7cff;
-	--primary-hover: #4a69e6;
-	--danger: #d34b63;
-	--danger-hover: #bc3e56;
-	--ok: #5fc98a;
-	--warn: #e7c167;
-	--radius-lg: 22px;
-	--radius-md: 14px;
+	--menu-overlay: rgb(8, 10, 14);
+	--modal-backdrop-overlay: transparent;
+	--surface-0: #11151d;
+	--surface-1: #171d28;
+	--surface-2: #1e2633;
+	--surface-3: #232d3d;
+	--line: rgba(190, 210, 255, 0.15);
+	--line-strong: rgba(142, 170, 255, 0.35);
+	--text: #edf2ff;
+	--text-soft: #b8c4df;
+	--text-muted: #8d9ab7;
+	--primary: #5f7eff;
+	--primary-2: #7c98ff;
+	--primary-hover: #506de6;
+	--danger: #d85a75;
+	--danger-hover: #c54a65;
+	--success: #5ecc93;
+	--info: #7fa3ff;
+	--radius-xl: 24px;
+	--radius-lg: 16px;
+	--radius-md: 12px;
 	--radius-sm: 10px;
-	--shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+	--shadow-lg: 0 24px 65px rgba(0, 0, 0, 0.55);
+	--shadow-md: 0 14px 32px rgba(0, 0, 0, 0.32);
 }
 
 *,
@@ -548,22 +34,35 @@ table tbody td:last-child {
 	outline: none;
 }
 
+html,
 body {
-	font-family: 'DM Mono', monospace;
-	background: none;
-	color: var(--text);
+	margin: 0;
+	padding: 0;
 }
 
-/* Keep Bootstrap modal above custom menus */
+body {
+	font-family: 'DM Mono', monospace;
+	color: var(--text);
+	background: transparent;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: geometricPrecision;
+}
+
 .modal-backdrop.show {
 	z-index: 12000;
+	background: var(--modal-backdrop-overlay);
+}
+
+.modal-backdrop,
+.modal-backdrop.show {
+	background: transparent !important;
+	opacity: 0 !important;
 }
 
 .modal.show {
 	z-index: 12010;
 }
 
-/* Fullscreen menu layers */
 .selection_menu,
 .loading_menu,
 .invoices_menu,
@@ -579,7 +78,18 @@ body {
 	height: 100vh;
 	padding: 24px;
 	z-index: 9999;
-	background: var(--bg-overlay);
+	background: var(--menu-overlay);
+}
+
+.selection_menu,
+.loading_menu,
+.invoices_menu,
+.societyinvoices_menu,
+.cityinvoices_menu,
+.createinvoice_menu,
+.payreference_menu,
+.police_menu {
+	background: transparent !important;
 }
 
 .selection_card,
@@ -594,16 +104,16 @@ body {
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-	width: 100%;
-	max-width: 1080px;
-	border-radius: var(--radius-lg);
-	border: 1px solid var(--border);
-	background: transparent;
-	box-shadow: var(--shadow);
+	width: min(1080px, calc(100vw - 48px));
+	border: 1px solid var(--line);
+	border-radius: var(--radius-xl);
+	background: var(--surface-1);
+	box-shadow: var(--shadow-lg);
+	overflow: hidden;
 }
 
 .loading_card {
-	max-width: 420px;
+	width: min(420px, calc(100vw - 48px));
 }
 
 .card,
@@ -612,7 +122,6 @@ body {
 	background: transparent;
 }
 
-.card-body,
 .selection_card-body,
 .invoices_card-body,
 .societyinvoices_card-body,
@@ -622,28 +131,34 @@ body {
 .police_card-body,
 .loading_card-body {
 	position: relative;
-	min-height: 320px;
-	padding: 22px 22px 18px;
-	border-radius: var(--radius-lg);
-	background: linear-gradient(180deg, rgba(35, 41, 55, 0.98) 0%, rgba(24, 28, 37, 0.98) 100%);
-	border: 1px solid rgba(255, 255, 255, 0.06);
-	color: var(--text-soft);
+	padding: 20px;
+	background: var(--surface-1);
 }
 
 .section {
 	min-height: 100%;
 	padding: 18px;
-	border-radius: var(--radius-md);
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	background: var(--surface-soft);
+	border-radius: var(--radius-lg);
+	border: none;
+	background: var(--surface-2);
+	backdrop-filter: none;
+}
+
+/* Selection menu keeps card color, only backdrop is transparent */
+.selection_menu .selection_card-body {
+	background: var(--surface-1);
+}
+
+.selection_menu .section {
+	background: var(--surface-2);
 }
 
 hr {
-	margin: 10px 0 16px;
+	margin: 12px 0 16px;
 	border: 0;
 	height: 1px;
 	opacity: 1;
-	background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.06));
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(137, 162, 255, 0.35), rgba(255, 255, 255, 0.03));
 }
 
 .page-title,
@@ -652,24 +167,24 @@ hr {
 	align-items: center;
 	gap: 10px;
 	color: var(--text);
-	font-weight: 700;
 	font-size: 24px;
-	letter-spacing: 0.4px;
+	font-weight: 700;
+	letter-spacing: 0.45px;
 }
 
 .page-title::before {
 	content: '';
 	width: 10px;
 	height: 10px;
-	border-radius: 50%;
+	border-radius: 999px;
 	background: var(--primary);
-	box-shadow: 0 0 0 4px rgba(92, 124, 255, 0.2);
+	box-shadow: 0 0 0 4px rgba(95, 126, 255, 0.2);
 }
 
 .close-button {
 	position: absolute;
-	top: 14px;
-	right: 14px;
+	top: 40px;
+	right: 24px;
 	z-index: 2;
 	width: 36px;
 	height: 36px;
@@ -677,27 +192,28 @@ hr {
 	align-items: center;
 	justify-content: center;
 	color: var(--text-soft);
-	background: rgba(255, 255, 255, 0.05);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	border-radius: var(--radius-sm);
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(200, 214, 255, 0.14);
+	border-radius: var(--radius-md);
 	cursor: pointer;
-	transition: all 0.2s ease;
+	transition: transform 0.16s ease, background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease;
 }
 
 .close-button:hover {
-	background: rgba(255, 255, 255, 0.14);
+	background: rgba(255, 255, 255, 0.12);
 	color: var(--text);
+	border-color: rgba(200, 214, 255, 0.25);
+	transform: translateY(-1px);
 }
 
-/* Buttons */
 .btn {
 	border: none;
-	border-radius: 12px;
-	font-weight: 600;
-	letter-spacing: 0.25px;
-	padding: 12px 16px;
-	font-size: 15px;
-	transition: all 0.18s ease;
+	border-radius: var(--radius-md);
+	font-size: 14px;
+	font-weight: 700;
+	padding: 11px 16px;
+	letter-spacing: 0.3px;
+	transition: transform 0.16s ease, filter 0.16s ease, background-color 0.16s ease;
 }
 
 .btn:focus {
@@ -706,44 +222,45 @@ hr {
 
 .btn.btn-blue,
 .btn.btn-bluesociety {
-	background: linear-gradient(180deg, #6e8cff 0%, var(--primary) 100%);
+	background: linear-gradient(180deg, var(--primary-2) 0%, var(--primary) 100%);
 	color: #fff;
-	border: 1px solid rgba(255, 255, 255, 0.12);
+	border: 1px solid rgba(220, 230, 255, 0.2);
 }
 
 .btn.btn-blue:hover,
 .btn.btn-bluesociety:hover {
-	background: linear-gradient(180deg, #5f7cf3 0%, var(--primary-hover) 100%);
-	color: #fff;
+	background: linear-gradient(180deg, #6e8cff 0%, var(--primary-hover) 100%);
 	transform: translateY(-1px);
+	filter: brightness(1.05);
 }
 
 .btn.btn-red {
-	background: linear-gradient(180deg, #e05973 0%, var(--danger) 100%);
+	background: linear-gradient(180deg, #e5728c 0%, var(--danger) 100%);
 	color: #fff;
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 210, 220, 0.18);
 }
 
 .btn.btn-red:hover {
-	background: linear-gradient(180deg, #cb4b64 0%, var(--danger-hover) 100%);
+	background: linear-gradient(180deg, #d5607a 0%, var(--danger-hover) 100%);
 	transform: translateY(-1px);
 }
 
 .btn.btn-odark {
 	background: rgba(255, 255, 255, 0.06);
 	color: var(--text);
-	border: 1px solid rgba(255, 255, 255, 0.12);
+	border: 1px solid rgba(200, 214, 255, 0.18);
 }
 
 .btn.btn-odark:hover {
 	background: rgba(255, 255, 255, 0.12);
-	color: var(--text);
+	color: #fff;
 }
 
 .btn:disabled,
 .btn.disabled {
-	opacity: 0.45;
-	filter: grayscale(20%);
+	opacity: 0.48;
+	filter: grayscale(0.28);
+	transform: none !important;
 }
 
 #menu .btn {
@@ -752,8 +269,8 @@ hr {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: 6px;
-	border-radius: 16px;
+	gap: 8px;
+	border-radius: 18px;
 }
 
 #menu .btn i {
@@ -770,32 +287,33 @@ hr {
 	font-size: 14px !important;
 }
 
-/* Form controls */
 input,
 textarea,
 select,
 .form-control,
 .form-select,
 .input-group-text {
-	border-radius: 10px !important;
+	border-radius: var(--radius-sm) !important;
 	background: rgba(255, 255, 255, 0.06) !important;
 	color: var(--text) !important;
-	border: 1px solid rgba(255, 255, 255, 0.12) !important;
-	font-weight: 500 !important;
+	border: 1px solid rgba(193, 209, 255, 0.18) !important;
+	font-weight: 600 !important;
 }
 
-input {
+input,
+.form-control,
+.form-select {
 	height: 48px;
 }
 
 textarea {
-	resize: none;
 	min-height: 90px;
+	resize: none;
 }
 
 input::placeholder,
 textarea::placeholder {
-	color: rgba(216, 223, 240, 0.55);
+	color: rgba(208, 218, 242, 0.55);
 }
 
 input:focus,
@@ -803,13 +321,17 @@ textarea:focus,
 select:focus,
 .form-control:focus,
 .form-select:focus {
-	color: var(--text) !important;
-	border-color: rgba(108, 141, 255, 0.8) !important;
-	box-shadow: 0 0 0 3px rgba(92, 124, 255, 0.2) !important;
+	color: #fff !important;
+	border-color: var(--line-strong) !important;
+	box-shadow: 0 0 0 3px rgba(95, 126, 255, 0.22) !important;
 }
 
 input[type=number]::-webkit-inner-spin-button {
 	opacity: 0;
+}
+
+#invoiceCustom {
+	display: none;
 }
 
 #invoicesFirstMenu,
@@ -817,11 +339,11 @@ input[type=number]::-webkit-inner-spin-button {
 	padding: 5px;
 	border-radius: 14px;
 	background: rgba(255, 255, 255, 0.03);
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(197, 212, 255, 0.13);
 }
 
 .ci-option {
-	border-radius: 10px !important;
+	border-radius: var(--radius-sm) !important;
 	font-size: 14px !important;
 	padding-top: 10px !important;
 	padding-bottom: 10px !important;
@@ -831,8 +353,8 @@ input[type=number]::-webkit-inner-spin-button {
 	margin-top: 12px;
 	padding: 14px;
 	border-radius: 14px;
-	background: rgba(0, 0, 0, 0.18);
-	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(0, 0, 0, 0.17);
+	border: 1px solid rgba(192, 206, 255, 0.1);
 }
 
 #selectedTargetsLabel,
@@ -840,19 +362,18 @@ input[type=number]::-webkit-inner-spin-button {
 .payreference_noinfo,
 .police_noinfo {
 	padding: 8px 10px;
-	border-radius: 10px;
+	border-radius: var(--radius-sm);
 	font-size: 13px;
-	font-weight: 600;
-	color: #c8d2e7;
+	font-weight: 700;
+	color: #c9d3ea;
 	background: rgba(255, 255, 255, 0.04);
-	border: 1px solid rgba(255, 255, 255, 0.08);
+	border: 1px solid rgba(190, 204, 244, 0.11);
 }
 
 .pendingdiv {
 	margin-bottom: 10px;
 }
 
-/* Tables */
 table {
 	width: 100%;
 	border-collapse: separate !important;
@@ -861,18 +382,21 @@ table {
 
 table thead th {
 	border: none !important;
-	color: #cfd8ee;
-	font-weight: 600;
-	padding-bottom: 4px !important;
+	color: #d4def3;
+	font-weight: 700;
+	padding-bottom: 5px !important;
+	font-size: 13px;
+	letter-spacing: 0.2px;
+	text-transform: uppercase;
 }
 
 table tbody tr {
 	background: rgba(255, 255, 255, 0.03);
-	transition: all 0.2s ease;
+	transition: transform 0.18s ease, background-color 0.18s ease;
 }
 
 table tbody tr:hover {
-	background: rgba(92, 124, 255, 0.12) !important;
+	background: rgba(95, 126, 255, 0.14) !important;
 	transform: translateY(-1px);
 }
 
@@ -881,14 +405,15 @@ table tbody td {
 	color: var(--text);
 	padding-top: 10px !important;
 	padding-bottom: 10px !important;
+	font-weight: 500;
 }
 
 table tbody td:first-child {
-	border-radius: 10px 0 0 10px;
+	border-radius: var(--radius-sm) 0 0 var(--radius-sm);
 }
 
 table tbody td:last-child {
-	border-radius: 0 10px 10px 0;
+	border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
 .dataTable-info {
@@ -897,43 +422,42 @@ table tbody td:last-child {
 
 .dataTable-top,
 .dataTable-bottom {
-	color: #c2cbe0;
+	color: var(--text-soft);
 }
 
 .dataTable-input,
 .dataTable-selector {
 	background: rgba(255, 255, 255, 0.06) !important;
 	color: var(--text) !important;
-	border: 1px solid rgba(255, 255, 255, 0.1) !important;
-	border-radius: 10px !important;
+	border: 1px solid rgba(193, 209, 255, 0.15) !important;
+	border-radius: var(--radius-sm) !important;
 }
 
-/* Status badges */
 .badge {
 	border-radius: 10px;
-	padding: 6px 9px;
-	font-weight: 600;
+	padding: 6px 10px;
+	font-weight: 700;
 	border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .bg-success {
-	background: rgba(95, 201, 138, 0.18) !important;
-	color: #96e7b8 !important;
+	background: rgba(94, 204, 147, 0.2) !important;
+	color: #9ff0c5 !important;
 }
 
 .bg-info {
-	background: rgba(102, 138, 255, 0.2) !important;
-	color: #bbccff !important;
+	background: rgba(127, 163, 255, 0.2) !important;
+	color: #c6d7ff !important;
 }
 
 .bg-danger {
-	background: rgba(211, 75, 99, 0.22) !important;
-	color: #ffc4cf !important;
+	background: rgba(216, 90, 117, 0.23) !important;
+	color: #ffd0da !important;
 }
 
 .bg-secondary {
-	background: rgba(145, 156, 178, 0.2) !important;
-	color: #d8dff0 !important;
+	background: rgba(145, 156, 178, 0.21) !important;
+	color: #dbe2f2 !important;
 }
 
 .itemWithPay {
@@ -950,22 +474,22 @@ table tbody td:last-child {
 	line-height: 1.2;
 }
 
-/* Target selection modal */
-.selectPlayerToSendInvoice_modal-dialog {
+.selectPlayerToSendInvoice_modal-dialog,
+.modal-dialog {
 	max-width: 560px;
 }
 
-#selectPlayerToSendInvoiceModal .modal-content,
+.modal-content,
 .myinvoices_modal-content,
-.modal-content {
-	background: linear-gradient(180deg, rgba(33, 39, 52, 0.99) 0%, rgba(24, 29, 38, 0.99) 100%);
-	border: 1px solid rgba(255, 255, 255, 0.1);
+#selectPlayerToSendInvoiceModal .modal-content {
+	background: var(--surface-1);
+	border: 1px solid rgba(191, 207, 255, 0.15);
 	border-radius: 18px;
-	box-shadow: var(--shadow);
+	box-shadow: var(--shadow-md);
 }
 
 .modal-body {
-	background: transparent;
+	background: var(--surface-1);
 	color: var(--text-soft);
 	border-radius: 18px !important;
 }
@@ -978,30 +502,31 @@ table tbody td:last-child {
 	max-height: 280px;
 	overflow-y: auto;
 	padding: 6px 4px;
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	border-radius: 10px;
-	background: rgba(0, 0, 0, 0.18);
+	border: 1px solid rgba(191, 207, 255, 0.14);
+	border-radius: var(--radius-sm);
+	background: rgba(0, 0, 0, 0.2);
 }
 
 .targetRow {
 	padding: 8px 10px;
 	margin-bottom: 6px;
-	border-radius: 8px;
-	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 9px;
+	border: 1px solid rgba(194, 209, 252, 0.1);
 	background: rgba(255, 255, 255, 0.04);
 	color: var(--text);
 	cursor: pointer;
+	transition: background-color 0.16s ease, border-color 0.16s ease;
 }
 
 .targetRow:hover {
-	background: rgba(92, 124, 255, 0.16);
+	background: rgba(95, 126, 255, 0.2);
+	border-color: rgba(166, 188, 255, 0.35);
 }
 
 .targetRow:last-child {
 	margin-bottom: 0;
 }
 
-/* Invoice detail modal blocks */
 .view_invoice_title {
 	font-size: 24px;
 	font-weight: 700;
@@ -1010,25 +535,34 @@ table tbody td:last-child {
 
 .view_invoice_sdtf {
 	font-size: 14px;
-	color: #c8d1e5;
+	color: #ced7ec;
 }
 
 .subtotal,
 .vat,
 .total,
 .view_invoice_paid {
-	color: #d6ddef;
+	color: #dce4f6;
+	font-weight: 600;
 }
 
 .notes-window {
 	padding: 10px 12px;
-	border-radius: 10px;
-	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: var(--radius-sm);
+	border: 1px solid rgba(197, 212, 255, 0.14);
 	background: rgba(255, 255, 255, 0.04);
-	color: #dce3f3;
+	color: #dce4f6;
 }
 
-/* Loading */
+.modal-body .notes-window,
+.modal-body .payreference_noinfo,
+.modal-body .police_noinfo,
+.modal-body .pendingdiv,
+.modal-body #selectedTargetsLabel {
+	background: var(--surface-2);
+	border-color: rgba(197, 212, 255, 0.2);
+}
+
 .load {
 	width: 36px;
 	height: 36px;
@@ -1039,8 +573,32 @@ table tbody td:last-child {
 }
 
 .ldata-txt {
-	color: #d5dcef;
+	color: #d8e0f3;
 	font-weight: 600;
+	letter-spacing: 0.2px;
+}
+
+.mt-m07 {
+	margin-top: -7px;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: rgba(255, 255, 255, 0.03);
+	border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(140, 163, 230, 0.42);
+	border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(156, 179, 244, 0.66);
 }
 
 @keyframes spin {
@@ -1048,912 +606,47 @@ table tbody td:last-child {
 		transform: rotate(360deg);
 	}
 }
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap');
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
 
-*,*:focus,*:hover{
-    outline:none;
-}
-
-body {
-	font-family: 'DM Mono', monospace;
-	background: none;
-}
-
-/* Keep Bootstrap modal above custom full-screen menus */
-.modal-backdrop.show {
-	z-index: 12000;
-}
-
-.modal.show {
-	z-index: 12010;
-}
-
-/* New UI layout containers */
-.selection_menu,
-.loading_menu,
-.invoices_menu,
-.societyinvoices_menu,
-.cityinvoices_menu,
-.createinvoice_menu,
-.payreference_menu,
-.police_menu {
-	display: none;
-	position: fixed;
-	inset: 0;
-	width: 100vw;
-	height: 100vh;
-	z-index: 9999;
-	padding: 24px;
-}
-
-.selection_card,
-.invoices_card,
-.societyinvoices_card,
-.cityinvoices_card,
-.createinvoice_card,
-.payreference_card,
-.police_card,
-.loading_card {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	margin: 0;
-	width: 100%;
-	max-width: 980px;
-	box-shadow: 0px 0px 12px rgba(10, 10, 10, 0.35);
-	border-radius: 20px;
-}
-
-.loading_card {
-	max-width: 380px;
-}
-
-.selection_card-body,
-.invoices_card-body,
-.societyinvoices_card-body,
-.cityinvoices_card-body,
-.createinvoice_card-body,
-.payreference_card-body,
-.police_card-body,
-.loading_card-body {
-	position: relative;
-	min-height: 320px;
-}
-
-.close-button {
-	position: absolute;
-	top: 18px;
-	right: 20px;
-	font-size: 20px;
-	color: #2f3037;
-	cursor: pointer;
-	z-index: 2;
-}
-
-.page-title {
-	display: block;
-	font-size: 28px;
-	font-weight: 600;
-	color: #2f3037;
-}
-
-textarea {
-	font-family: 'DM Mono', monospace;
-	font-weight: 500 !important;
-}
-
-/* START GENERAL CARD RELATED CSS */
-
-.card {
-	border: none;
-	border-radius: 20px;
-	background-color: transparent;
-}
-
-.card-header {
-	border-bottom: none !important;
-}
-
-.card-title {
-	font-weight: 600;
-}
-
-.card-body {
-	background-color: #ffffff;
-	color: rgba(110, 113, 121, 1);
-	font-size: 15px;
-	font-weight: 500;
-	border-radius: 20px;
-}
-
-.menutitle {
-	color: #2f3037;
-	font-weight: 600;
-	font-size: 28px;
-}
-
-/* END GENERAL CARD RELATED CSS */
-
-/* START MAIN MENU */
-
-.mainmenu {
-	display: none;
-	position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.mainmenu-card {
-	width: 500px !important;
-	border: none;
-	box-shadow: 0px 0px 5px 0px rgba(10, 10, 10, 0.3);
-	border-radius: 20px;
-	background-color: transparent;
-}
-
-.mainmenu-subcard {
-	transition: 0.3s;
-}
-
-.mainmenu-subcard:hover {
-	transition: 0.3s;
-	background-color: #1f5eff !important;
-	color: #eeeff3 !important;
-	cursor: pointer;
-}
-
-/* END MAIN MENU */
-
-/* START PAID INVOICE */
-
-.paidinvoice {
-	display: none;
-	position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.paidinvoice-card {
-	width: 500px !important;
-	border: none;
-	box-shadow: 0px 0px 5px 0px rgba(10, 10, 10, 0.3);
-	border-radius: 20px;
-	background-color: transparent;
-}
-
-/* END PAID INVOICE */
-
-/* START UNPAID INVOICE */
-
-.unpaidinvoice {
-	display: none;
-	position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.unpaidinvoice-card {
-	width: 500px !important;
-	border: none;
-	box-shadow: 0px 0px 5px 0px rgba(10, 10, 10, 0.3);
-	border-radius: 20px;
-	background-color: transparent;
-}
-
-/* END PAID INVOICE */
-
-/* START SEND INVOICE */
-
-.sendinvoice {
-	display: none;
-	position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.sendinvoice-card {
-	width: 500px !important;
-	border: none;
-	box-shadow: 0px 0px 5px 0px rgba(10, 10, 10, 0.3);
-	border-radius: 20px;
-	background-color: transparent;
-}
-
-/* END SEND INVOICE */
-
-/* START MY INVOICES */
-
-.myinvoices {
-	display: none;
-	position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.myinvoices-card {
-	width: 1000px !important;
-	border: none;
-	box-shadow: 0px 0px 5px 0px rgba(10, 10, 10, 0.3);
-	border-radius: 20px;
-	background-color: transparent;
-}
-
-/* END MY INVOICES */
-
-/* START SOCIETY INVOICES */
-
-.societyinvoices {
-	display: none;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-}
-
-.societyinvoices-card {
-	width: 1000px !important;
-	border: none;
-	box-shadow: 0px 0px 5px 0px rgba(10, 10, 10, 0.3);
-	border-radius: 20px;
-	background-color: transparent;
-}
-
-/* END SOCIETY INVOICES */
-
-/* START BUTTONS */
-
-.btn {
-	font-weight: 500;
-	font-size: 18px;
-	padding: 13px 17px;
-	border: none;
-	-webkit-border-radius: 2px;
-	-webkit-background-clip: padding-box;
-	-moz-border-radius: 2px;
-	-moz-background-clip: padding;
-	border-radius: 2px;
-	background-clip: padding-box;
-	transition: color 0.2s linear, background-color 0.2s linear;
-	letter-spacing: 0.2px;
-}
-
-.btn.btn-blue {
-	background-color: #1f5eff;
-	color: #fff;
-	font-size: 15px;
-}
-
-.btn.btn-blue.btn-border {
-	border-color: #1f5eff;
-	color: #1f5eff;
-}
-
-.btn.btn-blue.btn-3d {
-	box-shadow: inset 0 -2px 0 #0a4df9;
-}
-
-.btn.btn-blue:hover {
-	background-color: #0a4df9;
-}
-
-.btn.btn-red {
-	background-color: #f52847;
-	color: #fff;
-	font-size: 15px;
-}
-
-.btn.btn-red.btn-border {
-	border-color: #f52847;
-	color: #f52847;
-}
-
-.btn.btn-red.btn-3d {
-	box-shadow: inset 0 -2px 0 #d61e3a;
-}
-
-.btn.btn-red:hover {
-	background-color: #d61e3a;
-}
-
-.btn:focus {
-	box-shadow: none;
-}
-
-.itemWithPay {
-	white-space: nowrap;
-}
-
-.payInvoiceBtn {
-	white-space: nowrap;
-	display: inline-block;
-	vertical-align: middle;
-	padding: 4px 10px;
-	font-size: 13px !important;
-	line-height: 1.2;
-}
-
-.targetList {
-	max-height: 280px;
-	overflow-y: auto;
-	padding: 6px 2px;
-	border: 1px solid rgba(0, 0, 0, 0.08);
-	border-radius: 10px;
-}
-
-.targetRow {
-	padding: 8px 10px;
-	margin-bottom: 6px;
-	background: #f6f7fb;
-	border-radius: 8px;
-	cursor: pointer;
-}
-
-.targetRow:last-child {
-	margin-bottom: 0;
-}
-
-.btn-close {
-	background-color: #fff;
-	border-radius: 5px;
-	opacity: .75;
-	position: absolute; 
-	right: 20px; 
-	top: 20px;
-}
-
-.btn-close:hover {
-	opacity: 1;
-}
-
-.btn-close:focus {
-	box-shadow: none;
-}
-
-.btn.btn-bluesociety {
-	background-color: #1f5eff;
-	color: #e6e6e6;
-	font-size: 15px;
-}
-
-.btn.btn-bluesociety.btn-border {
-	border-color: #1f5eff;
-	color: #1f5eff;
-}
-
-.btn.btn-bluesociety.btn-3d {
-	box-shadow: inset 0 -2px 0 #0a4df9;
-}
-
-.btn.btn-bluesociety:hover {
-	background-color: #0a4df9;
-	color: #e6e6e6;
-}
-
-/* END BUTTONS */
-
-/* START INPUTS AND OTHERS */
-
-input {
-	border-radius: 10px !important;
-	height: 53px;
-	background-color: #eeeff3 !important;
-	border: none !important;
-	font-weight: 500 !important;
-}
-
-input:focus {
-	box-shadow: none !important;
-	color: #212529;
-}
-
-input[type=number]::-webkit-inner-spin-button {
-  	opacity: 0;
-}
-
-.input-group-text {
-	background-color: #eeeff3 !important;
-	border: none;
-	border-top-right-radius: 10px;
-	border-bottom-right-radius: 10px;
-	font-weight: 500;
-}
-
-.form-control {
-    background-color: #eeeff3;
-}
-
-textarea {
-    resize: none;
-    border: none !important;
-}
-
-textarea:focus {
-	box-shadow: none !important;
-	border: none !important;
-}
-
-tbody tr:hover {
-	background-color: #eeeff3;
-}
-
-.dataTable-info {
-	display: none;
-}
-
-/* END INPUTS AND OTHERS */
-
-/* START BADGES */
-
-.badge {
-	border-radius: 10px;
-}
-
-.bg-success {
-	background-color: #ddfbdd !important;
-	color: #5d9b5f !important;
-}
-
-.bg-info {
-	background-color: #dde9fc !important;
-	color: #45518a !important;
-}
-
-.bg-danger {
-	background-color: #fbdde0 !important;
-	color: #9a5052 !important;
-}
-
-.bg-secondary {
-	background-color: rgba(100, 100, 100, 0.25) !important;
-	color: #5a5a5a !important;
-}
-
-/* END BADGES */
-
-/* START MYINVOICES MODAL */
-
-.myinvoices_modal-content {
-	width: 500px !important;
-	border: none;
-	box-shadow: 0px 0px 5px 0px rgba(10, 10, 10, 0.3);
-	border-radius: 20px !important;
-}
-
-.modal-body {
-	background-color: #ffffff;
-	color: rgba(110, 113, 121, 1);
-	font-size: 15px;
-	font-weight: 500;
-	border-radius: 20px !important;
-}
-
-/* END MYINVOICES MODAL */
-
-/* ===================================================================
-   Chic Theme Overrides
-   =================================================================== */
-
-:root {
-	--theme-bg: #101216;
-	--theme-bg-soft: #171a20;
-	--theme-surface: #1b1f27;
-	--theme-surface-2: #212632;
-	--theme-border: rgba(255, 255, 255, 0.1);
-	--theme-text: #e8ebf2;
-	--theme-text-soft: #afb7c9;
-	--theme-primary: #5c7cff;
-	--theme-primary-hover: #4a69e6;
-	--theme-danger: #d34b63;
-	--theme-danger-hover: #bb3f57;
-	--theme-shadow: 0 22px 55px rgba(0, 0, 0, 0.45);
-}
-
-body {
-	color: var(--theme-text);
-}
-
-.selection_menu,
-.loading_menu,
-.invoices_menu,
-.societyinvoices_menu,
-.cityinvoices_menu,
-.createinvoice_menu,
-.payreference_menu,
-.police_menu {
-	background: rgba(10, 11, 14, 0.86);
-	backdrop-filter: none;
-}
-
-.selection_card,
-.invoices_card,
-.societyinvoices_card,
-.cityinvoices_card,
-.createinvoice_card,
-.payreference_card,
-.police_card,
-.loading_card {
-	border: 1px solid var(--theme-border);
-	box-shadow: var(--theme-shadow);
-}
-
-.card-body,
-.selection_card-body,
-.invoices_card-body,
-.societyinvoices_card-body,
-.cityinvoices_card-body,
-.createinvoice_card-body,
-.payreference_card-body,
-.police_card-body,
-.loading_card-body {
-	background: linear-gradient(180deg, rgba(33, 38, 50, 0.98) 0%, rgba(24, 28, 36, 0.98) 100%);
-	color: var(--theme-text-soft);
-	border-radius: 20px;
-	border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.page-title,
-.menutitle {
-	color: var(--theme-text);
-	letter-spacing: 0.6px;
-}
-
-hr {
-	border: 0;
-	height: 1px;
-	background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.06));
-	opacity: 1;
-}
-
-.close-button {
-	color: var(--theme-text-soft);
-	width: 36px;
-	height: 36px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 10px;
-	background: rgba(255, 255, 255, 0.04);
-	transition: all 0.2s ease;
-}
-
-.close-button:hover {
-	background: rgba(255, 255, 255, 0.12);
-	color: var(--theme-text);
-}
-
-.btn {
-	border-radius: 12px;
-	font-weight: 600;
-	letter-spacing: 0.4px;
-	transition: all 0.2s ease;
-}
-
-.btn.btn-blue {
-	background: linear-gradient(180deg, #6e8bff 0%, var(--theme-primary) 100%);
-	border: 1px solid rgba(255, 255, 255, 0.12);
-	color: #ffffff;
-}
-
-.btn.btn-blue:hover {
-	background: linear-gradient(180deg, #5f7cf2 0%, var(--theme-primary-hover) 100%);
-	transform: translateY(-1px);
-}
-
-.btn.btn-red {
-	background: linear-gradient(180deg, #e25b74 0%, var(--theme-danger) 100%);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	color: #fff;
-}
-
-.btn.btn-red:hover {
-	background: linear-gradient(180deg, #cf4e66 0%, var(--theme-danger-hover) 100%);
-	transform: translateY(-1px);
-}
-
-.btn.btn-odark {
-	background: rgba(255, 255, 255, 0.06);
-	border: 1px solid rgba(255, 255, 255, 0.12);
-	color: var(--theme-text);
-}
-
-.btn.btn-odark:hover {
-	background: rgba(255, 255, 255, 0.12);
-	color: #ffffff;
-}
-
-.btn:disabled,
-.btn.disabled {
-	opacity: 0.45;
-	filter: grayscale(15%);
-}
-
-input,
-textarea,
-select,
-.form-control,
-.form-select,
-.input-group-text {
-	background-color: rgba(255, 255, 255, 0.06) !important;
-	color: var(--theme-text) !important;
-	border: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-input::placeholder,
-textarea::placeholder {
-	color: rgba(214, 220, 234, 0.55);
-}
-
-input:focus,
-textarea:focus,
-select:focus,
-.form-control:focus,
-.form-select:focus {
-	border-color: rgba(116, 143, 255, 0.8) !important;
-	box-shadow: 0 0 0 3px rgba(92, 124, 255, 0.2) !important;
-}
-
-table {
-	border-collapse: separate !important;
-	border-spacing: 0 8px;
-}
-
-table thead th {
-	color: #cfd7ea;
-	font-weight: 600;
-	border: none !important;
-	padding-bottom: 6px !important;
-}
-
-table tbody tr {
-	background: rgba(255, 255, 255, 0.03);
-	transition: background 0.2s ease, transform 0.2s ease;
-}
-
-table tbody tr:hover {
-	background: rgba(92, 124, 255, 0.12) !important;
-	transform: translateY(-1px);
-}
-
-table tbody td {
-	color: var(--theme-text);
-	border: none !important;
-	padding-top: 11px !important;
-	padding-bottom: 11px !important;
-}
-
-.badge {
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	font-weight: 600;
-	padding: 6px 9px;
-}
-
-.bg-success {
-	background-color: rgba(72, 171, 119, 0.18) !important;
-	color: #8fe3b5 !important;
-}
-
-.bg-info {
-	background-color: rgba(84, 126, 255, 0.2) !important;
-	color: #b9cbff !important;
-}
-
-.bg-danger {
-	background-color: rgba(205, 86, 111, 0.2) !important;
-	color: #ffc3cf !important;
-}
-
-.bg-secondary {
-	background-color: rgba(130, 140, 160, 0.2) !important;
-	color: #d2d8e6 !important;
-}
-
-#selectedTargetsLabel,
-.pendingdiv,
-.payreference_noinfo,
-.police_noinfo {
-	color: #c8d0e3;
-	background: rgba(255, 255, 255, 0.04);
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	border-radius: 10px;
-	padding: 8px 10px;
-}
-
-.targetList {
-	background: rgba(0, 0, 0, 0.22);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.targetRow {
-	background: rgba(255, 255, 255, 0.05);
-	border: 1px solid rgba(255, 255, 255, 0.06);
-	color: var(--theme-text);
-}
-
-.targetRow:hover {
-	background: rgba(92, 124, 255, 0.2);
-}
-
-.modal-content,
-.myinvoices_modal-content,
-#selectPlayerToSendInvoiceModal .modal-content {
-	background: linear-gradient(180deg, rgba(30, 35, 46, 0.98) 0%, rgba(21, 25, 33, 0.98) 100%);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	box-shadow: var(--theme-shadow);
-}
-
-.modal-body {
-	background: transparent;
-	color: var(--theme-text-soft);
-}
-
-.dataTable-top,
-.dataTable-bottom {
-	color: #c2cbe0;
-}
-
-.dataTable-input,
-.dataTable-selector {
-	background-color: rgba(255, 255, 255, 0.06) !important;
-	color: var(--theme-text);
-	border: 1px solid rgba(255, 255, 255, 0.1) !important;
-	border-radius: 10px;
-}
-
-/* ===================================================================
-   App-like Layout Polish
-   =================================================================== */
-
-.selection_card,
-.invoices_card,
-.societyinvoices_card,
-.cityinvoices_card,
-.createinvoice_card,
-.payreference_card,
-.police_card {
-	max-width: 1080px;
-	border-radius: 24px;
-}
-
-.selection_card-body,
-.invoices_card-body,
-.societyinvoices_card-body,
-.cityinvoices_card-body,
-.createinvoice_card-body,
-.payreference_card-body,
-.police_card-body {
-	padding: 22px 22px 18px;
-}
-
-.section {
-	background: rgba(255, 255, 255, 0.02);
-	border: 1px solid rgba(255, 255, 255, 0.06);
-	border-radius: 16px;
-	padding: 18px 18px 14px;
-	min-height: 100%;
-}
-
-.page-title {
-	display: inline-flex;
-	align-items: center;
-	gap: 10px;
-	font-size: 24px;
-	font-weight: 700;
-}
-
-.page-title::before {
-	content: '';
-	display: inline-block;
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background: var(--theme-primary);
-	box-shadow: 0 0 0 4px rgba(92, 124, 255, 0.18);
-}
-
-#menu .btn {
-	height: 120px;
-	border-radius: 16px;
-	font-size: 16px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 6px;
-}
-
-#menu .btn i {
-	font-size: 22px;
-}
-
-#invoicesFirstMenu,
-#invoicesSecondMenu {
-	background: rgba(255, 255, 255, 0.03);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	border-radius: 14px;
-	padding: 5px;
-}
-
-.ci-option {
-	border-radius: 10px !important;
-	font-size: 14px !important;
-	padding-top: 10px !important;
-	padding-bottom: 10px !important;
-}
-
-#createinvoice_options {
-	background: rgba(0, 0, 0, 0.2);
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	border-radius: 14px;
-	padding: 14px;
-}
-
-#selectedTargetsLabel {
-	font-weight: 600;
-	font-size: 13px;
-	letter-spacing: 0.2px;
-}
-
-#view_invoice_payall,
-#createinvoice,
-#openTargetSelector,
-#payreference,
-#police_lookup,
-#payreference_lookup {
-	height: 46px;
-	font-size: 14px !important;
-}
-
-.pendingdiv {
-	font-size: 14px;
-	font-weight: 600;
-	margin-bottom: 10px;
-}
-
-table {
-	border-spacing: 0 10px;
-}
-
-table tbody td:first-child {
-	border-radius: 10px 0 0 10px;
-}
-
-table tbody td:last-child {
-	border-radius: 0 10px 10px 0;
-}
-
-.modal-dialog {
-	max-width: 560px;
-}
-
-.view_invoice_title {
-	font-size: 24px;
-	font-weight: 700;
-	color: var(--theme-text);
-}
-
-.view_invoice_sdtf {
-	color: #c6cfe3;
-	font-size: 14px;
-}
-
-.notes-window {
-	background: rgba(255, 255, 255, 0.05);
-	border: 1px solid rgba(255, 255, 255, 0.09);
-	border-radius: 10px;
-	padding: 10px 12px;
-	color: #d9e0ef;
-}
-
-.subtotal,
-.vat,
-.total {
-	color: #d7deef;
+@media (max-width: 992px) {
+	.selection_menu,
+	.loading_menu,
+	.invoices_menu,
+	.societyinvoices_menu,
+	.cityinvoices_menu,
+	.createinvoice_menu,
+	.payreference_menu,
+	.police_menu {
+		padding: 14px;
+	}
+
+	.selection_card,
+	.invoices_card,
+	.societyinvoices_card,
+	.cityinvoices_card,
+	.createinvoice_card,
+	.payreference_card,
+	.police_card,
+	.loading_card {
+		width: calc(100vw - 28px);
+	}
+
+	.selection_card-body,
+	.invoices_card-body,
+	.societyinvoices_card-body,
+	.cityinvoices_card-body,
+	.createinvoice_card-body,
+	.payreference_card-body,
+	.police_card-body {
+		padding: 14px;
+	}
+
+	.section {
+		padding: 14px;
+	}
+
+	.page-title,
+	.menutitle,
+	.view_invoice_title {
+		font-size: 20px;
+	}
 }

@@ -83,11 +83,25 @@ local function getNearbyPlayers()
 end
 
 local function CreateInvoice(society)
+	local jobBills = {}
+	local jobName = PlayerData and PlayerData.job and PlayerData.job.name
+	if jobName and Config.BillsList and Config.BillsList[jobName] then
+		for _, entry in ipairs(Config.BillsList[jobName]) do
+			if type(entry) == 'table' and entry[1] then
+				jobBills[#jobBills + 1] = {
+					label = tostring(entry[1]),
+					price = tonumber(entry[2])
+				}
+			end
+		end
+	end
+
 	SetNuiFocus(true, true)
 	SendNUIMessage({
 		action = 'createinvoice',
 		society = society,
-		nearPlayers = getNearbyPlayers()
+		nearPlayers = getNearbyPlayers(),
+		jobBills = jobBills
 	})
 end
 
