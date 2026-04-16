@@ -587,6 +587,8 @@ function QBCore.Functions.GetVehicleProperties(vehicle)
             modLivery = modLivery,
             modKit49 = GetVehicleMod(vehicle, 49),
             liveryRoof = GetVehicleRoofLivery(vehicle),
+            modDrift = GetDriftTyresEnabled(vehicle),
+            modBProofTires = not GetVehicleTyresCanBurst(vehicle),
         }
     else
         return
@@ -885,6 +887,11 @@ function QBCore.Functions.SetVehicleProperties(vehicle, props)
         if props.liveryRoof then
             SetVehicleRoofLivery(vehicle, props.liveryRoof)
         end
+        if props.modDrift then
+            SetDriftTyresEnabled(vehicle, true)
+        end
+        SetVehicleTyresCanBurst(vehicle, not props.modBProofTires)
+        TriggerServerEvent('jim-mechanic:server:loadStatus', props, VehToNet(vehicle))
     end
 end
 

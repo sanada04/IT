@@ -98,7 +98,16 @@ end)
 
 function server.UseItem(source, itemName, data)
     local cb = QBCore.Functions.CanUseItem(itemName)
-    return cb and cb(source, data)
+
+    if type(cb) == 'table' then
+        cb = cb.func or cb.cb or cb.callback
+    end
+
+    if type(cb) ~= 'function' then
+        return false
+    end
+
+    return cb(source, data)
 end
 
 AddEventHandler('QBCore:Server:OnMoneyChange', function(src, account, amount, changeType)

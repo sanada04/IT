@@ -515,4 +515,83 @@ return {
         degrade = 60,
     },
     -- バーガーショット
+
+    --Jim-Mechanic Vehicles
+	["mechanic_tools"] = {
+		label = "Mechanic tools",
+		weight = 0,
+		stack = false,
+		close = true,
+		description = "Needed for vehicle repairs",
+		client = {
+			event = "jim-mechanic:client:Repair:Check"
+		}
+	},
+	["toolbox"] = {
+		label = "Toolbox",
+		weight = 0,
+		stack = false,
+		close = true,
+		description = "Needed for Performance part removal",
+		client = {
+			event = "jim-mechanic:client:Menu"
+		}
+	},
+	["ducttape"] =          {["name"] = "ducttape",         ["label"] = "Duct Tape",			["weight"] = 0, ["type"] = "item",  ["image"] = "bodyrepair.png",       ["unique"] = true,  ["useable"] = true, ["shouldClose"] = true, ["description"] = "Good for quick fixes"},
+	["mechboard"] =         {["name"] = "mechboard",        ["label"] = "Mechanic Sheet",		["weight"] = 0, ["type"] = "item",  ["image"] = "mechboard.png",        ["unique"] = true,  ["useable"] = true, ["shouldClose"] = true, ["description"] = ""},
+
+	--Performance
+	["turbo"] = { label = "Supercharger Turbo", weight = 0, stack = false, close = true, description = "Who doesn't need a 65mm Turbo??", client = { event = "jim-mechanic:client:applyTurbo" } },
+	["car_armor"] = { label = "Vehicle Armor", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyArmour" } },
+	["nos"] = { label = "NOS Bottle", weight = 0, stack = false, close = true, description = "A full bottle of NOS", client = { event = "jim-mechanic:client:applyNOS" } },
+	["noscan"] = { label = "Empty NOS Bottle", weight = 0, stack = true, close = true, description = "An Empty bottle of NOS" },
+	["noscolour"] = { label = "NOS Colour Injector", weight = 0, stack = true, close = true, description = "Make that purge spray", client = { event = "jim-mechanic:client:NOS:rgbORhex" } },
+	["engine1"] = { label = "Tier 1 Engine", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyEngine1" } },
+	["engine2"] = { label = "Tier 2 Engine", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyEngine2" } },
+	["engine3"] = { label = "Tier 3 Engine", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyEngine3" } },
+	["engine4"] = { label = "Tier 4 Engine", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyEngine4" } },
+	["engine5"] = { label = "Tier 5 Engine", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyEngine5" } },
+	["transmission1"] = { label = "Tier 1 Transmission", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyTransmission1" } },
+	["transmission2"] = { label = "Tier 2 Transmission", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyTransmission2" } },
+	["transmission3"] = { label = "Tier 3 Transmission", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyTransmission3" } },
+	["transmission4"] = { label = "Tier 4 Transmission", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyTransmission4" } },
+	["brakes1"] = { label = "Tier 1 Brakes", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyBrakes1" } },
+	["brakes2"] = { label = "Tier 2 Brakes", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyBrakes2" } },
+	["brakes3"] = { label = "Tier 3 Brakes", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyBrakes3" } },
+	["suspension1"] = { label = "Tier 1 Suspension", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applySuspension1" } },
+	["suspension2"] = { label = "Tier 2 Suspension", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applySuspension2" } },
+	["suspension3"] = { label = "Tier 3 Suspension", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applySuspension3" } },
+	["suspension4"] = { label = "Tier 4 Suspension", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applySuspension4" } },
+	["suspension5"] = { label = "Tier 5 Suspension", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applySuspension5" } },
+	["bprooftires"] = { label = "Bulletproof Tires", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyBulletProof" } },
+	["drifttires"] = { label = "Drift Tires", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:applyDrift" } },
+
+	--Cosmetics
+	["underglow_controller"] = { label = "Neon Controller", weight = 0, stack = true, close = true, description = "RGB LED Vehicle Remote", client = { event = "jim-mechanic:client:neonMenu" } },
+	["headlights"] = { label = "Xenon Headlights", weight = 0, stack = false, close = true, description = "8k HID headlights", client = { event = "jim-mechanic:client:applyXenons" } },
+	["tint_supplies"] = { label = "Tint Supplies", weight = 0, stack = true, close = true, description = "Supplies for window tinting", client = { event = "jim-mechanic:client:Windows:Check" } },
+	["customplate"] = { label = "Customized Plates", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Plates:Check" } },
+	["hood"] = { label = "Vehicle Hood", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Hood:Check" } },
+	["roof"] = { label = "Vehicle Roof", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Roof:Check" } },
+	["spoiler"] = { label = "Vehicle Spoiler", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Spoilers:Check" } },
+	["bumper"] = { label = "Vehicle Bumper", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Bumpers:Check" } },
+	["skirts"] = { label = "Vehicle Skirts", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Skirts:Check" } },
+	["exhaust"] = { label = "Vehicle Exhaust", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Exhaust:Check" } },
+	["seat"] = { label = "Seat Cosmetics", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Seat:Check" } },
+	["rollcage"] = { label = "Roll Cage", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:RollCage:Check" } },
+	["rims"] = { label = "Custom Wheel Rims", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Rims:Check" } },
+	["livery"] = { label = "Livery Roll", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Livery:Check" } },
+	["paintcan"] = { label = "Vehicle Spray Can", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Paints:Check" } },
+	["tires"] = { label = "Drift Smoke Tires", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Tires:Check" } },
+	["horn"] = { label = "Custom Vehicle Horn", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Horn:Check" } },
+	["internals"] = { label = "Internal Cosmetics", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Interior:Check" } },
+	["externals"] = { label = "Exterior Cosmetics", weight = 0, stack = false, close = true, client = { event = "jim-mechanic:client:Exterior:Check" } },
+
+	--Repair Parts
+	["newoil"] = { label = "Car Oil", weight = 0, stack = true, close = false },
+	["sparkplugs"] = { label = "Spark Plugs", weight = 0, stack = true, close = false },
+	["carbattery"] = { label = "Car Battery", weight = 0, stack = true, close = false },
+	["axleparts"] = { label = "Axle Parts", weight = 0, stack = true, close = false },
+	["sparetire"] = { label = "Spare Tire", weight = 0, stack = false, close = false },
+    --Jim-Mechanic Vehicles
 }
