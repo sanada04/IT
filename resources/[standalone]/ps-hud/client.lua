@@ -31,6 +31,28 @@ local showSquareB = false
 local CinematicHeight = 0.2
 local w = 0
 local radioTalking = false
+local voiceModeMaxIndex = 4
+
+local function getVoiceHudValue()
+    local proximity = LocalPlayer.state['proximity']
+    if not proximity then return 0 end
+
+    local index = tonumber(proximity.index)
+    if index and index >= 1 then
+        if index > voiceModeMaxIndex then
+            voiceModeMaxIndex = index
+        end
+
+        if voiceModeMaxIndex > 1 then
+            return ((index - 1) / (voiceModeMaxIndex - 1)) * 6.0
+        end
+
+        return 0
+    end
+
+    local distance = tonumber(proximity.distance) or 0
+    return math.min(6.0, (distance / 15.0) * 6.0)
+end
 local Menu = {
     isOutMapChecked = true, -- isOutMapChecked
     isOutCompassChecked = true, -- isOutCompassChecked
@@ -914,14 +936,7 @@ CreateThread(function()
 
             -- Voice setup
             local talking = NetworkIsPlayerTalking(playerId)
-            local voice = 0
-            if LocalPlayer.state['proximity'] then
-                voice = LocalPlayer.state['proximity'].distance
-                -- Player enters server with Voice Chat off, will not have a distance (nil)
-                if voice == nil then
-                    voice = 0
-                end
-            end
+            local voice = getVoiceHudValue()
 
             if IsPauseMenuActive() then
                 show = false
