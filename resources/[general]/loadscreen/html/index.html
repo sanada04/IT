@@ -5,12 +5,12 @@
         <link id="style" rel="stylesheet" />
         <link href="./dev.css" rel="stylesheet" />
 
-        <title>Loadscreen Preview</title>
-        <meta property="og:title" content="Loadscreen Preview" />
+        <title>ロード画面プレビュー</title>
+        <meta property="og:title" content="ロード画面プレビュー" />
         <meta property="og:type" content="website" />
         <meta
             property="og:description"
-            content="A preview of D4's loadscreen"
+            content="D4ロード画面のプレビュー"
         />
         <meta name="theme-color" content="#4040FF" />
     </head>
@@ -19,9 +19,9 @@
         <div id="error-wrapper" style="display: none">
             <header>
                 <img src="./assets/icons/report.svg" draggable="false" />
-                <h3>Error log</h3>
+                <h3>エラーログ</h3>
             </header>
-            <p>Please copy & report the errors below.</p>
+            <p>下記のエラーをコピーして報告してください。</p>
             <textarea
                 id="error-log"
                 class="hover"
@@ -84,39 +84,39 @@
         </button>
     </div>
 
-    <button id="dev-open" class="hover" style="display: none">Dev Menu</button>
+    <button id="dev-open" class="hover" style="display: none">開発メニュー</button>
     <div id="dev-menu" class="hover" style="display: none">
         <header>
-            <h2>Dev Menu</h2>
-            <button id="dev-close" class="hover">Close</button>
+            <h2>開発メニュー</h2>
+            <button id="dev-close" class="hover">閉じる</button>
         </header>
 
-        <button id="dev-back" class="hover" style="display: none">Back</button>
+        <button id="dev-back" class="hover" style="display: none">戻る</button>
 
         <main id="dev-options">
             <div id="dev-variables">
-                <h3>Variables</h3>
+                <h3>変数</h3>
                 <img src="./assets/icons/arrow_forward.svg" />
             </div>
 
             <div id="dev-config">
-                <h3>Config</h3>
+                <h3>設定</h3>
                 <img src="./assets/icons/arrow_forward.svg" />
             </div>
 
             <div id="dev-events">
-                <h3>Events</h3>
+                <h3>イベント</h3>
                 <img src="./assets/icons/arrow_forward.svg" />
             </div>
 
             <div id="dev-custom-events">
-                <h3>Custom Events</h3>
+                <h3>カスタムイベント</h3>
                 <img src="./assets/icons/arrow_forward.svg" />
             </div>
         </main>
 
         <div id="dev-cfg-wrapper">
-            <h4>Generated Cfg</h4>
+            <h4>生成されたCfg</h4>
             <textarea
                 id="dev-generated-cfg"
                 class="hover"
@@ -136,7 +136,7 @@
     <template id="dev-event-template">
         <div class="dev-event">
             <h4></h4>
-            <button id="dev-on-log-line" class="hover">Emit</button>
+            <button id="dev-on-log-line" class="hover">送信</button>
         </div>
     </template>
 

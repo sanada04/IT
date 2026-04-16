@@ -79,8 +79,8 @@ function onPlayerConnecting(name, _setKickReason, deferrals) {
         paths,
 
         config: {
-            style: GetConvar('loadscreen:style', 'minimal'),
-            background: GetConvar('loadscreen:background', 'image'),
+            style: GetConvar('loadscreen:style', 'modern'),
+            background: GetConvar('loadscreen:background', 'video'),
             backgroundBrightness:
                 GetConvarInt('loadscreen:backgroundBrightness', 30) / 100,
             textColor: GetConvar('loadscreen:textColor', 'rgb(250, 250, 250)'),
@@ -104,20 +104,20 @@ function onPlayerConnecting(name, _setKickReason, deferrals) {
             logo: GetConvarInt('loadscreen:logo', 1) == 1,
             serverMessage: GetConvar(
                 'loadscreen:serverMessage',
-                '${playerName}, welcome to ${serverName}!',
+                'IT serverへようこそ！',
             ),
             primaryBar: GetConvarInt('loadscreen:primaryBar', 1) == 1,
             secondaryBar: GetConvarInt('loadscreen:secondaryBar', 0) == 1,
             loadingAction: GetConvarInt('loadscreen:loadingAction', 0) == 1,
             finishingMessage: GetConvar(
                 'loadscreen:finishingMessage',
-                'Finishing up...',
+                '読み込み中...',
             ),
             logLine: GetConvarInt('loadscreen:logLine', 1) == 1,
-            finishedMessage: GetConvar('loadscreen:finishedMessage', 'Done!'),
+            finishedMessage: GetConvar('loadscreen:finishedMessage', '完了しました！'),
             finishedLine: GetConvar(
                 'loadscreen:finishedLine',
-                'You will be loaded in any moment now...',
+                'まもなくゲームに参加します...',
             ),
             audioControls: GetConvarInt('loadscreen:audioControls', 1) == 1,
             audioMuteKey: GetConvar('loadscreen:audioMuteKey', 'Space'),

@@ -3,8 +3,8 @@
  */
 const DEFAULT_HANDOVER_DATA = {
     vars: {
-        playerName: 'Player',
-        serverName: 'Server',
+        playerName: 'プレイヤー',
+        serverName: 'サーバー',
     },
     paths: {
         images: ['./assets/images/moon.png', './assets/images/vinewood.png'],
@@ -22,14 +22,14 @@ const DEFAULT_HANDOVER_DATA = {
         shadowColor: 'rgba(8, 8, 16, 0.5)',
         fontFamily: "'Segoe UI', Arial, Helvetica, sans-serif",
         logo: true,
-        serverMessage: '${playerName}, welcome to ${serverName}!',
+        serverMessage: '${serverName}へようこそ、${playerName}さん！',
         primaryBar: true,
         secondaryBar: false,
         loadingAction: false,
-        finishingMessage: 'Finishing up...',
+        finishingMessage: '読み込み中...',
         logLine: true,
-        finishedMessage: 'Done!',
-        finishedLine: 'You will be loaded in any moment now...',
+        finishedMessage: '完了しました！',
+        finishedLine: 'まもなくゲームに参加します...',
         audioControls: true,
         audioMuteKey: 'Space',
         rememberVolume: true,
