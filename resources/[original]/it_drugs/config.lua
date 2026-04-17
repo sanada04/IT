@@ -567,22 +567,31 @@ Config.Actions = {
 Config.ProcessRecipes = {
     weed = {
         label = '大麻',
-        inputItem = 'wild_herb',
-        inputPerBatch = 3,
+        inputs = {
+            wild_herb = 3,
+            chemical_reagent_a = 1,
+            filter_material = 1
+        },
         outputItem = 'weed_baggy',
         outputCount = 1
     },
     coke = {
         label = 'コカイン',
-        inputItem = 'coca_leaf',
-        inputPerBatch = 3,
+        inputs = {
+            coca_leaf = 3,
+            acidic_liquid = 1,
+            crystallization_powder = 1
+        },
         outputItem = 'coke_baggy',
         outputCount = 1
     },
     meth = {
         label = 'メス',
-        inputItem = 'medicinal_flower',
-        inputPerBatch = 3,
+        inputs = {
+            medicinal_flower = 3,
+            strong_solvent = 1,
+            chemical_reagent_b = 1
+        },
         outputItem = 'meth_baggy',
         outputCount = 1
     }

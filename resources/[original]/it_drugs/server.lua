@@ -1,6 +1,28 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local actionLocks = {}
 local actionCooldowns = {}
+local defaultProcessMaterials = {
+    'wild_herb',
+    'poppy_seed',
+    'coca_leaf',
+    'hallucinogenic_mushroom',
+    'cactus',
+    'medicinal_flower',
+    'fermented_fruit',
+    'resin',
+    'seaweed',
+    'contaminated_plant',
+    'solvent_alcohol',
+    'strong_solvent',
+    'acidic_liquid',
+    'alkaline_liquid',
+    'chemical_reagent_a',
+    'chemical_reagent_b',
+    'catalyst',
+    'purified_water',
+    'filter_material',
+    'crystallization_powder'
+}
 
 local function now()
     return os.time()
@@ -70,6 +92,175 @@ local function hasItem(src, item, amount)
     return (count or 0) >= amount
 end
 
+local function getRecipeInputs(recipe)
+    if type(recipe) ~= 'table' then
+        return nil
+    end
+
+    if type(recipe.inputs) == 'table' then
+        local normalized = {}
+        for itemName, perBatch in pairs(recipe.inputs) do
+            local required = tonumber(perBatch) or 0
+            if type(itemName) == 'string' and itemName ~= '' and required > 0 then
+                normalized[itemName] = math.floor(required)
+            end
+        end
+        if next(normalized) ~= nil then
+            return normalized
+        end
+    end
+
+    if recipe.inputItem and recipe.inputPerBatch then
+        local required = tonumber(recipe.inputPerBatch) or 0
+        if required > 0 then
+            return {
+                [recipe.inputItem] = math.floor(required)
+            }
+        end
+    end
+
+    return nil
+end
+
+local function getSerialSlots(src, itemName)
+    local slots = exports.ox_inventory:Search(src, 'slots', itemName) or {}
+    local filtered = {}
+    for i = 1, #slots do
+        local slotData = slots[i]
+        local metadata = slotData.metadata or {}
+        if metadata.serial == 'it_drugs' and (slotData.count or 0) > 0 then
+            filtered[#filtered + 1] = slotData
+        end
+    end
+    return filtered
+end
+
+local function getSerialItemCount(src, itemName)
+    local total = 0
+    local slots = getSerialSlots(src, itemName)
+    for i = 1, #slots do
+        total = total + (slots[i].count or 0)
+    end
+    return total
+end
+
+local function consumeSerialItem(src, itemName, amount)
+    local remain = tonumber(amount) or 0
+    if remain <= 0 then
+        return true
+    end
+
+    local slots = getSerialSlots(src, itemName)
+    for i = 1, #slots do
+        if remain <= 0 then
+            break
+        end
+
+        local slotData = slots[i]
+        local take = math.min(remain, slotData.count or 0)
+        if take > 0 then
+            local metadata = slotData.metadata or {}
+            local removed = exports.ox_inventory:RemoveItem(src, itemName, take, metadata, slotData.slot)
+            if not removed then
+                return false
+            end
+            remain = remain - take
+        end
+    end
+
+    return remain <= 0
+end
+
+local function getItemDisplayData(itemName)
+    local label = itemName
+    local image = ('%s.png'):format(itemName)
+
+    local ok, itemData = pcall(function()
+        return exports.ox_inventory:Items(itemName)
+    end)
+
+    if ok and type(itemData) == 'table' then
+        label = itemData.label or label
+        image = itemData.image or image
+    end
+
+    return label, image
+end
+
+local function getRequestedInputs(inputMap)
+    local requested = {}
+    local count = 0
+
+    if type(inputMap) ~= 'table' then
+        return requested, count
+    end
+
+    for itemName, rawAmount in pairs(inputMap) do
+        if type(itemName) == 'string' and itemName ~= '' then
+            local amount = math.floor(tonumber(rawAmount) or 0)
+            if amount > 0 then
+                requested[itemName] = amount
+                count = count + 1
+            end
+        end
+    end
+
+    return requested, count
+end
+
+local function findMatchedRecipe(requestedInputs, requestedCount)
+    for recipeKey, recipe in pairs(Config.ProcessRecipes or {}) do
+        local recipeInputs = getRecipeInputs(recipe)
+        if recipeInputs then
+            local recipeCount = 0
+            local expectedBatches = nil
+            local valid = true
+
+            for itemName, perBatch in pairs(recipeInputs) do
+                recipeCount = recipeCount + 1
+                local amount = requestedInputs[itemName]
+                if not amount or amount < 1 then
+                    valid = false
+                    break
+                end
+
+                if amount % perBatch ~= 0 then
+                    valid = false
+                    break
+                end
+
+                local batches = math.floor(amount / perBatch)
+                if batches < 1 then
+                    valid = false
+                    break
+                end
+
+                if expectedBatches == nil then
+                    expectedBatches = batches
+                elseif expectedBatches ~= batches then
+                    valid = false
+                    break
+                end
+            end
+
+            if valid and recipeCount == requestedCount then
+                for itemName, _ in pairs(requestedInputs) do
+                    if not recipeInputs[itemName] then
+                        valid = false
+                        break
+                    end
+                end
+            end
+
+            if valid then
+                return recipeKey, recipe, recipeInputs, expectedBatches or 0
+            end
+        end
+    end
+
+    return nil, nil, nil, 0
+end
+
 local function startLock(src, actionKey)
     local key = ('%s:%s'):format(src, actionKey)
     if actionLocks[key] then
@@ -110,33 +301,81 @@ end
 lib.callback.register('it_drugs:server:getSerialMaterials', function(source, actionKey)
     local action = Config.Actions[actionKey]
     if not isProcessUiAction(action) then
-        return {}
+        return { recipes = {} }
     end
 
-    local items = {}
+    local recipeList = {}
+    local materialMap = {}
 
+    local function appendMaterial(itemName)
+        if type(itemName) ~= 'string' or itemName == '' then
+            return
+        end
+
+        local itemLabel, itemImage = getItemDisplayData(itemName)
+        materialMap[itemName] = {
+            itemName = itemName,
+            label = itemLabel,
+            image = itemImage,
+            owned = getSerialItemCount(source, itemName)
+        }
+    end
+
+    for i = 1, #defaultProcessMaterials do
+        appendMaterial(defaultProcessMaterials[i])
+    end
     for recipeKey, recipe in pairs(Config.ProcessRecipes or {}) do
-        local slots = exports.ox_inventory:Search(source, 'slots', recipe.inputItem) or {}
-        for i = 1, #slots do
-            local slotData = slots[i]
-            local metadata = slotData.metadata or {}
-            if metadata.serial == 'it_drugs' and (slotData.count or 0) > 0 then
-                items[#items + 1] = {
-                    slot = slotData.slot,
-                    itemName = slotData.name,
-                    label = slotData.label or recipe.inputItem,
-                    count = slotData.count,
-                    recipeKey = recipeKey,
-                    recipeLabel = recipe.label,
-                    inputPerBatch = recipe.inputPerBatch,
-                    outputItem = recipe.outputItem,
-                    outputCount = recipe.outputCount
+        local inputs = getRecipeInputs(recipe)
+        if inputs then
+            local uiInputs = {}
+            local ingredientCount = 0
+            local minPossibleBatches = nil
+
+            for itemName, required in pairs(inputs) do
+                local owned = getSerialItemCount(source, itemName)
+                local possibleBatches = math.floor(owned / required)
+                local itemLabel, itemImage = getItemDisplayData(itemName)
+                ingredientCount = ingredientCount + 1
+
+                if minPossibleBatches == nil or possibleBatches < minPossibleBatches then
+                    minPossibleBatches = possibleBatches
+                end
+
+                uiInputs[#uiInputs + 1] = {
+                    itemName = itemName,
+                    label = itemLabel,
+                    image = itemImage,
+                    required = required,
+                    owned = owned
                 }
+                appendMaterial(itemName)
             end
+
+            recipeList[#recipeList + 1] = {
+                recipeKey = recipeKey,
+                recipeLabel = recipe.label or recipeKey,
+                outputItem = recipe.outputItem,
+                outputCount = recipe.outputCount or 1,
+                ingredientCount = ingredientCount,
+                canCraftBatches = minPossibleBatches or 0,
+                inputs = uiInputs
+            }
         end
     end
 
-    return items
+    local materials = {}
+    for _, data in pairs(materialMap) do
+        materials[#materials + 1] = data
+    end
+
+    table.sort(materials, function(a, b)
+        return (a.label or a.itemName) < (b.label or b.itemName)
+    end)
+
+    return {
+        recipes = recipeList,
+        materials = materials
+    }
 end)
 
 lib.callback.register('it_drugs:server:canStartAction', function(source, actionKey)
@@ -213,70 +452,50 @@ lib.callback.register('it_drugs:server:completeProcess', function(source, action
             return false
         end
 
-        local recipeKey = payload and payload.recipeKey
-        local inputSlot = tonumber(payload and payload.slot)
-        local itemName = payload and payload.itemName
-        local inputAmount = tonumber(payload and payload.inputAmount) or 0
-        local recipe = Config.ProcessRecipes and Config.ProcessRecipes[recipeKey]
+        local inputMap = payload and payload.inputs or {}
+        local requestedInputs, requestedCount = getRequestedInputs(inputMap)
 
-        if not recipe then
-            sendNotify(source, '無効なレシピです。', 'error')
+        if requestedCount < 1 then
+            sendNotify(source, '投入する素材を選択してください。', 'error')
             return false
         end
 
-        if inputAmount < 1 or inputAmount > 100 then
-            sendNotify(source, '投入量が不正です。', 'error')
-            return false
-        end
+        local consumableInputs = {}
+        local totalConsumable = 0
+        local hasShortage = false
+        local totalRequested = 0
 
-        if not inputSlot or inputSlot < 1 then
-            sendNotify(source, '素材スロットが不正です。', 'error')
-            return false
-        end
-
-        if itemName ~= recipe.inputItem then
-            sendNotify(source, '素材とレシピが一致しません。', 'error')
-            return false
-        end
-
-        local inputSlots = exports.ox_inventory:Search(source, 'slots', recipe.inputItem) or {}
-        local selectedSlot = nil
-        for i = 1, #inputSlots do
-            local slotData = inputSlots[i]
-            if slotData.slot == inputSlot then
-                selectedSlot = slotData
-                break
+        for itemName, requested in pairs(requestedInputs) do
+            if requested < 1 or requested > 1000 then
+                sendNotify(source, ('投入量が不正です: %s'):format(itemName), 'error')
+                return false
             end
+
+            local owned = getSerialItemCount(source, itemName)
+            local consumable = math.min(requested, owned)
+
+            consumableInputs[itemName] = consumable
+            totalRequested = totalRequested + requested
+            totalConsumable = totalConsumable + consumable
+
+            if owned < requested then
+                hasShortage = true
+            end
+
         end
 
-        if not selectedSlot then
-            sendNotify(source, '選択した素材が見つかりません。', 'error')
-            return false
-        end
+        local matchedRecipeKey, matchedRecipe, _, expectedBatches = findMatchedRecipe(requestedInputs, requestedCount)
+        local isSuccess = (matchedRecipe ~= nil) and (not hasShortage) and expectedBatches > 0
+        local outputAmount = isSuccess and (expectedBatches * (matchedRecipe.outputCount or 1)) or 0
+        local wasteAmount = math.max(1, math.floor(totalConsumable / math.max(1, requestedCount)))
 
-        local selectedMetadata = selectedSlot.metadata or {}
-        if selectedMetadata.serial ~= 'it_drugs' then
-            sendNotify(source, 'この素材は精製に使えません。', 'error')
-            return false
-        end
+        if isSuccess then
+            if outputAmount < 1 then
+                sendNotify(source, '投入量が足りません。', 'error')
+                return false
+            end
 
-        if (selectedSlot.count or 0) < inputAmount then
-            sendNotify(source, ('素材不足: %s x%s'):format(recipe.inputItem, inputAmount), 'error')
-            return false
-        end
-
-        local isCorrectMix = inputAmount % recipe.inputPerBatch == 0
-        local outputBatches = math.floor(inputAmount / recipe.inputPerBatch)
-        local outputAmount = outputBatches * recipe.outputCount
-        local wasteAmount = math.max(1, math.floor(inputAmount / recipe.inputPerBatch))
-
-        if isCorrectMix and outputAmount < 1 then
-            sendNotify(source, ('最低投入量は %s 個です。'):format(recipe.inputPerBatch), 'error')
-            return false
-        end
-
-        if isCorrectMix then
-            if not canCarry(source, recipe.outputItem, outputAmount) then
+            if not canCarry(source, matchedRecipe.outputItem, outputAmount) then
                 sendNotify(source, '完成品を持てません。', 'error')
                 return false
             end
@@ -287,23 +506,31 @@ lib.callback.register('it_drugs:server:completeProcess', function(source, action
             end
         end
 
-        local removed = exports.ox_inventory:RemoveItem(source, recipe.inputItem, inputAmount, selectedMetadata, inputSlot)
-        if not removed then
-            sendNotify(source, '原料の消費に失敗しました。', 'error')
-            return false
+        for itemName, amount in pairs(consumableInputs) do
+            if amount > 0 then
+                local removed = consumeSerialItem(source, itemName, amount)
+                if not removed then
+                    sendNotify(source, '原料の消費に失敗しました。', 'error')
+                    return false
+                end
+            end
         end
 
-        if isCorrectMix then
-            local added = exports.ox_inventory:AddItem(source, recipe.outputItem, outputAmount, { serial = 'it_drugs' })
+        if isSuccess then
+            local added = exports.ox_inventory:AddItem(source, matchedRecipe.outputItem, outputAmount, { serial = 'it_drugs' })
             if not added then
                 sendNotify(source, '完成品の付与に失敗しました。', 'error')
                 return false
             end
 
-            sendNotify(source, ('調合成功: %s x%s'):format(recipe.outputItem, outputAmount), 'success')
+            sendNotify(source, ('調合成功: %s x%s'):format(matchedRecipe.outputItem, outputAmount), 'success')
         else
             exports.ox_inventory:AddItem(source, 'drug_waste', wasteAmount)
-            sendNotify(source, ('調合失敗: drug_waste x%s を生成'):format(wasteAmount), 'error')
+            if matchedRecipeKey == nil then
+                sendNotify(source, ('調合失敗: 配合が一致しません (drug_waste x%s)'):format(wasteAmount), 'error')
+            else
+                sendNotify(source, ('調合失敗: 素材不足 (drug_waste x%s)'):format(wasteAmount), 'error')
+            end
         end
 
         setCooldown(source, actionKey)

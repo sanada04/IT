@@ -1,14 +1,14 @@
 var app = document.getElementById('app');
-var materialsList = document.getElementById('materialsList');
+var materialGrid = document.getElementById('materialGrid');
+var selectedList = document.getElementById('selectedList');
 var selectedInfo = document.getElementById('selectedInfo');
 var recipeInfo = document.getElementById('recipeInfo');
-var amountInput = document.getElementById('amountInput');
 var submitBtn = document.getElementById('submitBtn');
 var cancelBtn = document.getElementById('cancelBtn');
 var closeBtn = document.getElementById('closeBtn');
 
-var recipes = [];
-var selectedIndex = -1;
+var materials = [];
+var selectedInputs = {};
 
 function getResourceName() {
   if (typeof GetParentResourceName === 'function') {
@@ -30,80 +30,211 @@ function closeUi() {
   app.style.display = 'none';
 }
 
-function openUi(payload) {
-  recipes = payload.items || [];
-  materialsList.innerHTML = '';
-  selectedIndex = -1;
+function getItemImage(itemName, explicitImage) {
+  var fileName = explicitImage || (itemName + '.png');
+  return 'nui://ox_inventory/web/images/' + fileName;
+}
 
-  for (var i = 0; i < recipes.length; i++) {
-    (function(index) {
-      var recipe = recipes[index];
+function setImageWithFallback(img, itemName, explicitImage) {
+  var triedFallback = false;
+  img.src = getItemImage(itemName, explicitImage);
+  img.onerror = function() {
+    if (!triedFallback) {
+      triedFallback = true;
+      img.src = getItemImage(itemName, itemName + '.png');
+      return;
+    }
+    img.style.opacity = '0.2';
+  };
+}
+
+function renderMaterialGrid() {
+  materialGrid.innerHTML = '';
+  if (!materials.length) return;
+
+  for (var i = 0; i < materials.length; i++) {
+    (function(material) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'material-btn';
-      btn.textContent =
-        '[' + recipe.slot + '] ' + recipe.label + ' x' + recipe.count +
-        ' | ' + recipe.recipeLabel + ' -> ' + recipe.outputItem;
-      btn.addEventListener('click', function() {
-        selectMaterial(index);
-      });
-      materialsList.appendChild(btn);
-    })(i);
-  }
 
-  amountInput.value = '3';
-  if (recipes.length > 0) {
-    selectMaterial(0);
-  } else {
-    selectedInfo.textContent = '使用できる素材がありません';
-    recipeInfo.textContent = '';
+      var img = document.createElement('img');
+      setImageWithFallback(img, material.itemName, material.image);
+      img.alt = material.label;
+
+      var name = document.createElement('div');
+      name.className = 'material-name';
+      name.textContent = material.label;
+
+      var stock = document.createElement('div');
+      stock.className = 'material-stock';
+      stock.textContent = '所持 ' + material.owned;
+
+      if (Number(selectedInputs[material.itemName] || 0) > 0) {
+        btn.classList.add('active');
+      }
+      if (Number(material.owned || 0) <= 0) {
+        btn.classList.add('disabled');
+        btn.disabled = true;
+      }
+
+      btn.appendChild(img);
+      btn.appendChild(name);
+      btn.appendChild(stock);
+
+      if (!btn.disabled) {
+        btn.addEventListener('click', function() {
+          addIngredient(material.itemName, 1);
+        });
+      }
+
+      materialGrid.appendChild(btn);
+    })(materials[i]);
   }
-  updateRecipeInfo();
-  app.style.display = 'flex';
 }
 
-function selectMaterial(index) {
-  selectedIndex = index;
-  var buttons = materialsList.getElementsByClassName('material-btn');
-  for (var i = 0; i < buttons.length; i++) {
-    if (i === index) {
-      buttons[i].classList.add('active');
-    } else {
-      buttons[i].classList.remove('active');
+function renderSelectedList() {
+  selectedList.innerHTML = '';
+  var hasSelected = false;
+
+  for (var i = 0; i < materials.length; i++) {
+    var material = materials[i];
+    var count = Number(selectedInputs[material.itemName] || 0);
+    if (count < 1) {
+      continue;
     }
-  }
-  updateRecipeInfo();
-}
+    hasSelected = true;
 
-function getSelectedRecipe() {
-  if (selectedIndex < 0 || selectedIndex >= recipes.length) return null;
-  return recipes[selectedIndex];
+    var row = document.createElement('div');
+    row.className = 'selected-item';
+
+    var left = document.createElement('div');
+    left.className = 'selected-left';
+
+    var img = document.createElement('img');
+    setImageWithFallback(img, material.itemName, material.image);
+    img.alt = material.label;
+
+    var name = document.createElement('div');
+    name.className = 'selected-name';
+    name.textContent = material.label;
+
+    var amount = document.createElement('div');
+    amount.className = 'selected-count';
+    amount.textContent = '投入 x' + count;
+
+    left.appendChild(img);
+    left.appendChild(name);
+
+    var controls = document.createElement('div');
+    controls.className = 'selected-controls';
+
+    var minus = document.createElement('button');
+    minus.type = 'button';
+    minus.className = 'step-btn';
+    minus.textContent = '-';
+    minus.addEventListener('click', function(itemName) {
+      return function() {
+        addIngredient(itemName, -1);
+      };
+    }(material.itemName));
+
+    var plus = document.createElement('button');
+    plus.type = 'button';
+    plus.className = 'step-btn';
+    plus.textContent = '+';
+    plus.addEventListener('click', function(itemName) {
+      return function() {
+        addIngredient(itemName, 1);
+      };
+    }(material.itemName));
+
+    controls.appendChild(minus);
+    controls.appendChild(amount);
+    controls.appendChild(plus);
+
+    row.appendChild(left);
+    row.appendChild(controls);
+    selectedList.appendChild(row);
+  }
+
+  if (!hasSelected) {
+    var empty = document.createElement('div');
+    empty.className = 'selected-item';
+    empty.textContent = 'まだ素材は投入されていません。左の素材をクリックしてください。';
+    selectedList.appendChild(empty);
+  }
 }
 
 function updateRecipeInfo() {
-  var recipe = getSelectedRecipe();
-  if (!recipe) {
-    selectedInfo.textContent = '素材を選択してください';
+  if (!materials.length) {
+    selectedInfo.textContent = '利用可能な素材がありません';
     recipeInfo.textContent = '';
+    materialGrid.innerHTML = '';
+    selectedList.innerHTML = '';
     return;
   }
-  selectedInfo.textContent =
-    '[' + recipe.slot + '] ' + recipe.label + ' x' + recipe.count +
-    ' / レシピ: ' + recipe.recipeLabel + ' / 生成: ' + recipe.outputItem + ' x' + recipe.outputCount;
-  recipeInfo.textContent = '正しい配合: ' + recipe.inputPerBatch + ' の倍数で成功';
+
+  var selectedKinds = Object.keys(selectedInputs).length;
+  selectedInfo.textContent = '投入中の素材: ' + selectedKinds + ' 種類';
+  recipeInfo.textContent = 'レシピは非表示です。自由に投入するとサーバー側で判定されます。';
+  renderMaterialGrid();
+  renderSelectedList();
+}
+
+function addIngredient(itemName, delta) {
+  var material = null;
+  for (var i = 0; i < materials.length; i++) {
+    if (materials[i].itemName === itemName) {
+      material = materials[i];
+      break;
+    }
+  }
+  if (!material) {
+    return;
+  }
+
+  var current = Number(selectedInputs[itemName] || 0);
+  var next = current + Number(delta || 0);
+  if (next < 0) next = 0;
+  if (next > material.owned) next = material.owned;
+
+  selectedInputs[itemName] = next;
+  if (selectedInputs[itemName] <= 0) {
+    delete selectedInputs[itemName];
+  }
+
+  updateRecipeInfo();
+}
+
+function collectInputs() {
+  var inputs = {};
+  var hasAny = false;
+
+  for (var i = 0; i < materials.length; i++) {
+    var material = materials[i];
+    var value = Number(selectedInputs[material.itemName] || 0);
+    if (value > 0) {
+      hasAny = true;
+      inputs[material.itemName] = Math.floor(value);
+    }
+  }
+
+  if (!hasAny) {
+    return null;
+  }
+
+  return inputs;
 }
 
 function submit() {
-  var recipe = getSelectedRecipe();
-  var inputAmount = Number(amountInput.value || 0);
-  if (!recipe || isNaN(inputAmount) || inputAmount < 1) return;
+  var inputs = collectInputs();
+  if (!inputs) return;
 
   post('submitProcess', {
-    slot: recipe.slot,
-    itemName: recipe.itemName,
-    recipeKey: recipe.recipeKey,
-    inputAmount: inputAmount
+    inputs: inputs
   });
+
   closeUi();
 }
 
@@ -112,16 +243,19 @@ function cancel() {
   closeUi();
 }
 
+function openUi(payload) {
+  materials = (payload && payload.materials) || [];
+  selectedInputs = {};
+  updateRecipeInfo();
+  app.style.display = 'flex';
+}
+
 window.addEventListener('message', function(event) {
   var data = event.data;
   if (!data || !data.action) return;
 
   if (data.action === 'openProcessUi') {
-    try {
-      openUi(data);
-    } catch (e) {
-      app.style.display = 'flex';
-    }
+    openUi(data.data || {});
   }
 });
 

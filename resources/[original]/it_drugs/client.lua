@@ -29,19 +29,21 @@ local function canDoAction(actionKey)
     return true
 end
 
-local function buildRecipeList()
-    return lib.callback.await('it_drugs:server:getSerialMaterials', false, 'process_lab')
+local function buildRecipeList(actionKey)
+    return lib.callback.await('it_drugs:server:getSerialMaterials', false, actionKey)
 end
 
 local function openProcessUi(actionKey)
-    local materials = buildRecipeList()
-    if not materials or #materials < 1 then
-        notify('serial = it_drugs の素材がありません。', 'error')
-        return false
+    local processData = buildRecipeList(actionKey)
+    if type(processData) ~= 'table' then
+        processData = {}
+    end
+    if type(processData.recipes) ~= 'table' then
+        processData.recipes = {}
     end
 
     pendingProcessActionKey = actionKey
-    pendingOpenRecipes = materials
+    pendingOpenRecipes = processData
     if textUiOpen then
         lib.hideTextUI()
         textUiOpen = false
@@ -51,7 +53,7 @@ local function openProcessUi(actionKey)
         SetNuiFocus(true, true)
         SendNUIMessage({
             action = 'openProcessUi',
-            items = materials
+            data = processData
         })
     end
 
@@ -181,7 +183,7 @@ RegisterNUICallback('uiReady', function(_, cb)
     if pendingProcessActionKey and pendingOpenRecipes then
         SendNUIMessage({
             action = 'openProcessUi',
-            items = pendingOpenRecipes
+            data = pendingOpenRecipes
         })
     end
     cb({ ok = true })
@@ -195,10 +197,8 @@ RegisterNUICallback('submitProcess', function(data, cb)
 
     if actionKey then
         local payload = {
-            slot = tonumber(data.slot),
-            itemName = data.itemName,
             recipeKey = data.recipeKey,
-            inputAmount = tonumber(data.inputAmount) or 0
+            inputs = data.inputs or {}
         }
         CreateThread(function()
             runProcessAction(actionKey, payload)
