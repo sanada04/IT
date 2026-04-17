@@ -299,14 +299,19 @@ function Framework.Client.VehicleGetFuel(vehicle)
     local ok, fuel = pcall(function()
       return exports[resourceName]:GetFuel(vehicle)
     end)
-    if ok and fuel then return fuel end
+    if ok and fuel ~= nil then return fuel end
 
     ok, fuel = pcall(function()
       return exports[resourceName]:getFuel(vehicle)
     end)
-    if ok and fuel then return fuel end
+    if ok and fuel ~= nil then return fuel end
 
     return nil
+  end
+
+  if Config.FuelSystem == "cdn-fuel" then
+    -- cdn-fuel の一部環境で export 解決エラーを避けるため native を優先
+    return GetVehicleFuelLevel(vehicle)
   end
 
   if (Config.FuelSystem == "LegacyFuel" or Config.FuelSystem == "ps-fuel" or Config.FuelSystem == "lj-fuel" or Config.FuelSystem == "cdn-fuel" or Config.FuelSystem == "hyon_gas_station" or Config.FuelSystem == "okokGasStation" or Config.FuelSystem == "nd_fuel" or Config.FuelSystem == "myFuel") then
@@ -348,7 +353,14 @@ function Framework.Client.VehicleSetFuel(vehicle, fuel)
     ok = pcall(function()
       exports[resourceName]:setFuel(vehicle, level)
     end)
-    return ok
+    if ok then return true end
+
+    return false
+  end
+
+  if Config.FuelSystem == "cdn-fuel" then
+    SetVehicleFuelLevel(vehicle, fuel)
+    return
   end
 
   if (Config.FuelSystem == "LegacyFuel" or Config.FuelSystem == "ps-fuel" or Config.FuelSystem == "lj-fuel" or Config.FuelSystem == "cdn-fuel" or Config.FuelSystem == "hyon_gas_station" or Config.FuelSystem == "okokGasStation" or Config.FuelSystem == "nd_fuel" or Config.FuelSystem == "myFuel" or Config.FuelSystem == "Renewed-Fuel") then
