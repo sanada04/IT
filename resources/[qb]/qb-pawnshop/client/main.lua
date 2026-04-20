@@ -175,16 +175,19 @@ RegisterNetEvent('qb-pawnshop:client:openPawn', function(data)
         for _, v in pairs(PlyInv) do
             for i = 1, #data.items do
                 if v.name == data.items[i].item then
+                    local sharedItem = QBCore.Shared.Items[v.name]
+                    local itemLabel = (sharedItem and sharedItem.label) or v.label or v.name
+                    local itemAmount = tonumber(v.amount) or tonumber(v.count) or 0
                     pawnMenu[#pawnMenu + 1] = {
-                        header = QBCore.Shared.Items[v.name].label,
+                        header = itemLabel,
                         txt = Lang:t('info.sell_items', { value = data.items[i].price }),
                         params = {
                             event = 'qb-pawnshop:client:pawnitems',
                             args = {
-                                label = QBCore.Shared.Items[v.name].label,
+                                label = itemLabel,
                                 price = data.items[i].price,
                                 name = v.name,
-                                amount = v.amount
+                                amount = itemAmount
                             }
                         }
                     }
@@ -213,16 +216,19 @@ RegisterNetEvent('qb-pawnshop:client:openMelt', function(data)
         for _, v in pairs(PlyInv) do
             for i = 1, #data.items do
                 if v.name == data.items[i].item then
+                    local sharedItem = QBCore.Shared.Items[v.name]
+                    local itemLabel = (sharedItem and sharedItem.label) or v.label or v.name
+                    local itemAmount = tonumber(v.amount) or tonumber(v.count) or 0
                     meltMenu[#meltMenu + 1] = {
-                        header = QBCore.Shared.Items[v.name].label,
-                        txt = Lang:t('info.melt_item', { value = QBCore.Shared.Items[v.name].label }),
+                        header = itemLabel,
+                        txt = Lang:t('info.melt_item', { value = itemLabel }),
                         params = {
                             event = 'qb-pawnshop:client:meltItems',
                             args = {
-                                label = QBCore.Shared.Items[v.name].label,
+                                label = itemLabel,
                                 reward = data.items[i].rewards,
                                 name = v.name,
-                                amount = v.amount,
+                                amount = itemAmount,
                                 time = data.items[i].meltTime
                             }
                         }
@@ -258,8 +264,11 @@ RegisterNetEvent('qb-pawnshop:client:pawnitems', function(item)
             return
         end
 
-        if tonumber(sellingItem.amount) > 0 then
-            if tonumber(sellingItem.amount) <= item.amount then
+        local sellAmount = tonumber(sellingItem.amount) or 0
+        local availableAmount = tonumber(item.amount) or tonumber(item.count) or 0
+
+        if sellAmount > 0 then
+            if sellAmount <= availableAmount then
                 TriggerServerEvent('qb-pawnshop:server:sellPawnItems', item.name, sellingItem.amount, item.price)
             else
                 QBCore.Functions.Notify(Lang:t('error.no_items'), 'error')

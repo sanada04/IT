@@ -124,6 +124,13 @@ return {
 		allowArmed = true
 	},
 
+	['humane_usb'] = {
+		label = '機密データUSB',
+		weight = 50,
+		stack = false,
+		description = 'ヒューメイン研究所から盗み出した機密データ。発注者に渡すと報酬がもらえる。',
+	},
+
 	['armour'] = {
 		label = 'アーマー',
 		weight = 3000,
@@ -594,4 +601,34 @@ return {
 	["axleparts"] = { label = "Axle Parts", weight = 0, stack = true, close = false },
 	["sparetire"] = { label = "Spare Tire", weight = 0, stack = false, close = false },
     --Jim-Mechanic Vehicles
+
+    -- コンビニ強盗
+    ['shoprobbery_gold'] = {
+    label = '金の延べ棒',
+        weight = 160,
+    },
+    ['shoprobbery_diamond'] = {
+        label = 'ダイアモンド',
+        weight = 160,
+    },
+    -- コンビニ強盗
+
+    -- フリーカ銀行
+    ['fleeca_drill'] = {
+        label = '銀行強盗用ドリル',
+        weight = 1000,
+    },
+    ['fleeca_bag'] = {
+        label = '犯罪バッグ',
+        weight = 500,
+    },
+    ['fleeca_gold'] = {
+        label = '金の延べ棒',
+        weight = 160,
+    },
+    ['fleeca_diamond'] = {
+        label = 'ダイアモンド',
+        weight = 160,
+    },
+    -- フリーカ銀行
 }

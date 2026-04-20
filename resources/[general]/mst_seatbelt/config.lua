@@ -49,7 +49,7 @@ Config.Notifications = {
 }
 
 Config.HUD = {
-    enabled = true, -- Enable/disable HUD indicator when seatbelt is not fastened
+    enabled = false, -- Enable/disable HUD indicator when seatbelt is not fastened
     minSpeed = 0.0, -- Minimum speed to show HUD indicator (KMH or MPH based on Config.SpeedUnit), 0.0 = always show when unfastened
     position = { -- Default position: right-centered
         top = "50%", -- Top position (CSS value: %, px, etc.)
@@ -113,8 +113,8 @@ Config.Ejection = {
         low = {
             ejectChance = 40, -- Chance to eject when conditions are met (0-100)
             deathChance = 10, -- Chance to die on ejection (0-100), 0 = never die, 100 = always die
-            speedThreshold = 80.0, -- Minimum speed for low impact category (KMH/MPH) - impacts at or above this speed are considered "low"
-            minSpeedDrop = 65.0, -- Minimum absolute speed drop (KMH/MPH) required to trigger collision detection for this category
+            speedThreshold = 140.0, -- Minimum speed for low impact category (KMH/MPH) - impacts at or above this speed are considered "low"
+            minSpeedDrop = 120.0, -- Minimum absolute speed drop (KMH/MPH) required to trigger collision detection for this category
             ignoreRearCollisions = true, -- If true, rear collisions (hitting something with the back of the car) won't cause ejection for this category
             survivalDamage = {20, 40}, -- Random damage range if you survive: randomly picks a value between 20 and 40 (health loss amount)
             seatbeltDamage = {5, 15}, -- Random damage when wearing seatbelt (no ejection): picks value between 5-15 (set {0, 0} or nil to disable)
@@ -136,8 +136,8 @@ Config.Ejection = {
         medium = {
             ejectChance = 50, -- Chance to eject when conditions are met (0-100)
             deathChance = 35, -- Chance to die on ejection (0-100), 0 = never die, 100 = always die
-            speedThreshold = 120.0, -- Minimum speed for medium impact category (KMH/MPH) - impacts at or above this speed are considered "medium"
-            minSpeedDrop = 95.0, -- Minimum absolute speed drop (KMH/MPH) required to trigger collision detection for this category
+            speedThreshold = 180.0, -- Minimum speed for medium impact category (KMH/MPH) - impacts at or above this speed are considered "medium"
+            minSpeedDrop = 160.0, -- Minimum absolute speed drop (KMH/MPH) required to trigger collision detection for this category
             ignoreRearCollisions = true, -- If true, rear collisions (hitting something with the back of the car) won't cause ejection for this category
             survivalDamage = {20, 40}, -- Random damage range if you survive: randomly picks a value between 20 and 40 (health loss amount)
             seatbeltDamage = {15, 30}, -- Random damage when wearing seatbelt (no ejection): picks value between 15-30 (set {0, 0} or nil to disable)
@@ -159,8 +159,8 @@ Config.Ejection = {
         high = {
             ejectChance = 100, -- Chance to eject when conditions are met (0-100)
             deathChance = 45, -- Chance to die on ejection (0-100), 0 = never die, 100 = always die
-            speedThreshold = 160.0, -- Minimum speed for high impact category (KMH/MPH) - impacts at or above this speed are considered "high"
-            minSpeedDrop = 110.0, -- Minimum absolute speed drop (KMH/MPH) required to trigger collision detection for this category
+            speedThreshold = 240.0, -- Minimum speed for high impact category (KMH/MPH) - impacts at or above this speed are considered "high"
+            minSpeedDrop = 220.0, -- Minimum absolute speed drop (KMH/MPH) required to trigger collision detection for this category
             ignoreRearCollisions = false, -- If true, rear collisions (hitting something with the back of the car) won't cause ejection for this category
             survivalDamage = {40, 70}, -- Random damage values taken if you survive (health loss amount)
             seatbeltDamage = {30, 50}, -- Random damage when wearing seatbelt (no ejection): picks value between 30-50 (set {0, 0} or nil to disable)

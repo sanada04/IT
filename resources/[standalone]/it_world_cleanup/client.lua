@@ -4,6 +4,16 @@ local targets = {
         coords = vector3(1204.555, -3110.386, 6.557831),
         radius = 20.0,
     },
+    {
+        model = 'v_ilev_bl_shutter2',
+        coords = vector3(3621.4751, 3750.9524, 28.6901),
+        radius = 20.0,
+    },
+    {
+        model = 'v_ilev_bl_doorpool',
+        coords = vector3(3525.1230, 3701.6741, 20.9897),
+        radius = 5.0,
+    },
 }
 
 local function getModelHash(model)

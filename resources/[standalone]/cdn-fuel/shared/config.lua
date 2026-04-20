@@ -9,7 +9,7 @@ Config.CostMultiplier = 3 -- Amount to multiply 1 by. This indicates fuel price.
 Config.GlobalTax = 15.0 -- The tax, in %, that people will be charged at the pump. (Default: 15% or 15.0)
 Config.FuelNozzleExplosion = false -- When true, it enables the fuel pump exploding when players run away with the nozzle. Highly recommeded to be false.
 Config.FuelDecor = "_FUEL_LEVEL" -- Do not touch! (Default: "_FUEL_LEVEL")
-Config.RefuelTime = 600 -- Highly recommended to leave at 600. This value will be multiplied times the amount the player is fueling for the progress bar and cancellation logic! DON'T GO BELOW 250, performance WILL drop!
+Config.RefuelTime = 400 -- Highly recommended to leave at 600. This value will be multiplied times the amount the player is fueling for the progress bar and cancellation logic! DON'T GO BELOW 250, performance WILL drop!
 Config.FuelTargetExport = false -- DO NOT USE WITH OX_TARGET! This is only used to fix this qb-target issue: https://github.com/CodineDev/cdn-fuel/issues/3. <br> <br> If you don't have this issue and haven't installed this exports in qb-target, then this should be false. Otherwise there will be an error.
 
 -- 2.1.1 Update --

@@ -53,6 +53,15 @@ Config.PawnItems = {
     [8] = {
         item = 'laptop',
         price = math.random(50,100)
+    },
+    -- rm_shoprobbery の戦利品（safecrack）
+    [9] = {
+        item = 'shoprobbery_gold',
+        price = 50000
+    },
+    [10] = {
+        item = 'shoprobbery_diamond',
+        price = 75000
     }
 }
 
