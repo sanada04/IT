@@ -1,4 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
+local raidActive = false
 
 local function getItemCount(src, itemName)
     if GetResourceState('ox_inventory') == 'started' then
@@ -39,6 +40,16 @@ local function removeItem(src, itemName, amount)
     player.Functions.RemoveItem(itemName, amount)
     return true, nil
 end
+
+lib.callback.register('humane_lab_raid:server:startRaid', function(source)
+    if raidActive then
+        return { ok = false, reason = 'busy' }
+    end
+
+    raidActive = true
+    TriggerClientEvent('humane_lab_raid:client:syncStartRaid', -1)
+    return { ok = true }
+end)
 
 lib.callback.register('humane_lab_raid:server:rewardUsb', function(source)
     local src = source
@@ -111,6 +122,9 @@ lib.callback.register('humane_lab_raid:server:exchangeData', function(source)
         addItem(src, reqItem, reqCount)
         return { ok = false, reason = 'reward_failed' }
     end
+
+    raidActive = false
+    TriggerClientEvent('humane_lab_raid:client:syncEndRaid', -1)
 
     return { ok = true, amount = payout }
 end)

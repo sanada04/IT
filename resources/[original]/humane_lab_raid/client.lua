@@ -281,17 +281,31 @@ local function spawnEnemies()
 end
 
 RegisterNetEvent('humane_lab_raid:client:startRaid', function()
-    if raidActive then
+    local result = lib.callback.await('humane_lab_raid:server:startRaid', false)
+    if not result or not result.ok then
         notify(Config.Text.busy, 'error')
+    end
+end)
+
+RegisterNetEvent('humane_lab_raid:client:syncStartRaid', function()
+    if raidActive then
         return
     end
+
     if not spawnEnemies() then
         notify('敵NPCの生成に失敗しました（モデルまたは座標を確認）', 'error')
         return
     end
+
     dataStolen = false
     raidActive = true
     notify(Config.Text.accepted, 'success')
+end)
+
+RegisterNetEvent('humane_lab_raid:client:syncEndRaid', function()
+    deleteEnemies()
+    raidActive = false
+    dataStolen = false
 end)
 
 RegisterNetEvent('humane_lab_raid:client:exchangeData', function()
@@ -304,11 +318,6 @@ RegisterNetEvent('humane_lab_raid:client:exchangeData', function()
         end
         return
     end
-
-    -- 換金完了時は襲撃を終了し、残っている敵を掃除する
-    deleteEnemies()
-    raidActive = false
-    dataStolen = false
 
     notify((Config.Text.exchangeSuccess):format(result.amount or 0), 'success')
 end)

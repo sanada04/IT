@@ -134,7 +134,7 @@ return {
 	['armour'] = {
 		label = 'アーマー',
 		weight = 3000,
-		stack = false,
+		stack = true,
 		client = {
 			anim = { dict = 'clothingshirt', clip = 'try_shirt_positive_d' },
 			usetime = 3500
@@ -602,6 +602,11 @@ return {
 	["sparetire"] = { label = "Spare Tire", weight = 0, stack = false, close = false },
     --Jim-Mechanic Vehicles
 
+    ['heist_bag'] = {
+        label = '犯罪バッグ',
+        weight = 500,
+    },
+
     -- コンビニ強盗
     ['shoprobbery_gold'] = {
     label = '金の延べ棒',
@@ -618,10 +623,6 @@ return {
         label = '銀行強盗用ドリル',
         weight = 1000,
     },
-    ['fleeca_bag'] = {
-        label = '犯罪バッグ',
-        weight = 500,
-    },
     ['fleeca_gold'] = {
         label = '金の延べ棒',
         weight = 160,
@@ -631,4 +632,21 @@ return {
         weight = 160,
     },
     -- フリーカ銀行
+
+    ['carheist_laptop_h'] = {
+        label = 'Hack Laptop',
+        weight = 160,
+    },
+    ['carheist_coke_pooch'] = {
+        label = 'Coke Pooch',
+        weight = 160,
+    },
+    ['carheist_weed_pooch'] = {
+        label = 'Weed Pooch',
+        weight = 160,
+    },
+    ['carheist_gold'] = {
+        label = 'Gold Bar',
+        weight = 160,
+    },
 }
