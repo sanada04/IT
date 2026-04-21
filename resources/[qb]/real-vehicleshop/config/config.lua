@@ -12,7 +12,7 @@ Config.PlateChangePrice = 10000 -- Plate cost
 
 Config.DefaultGarage = 'pillboxgarage' -- The place to be written in the 'garage' section of the database when the vehicle is purchased. 
 Config.PhoneMailOnline = 'qb-phone:server:sendNewMail' -- Event to send mail to active players. Customize it for your phone.
-Config.BlipScale = 1 -- マップBlipsのサイズを全店舗で統一（vehicleshops.lua の個別Scaleより優先）
+Config.BlipScale = 0.7 -- マップBlipsのサイズを全店舗で統一（vehicleshops.lua の個別Scaleより優先）
 
 Config.CheckSalaryStatus = { -- This checks the salary every day at 12 o'clock and the players get paid.
     Hour = 12,

@@ -1,0 +1,30 @@
+-- TEBEX INTEGRATION..
+
+-- 1: set "sv_tebexSecret" on you server.cfg
+-- 2: create a package on tebex.
+-- 3: Click game server commands at bottom and select your game server.
+-- 4: Click Add Command
+-- 5: paste this code without "( )" (     purchase_advancedhunting_experience {"transid": "{transaction}", "experience": "1000"}     )
+-- NOTE: the person who buys the package will get 1000 experience, you type the amount you want.
+-- 6: Click settings icon
+-- 7: Require Player To Be Online : SHOULD BE > Execute the command even if the player is offline
+
+-- DONE!
+ 
+
+https://docs.ak4y.com/information/tebex-script-integration
+
+--HUNTING
+['hunting_knife'] = {['name'] = 'hunting_knife', ['label'] = 'Hunting Knife', ['weight'] = 50, ['type'] = 'item', ['image'] = 'hunting_knife.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = '', ['created'] = nil, ['decay'] = 28.0},
+--BAITS
+['deer_bait'] = {['name'] = 'deer_bait', ['label'] = 'Deer Bait (Low)', ['weight'] = 50, ['type'] = 'item', ['image'] = 'deer_bait.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = '', ['created'] = nil, ['decay'] = 28.0},
+['deer_bait2'] = {['name'] = 'deer_bait2', ['label'] = 'Deer Bait (High)', ['weight'] = 50, ['type'] = 'item', ['image'] = 'deer_bait2.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = '', ['created'] = nil, ['decay'] = 28.0},
+['pig_bait'] = {['name'] = 'pig_bait', ['label'] = 'Pig Bait (Low)', ['weight'] = 50, ['type'] = 'item', ['image'] = 'pig_bait.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = '', ['created'] = nil, ['decay'] = 28.0},
+['pig_bait2'] = {['name'] = 'pig_bait2', ['label'] = 'Pig Bait (High)', ['weight'] = 50, ['type'] = 'item', ['image'] = 'pig_bait2.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = '', ['created'] = nil, ['decay'] = 28.0},
+--MEATS
+['deer_meat'] = {['name'] = 'deer_meat', ['label'] = 'Deer Meat (Low)', ['weight'] = 50, ['type'] = 'item', ['image'] = 'deer_meat.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = '', ['created'] = nil, ['decay'] = 28.0},
+['deer_meat2'] = {['name'] = 'deer_meat2', ['label'] = 'Deer Meat (High)', ['weight'] = 50, ['type'] = 'item', ['image'] = 'deer_meat2.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = '', ['created'] = nil, ['decay'] = 28.0},
+['pig_meat'] = {['name'] = 'pig_meat', ['label'] = 'Pig Meat (Low)', ['weight'] = 50, ['type'] = 'item', ['image'] = 'pig_meat.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = '', ['created'] = nil, ['decay'] = 28.0},
+['pig_meat2'] = {['name'] = 'pig_meat2', ['label'] = 'Pig Meat (High)', ['weight'] = 50, ['type'] = 'item', ['image'] = 'pig_meat2.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = '', ['created'] = nil, ['decay'] = 28.0},
+['chicken_meat'] = {['name'] = 'chicken_meat', ['label'] = 'Chicken Meat (Low)', ['weight'] = 50, ['type'] = 'item', ['image'] = 'chicken_meat.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = '', ['created'] = nil, ['decay'] = 28.0},
+['chicken_meat2'] = {['name'] = 'chicken_meat2', ['label'] = 'Chicken Meat (High)', ['weight'] = 50, ['type'] = 'item', ['image'] = 'chicken_meat2.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = '', ['created'] = nil, ['decay'] = 28.0},

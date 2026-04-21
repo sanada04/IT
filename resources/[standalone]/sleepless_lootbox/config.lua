@@ -34,27 +34,27 @@ config.rarities = {
     common = {
         label = 'Common',
         color = '#94999a',
-        minWeight = 17, -- Items with weight >= 17 are considered common
+        minWeight = 50, -- Items with weight >= 17 are considered common
     },
     uncommon = {
         label = 'Uncommon',
         color = '#26c057',
-        minWeight = 4, -- Items with weight >= 4 are considered uncommon
+        minWeight = 0, -- Items with weight >= 4 are considered uncommon
     },
     rare = {
         label = 'Rare',
         color = '#0aa7e6',
-        minWeight = 1, -- Items with weight >= 1 are considered rare
+        minWeight = 0, -- Items with weight >= 1 are considered rare
     },
     epic = {
         label = 'Epic',
         color = '#d02e9b',
-        minWeight = 0.3, -- Items with weight >= 0.3 are considered epic
+        minWeight = 0, -- Items with weight >= 0.3 are considered epic
     },
     legendary = {
         label = 'Legendary',
         color = '#ffc500',
-        minWeight = 0, -- Items with weight < 0.3 are considered legendary
+        minWeight = 50, -- Items with weight < 0.3 are considered legendary
     },
 }
 
@@ -260,18 +260,18 @@ config.lootboxes = {
     ]]
 
     ['vehicle_crate'] = {
-        label = 'Vehicle Crate',
-        description = 'Win a brand new vehicle!',
+        label = '車両ガチャ',
+        description = '新しい車両を手に入れよう！',
         items = {
             -- Common vehicles (~80% total) — 画像は server が rewardData.model から自動設定
-            { 40, {
+            { 50, {
                 name = 'vehicle_blista',
                 label = 'Blista',
                 amount = 1,
                 rewardType = 'vehicle',
                 rewardData = { model = 'blista', garage = 'pillboxgarage' },
             } },
-            { 40, {
+            { 0, {
                 name = 'vehicle_prairie',
                 label = 'Prairie',
                 amount = 1,
@@ -280,14 +280,14 @@ config.lootboxes = {
             } },
 
             -- Uncommon vehicles (~16% total)
-            { 8, {
+            { 0, {
                 name = 'vehicle_buffalo',
                 label = 'Buffalo',
                 amount = 1,
                 rewardType = 'vehicle',
                 rewardData = { model = 'buffalo', garage = 'pillboxgarage' },
             } },
-            { 8, {
+            { 0, {
                 name = 'vehicle_sultan',
                 label = 'Sultan',
                 amount = 1,
@@ -296,14 +296,14 @@ config.lootboxes = {
             } },
 
             -- Rare vehicles (~3.1% total)
-            { 1.6, {
+            { 0, {
                 name = 'vehicle_elegy2',
                 label = 'Elegy RH8',
                 amount = 1,
                 rewardType = 'vehicle',
                 rewardData = { model = 'elegy2', garage = 'pillboxgarage' },
             } },
-            { 1.5, {
+            { 0, {
                 name = 'vehicle_comet2',
                 label = 'Comet',
                 amount = 1,
@@ -312,7 +312,7 @@ config.lootboxes = {
             } },
 
             -- Epic vehicles (~0.64% total)
-            { 0.64, {
+            { 0, {
                 name = 'vehicle_zentorno',
                 label = 'Zentorno',
                 amount = 1,
@@ -322,7 +322,7 @@ config.lootboxes = {
             } },
 
             -- Legendary vehicles (~0.26% total)
-            { 0.26, {
+            { 50, {
                 name = 'vehicle_adder',
                 label = 'Adder',
                 amount = 1,

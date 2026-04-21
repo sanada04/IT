@@ -51,7 +51,7 @@ Config.Locations = {
         blip = { -- Set to nil for no blip.
             label = "レンタル会社 (車両)",
             id = 225,
-            scale = 0.85,
+            scale = 0.7,
             color = 2,
             display = 4,
         },

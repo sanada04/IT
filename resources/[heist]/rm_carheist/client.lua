@@ -45,6 +45,7 @@ HeistSync = {
 CarHeist = {
     ['startPeds'] = {}
 }
+gangObjectiveBlip = nil
 ESX, QBCore = nil, nil
 Citizen.CreateThread(function()
     if Config['CarHeist']['framework']['name'] == 'ESX' then
@@ -115,6 +116,9 @@ function StartCarHeist()
                     ShowNotification(Strings['start_heist'])
                     ShowNotification(Strings['start_heist2'])
                     carsBlip = addBlip(Config['CarSetup']['main'], 90, 0, Strings['airport_blip'])
+                    if Config['CarHeist']['shareObjectivesWithGang'] then
+                        TriggerServerEvent('carheist:server:shareGangObjective', 'airport')
+                    end
                     SetupCarHeist()
                 end
             end)
@@ -238,7 +242,11 @@ AddEventHandler('carheist:client:sync', function(type, args)
             end)
         end
     elseif type == 'heistSync' then
-        HeistSync[args[1]][args[2]] = not HeistSync[args[1]][args[2]]
+        if args[3] == nil then
+            HeistSync[args[1]][args[2]] = not HeistSync[args[1]][args[2]]
+        else
+            HeistSync[args[1]][args[2]] = args[3]
+        end
     elseif type == 'mainLoop' then
         mainLoop = true
         Citizen.CreateThread(function()
@@ -301,13 +309,38 @@ AddEventHandler('carheist:client:sync', function(type, args)
         mainLoop = false
         HeistSync = {
             ['stacks'] = {},
-            ['artifacts'] = {},
+            ['moneyStacks'] = {},
+            ['cars'] = {}
         }
         lootTables = {}
         loots = {}
         stacks = {}
         guardPeds = {}
+        if gangObjectiveBlip then
+            RemoveBlip(gangObjectiveBlip)
+            gangObjectiveBlip = nil
+        end
         ClearArea(Config['CarSetup']['main'], 50.0)
+    end
+end)
+
+RegisterNetEvent('carheist:client:gangObjective')
+AddEventHandler('carheist:client:gangObjective', function(objectiveType)
+    if not Config['CarHeist']['shareObjectivesWithGang'] then return end
+
+    if gangObjectiveBlip then
+        RemoveBlip(gangObjectiveBlip)
+        gangObjectiveBlip = nil
+    end
+
+    if objectiveType == 'airport' then
+        gangObjectiveBlip = addBlip(Config['CarSetup']['main'], 90, 2, Strings['airport_blip'])
+        ShowNotification(Strings['gang_objective_updated'])
+    elseif objectiveType == 'buyer' then
+        gangObjectiveBlip = addBlip(Config['CarHeist']['finishHeist']['buyerPos'], 500, 2, Strings['buyer_blip'])
+        ShowNotification(Strings['gang_objective_updated'])
+    elseif objectiveType == 'clear' then
+        gangObjectiveBlip = nil
     end
 end)
 
@@ -324,6 +357,9 @@ function Outside()
         local ped = PlayerPedId()
         local vehicle = GetVehiclePedIsIn(ped, false)
         RemoveBlip(carsBlip)
+        if Config['CarHeist']['shareObjectivesWithGang'] then
+            TriggerServerEvent('carheist:server:shareGangObjective', 'buyer')
+        end
         buyerBlip = addBlip(Config['CarHeist']['finishHeist']['buyerPos'], 500, 0, Strings['buyer_blip'])
         if checkVehicle(vehicle) and GetPedInVehicleSeat(vehicle, -1) == ped then
             ShowNotification(Strings['deliver_to_buyer_with_car'])
@@ -362,6 +398,9 @@ function Outside()
             DestroyCam(cam, false)
             TriggerServerEvent('carheist:server:sellRewardItems', index)
             RemoveBlip(buyerBlip)
+            if Config['CarHeist']['shareObjectivesWithGang'] then
+                TriggerServerEvent('carheist:server:shareGangObjective', 'clear')
+            end
         else
             ShowNotification(Strings['deliver_to_buyer'])
             robber = false
@@ -376,6 +415,9 @@ function Outside()
                     DeleteVehicle(buyerVehicle)
                     RemoveBlip(buyerBlip)
                     TriggerServerEvent('carheist:server:sellRewardItems')
+                    if Config['CarHeist']['shareObjectivesWithGang'] then
+                        TriggerServerEvent('carheist:server:shareGangObjective', 'clear')
+                    end
                     break
                 end
                 Wait(1)
@@ -403,7 +445,7 @@ function Hacking(index)
             local ped = PlayerPedId()
             local pedCo, pedRotation = GetEntityCoords(ped), GetEntityRotation(ped)
             local animDict = 'anim@heists@ornate_bank@hack'
-            TriggerServerEvent('carheist:server:sync', 'heistSync', {'cars', index})
+            TriggerServerEvent('carheist:server:sync', 'heistSync', {'cars', index, true})
             busy = true
             robber = true
 
@@ -428,7 +470,7 @@ function Hacking(index)
                     TriggerEvent('carheist:client:giveVehicleKey', cars['plate'][index])
                     TriggerServerEvent('carheist:server:lockVehicle', index)
                 else
-                    TriggerServerEvent('carheist:server:sync', 'heistSync', {'cars', index})
+                    TriggerServerEvent('carheist:server:sync', 'heistSync', {'cars', index, false})
                 end
             end)
             DeleteObject(LaptopAnimation['sceneObjects'][1])
@@ -449,7 +491,7 @@ function GrabStacks(index)
             local animDict
             local stackModel
 
-            TriggerServerEvent('carheist:server:sync', 'heistSync', {'stacks', index})
+            TriggerServerEvent('carheist:server:sync', 'heistSync', {'stacks', index, true})
             local stackType = Config['CarSetup']['tables'][index]['type']
             animDict = 'anim@scripted@heist@ig1_table_grab@cash@male@'
             if stackType == 'money' then
@@ -493,7 +535,6 @@ function GrabStacks(index)
             SetEntityCoords(ped, GetEntityCoords(sceneObject))
             NetworkStartSynchronisedScene(GrabCash['scenes'][2])
             Wait(GetAnimDuration(animDict, 'grab') * 1000)
-            DeleteObjectSync(sceneObject)
             if stackType == 'gold' then
                 TriggerServerEvent('carheist:server:rewardItem', Config['CarHeist']['rewardItems'][1]['itemName'], Config['CarHeist']['rewardItems'][1]['count'], 'item')
             elseif stackType == 'coke' then
@@ -521,7 +562,7 @@ function GrabMoneyStacks(index)
         if data['status'] then
             busy = true
             robber = true
-            TriggerServerEvent('carheist:server:sync', 'heistSync', {'moneyStacks', index})
+            TriggerServerEvent('carheist:server:sync', 'heistSync', {'moneyStacks', index, true})
             local ped = PlayerPedId()
             local pedCo, pedRotation = GetEntityCoords(ped), GetEntityRotation(ped)
             local animDict = 'anim@heists@money_grab@duffel'
@@ -569,7 +610,6 @@ function GrabMoneyStacks(index)
             Wait(10000)
             DeleteObject(money1)
             DeleteObject(money2)
-            DeleteObjectSync(sceneObject)
             NetworkStartSynchronisedScene(MoneyStacks['scenes'][3])
             Wait(GetAnimDuration(animDict, 'exit') * 1000 - 1000)
             TriggerServerEvent('carheist:server:rewardItem', 'nil', Config['CarHeist']['rewardMoneys']['stacks'](), 'money')

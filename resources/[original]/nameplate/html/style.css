@@ -1,0 +1,218 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: transparent;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* ── ネームプレートレイヤー ── */
+#np-layer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    font-family: 'Meiryo', 'Yu Gothic', 'MS Gothic', sans-serif;
+}
+
+/* ── 設定パネル ── */
+#ui {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+}
+
+#panel {
+    width: 430px;
+    background: #141419;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+    font-family: 'Meiryo UI', 'Yu Gothic UI', 'Segoe UI', sans-serif;
+}
+
+.ph {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+}
+
+.pt {
+    color: #eee;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.xbtn {
+    width: 26px; height: 26px;
+    border: none;
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.xbtn:hover { background: rgba(255,80,80,0.3); color: #f77; }
+
+.preview {
+    padding: 20px;
+    background: #0e0e14;
+    text-align: center;
+    min-height: 76px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-family: 'Meiryo', 'Yu Gothic', sans-serif;
+}
+
+#pv-title {
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 14px;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000;
+}
+
+#pv-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000;
+}
+
+.fg {
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.fh {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 7px;
+}
+
+.fl {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.opt {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+}
+
+.cnt {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+}
+
+.ti {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 7px;
+    padding: 8px 11px;
+    color: #f0f0f0;
+    font-size: 14px;
+    outline: none;
+    margin-bottom: 9px;
+    font-family: 'Meiryo UI', 'Yu Gothic UI', 'Segoe UI', sans-serif;
+}
+
+.ti:focus { border-color: rgba(80,140,255,0.5); background: rgba(255,255,255,0.09); }
+.ti::placeholder { color: rgba(255,255,255,0.18); }
+
+.ti.err {
+    border-color: rgba(255,80,80,0.7);
+    animation: shake 0.25s ease;
+}
+
+@keyframes shake {
+    0%,100% { transform: translateX(0); }
+    30%     { transform: translateX(-5px); }
+    70%     { transform: translateX(5px); }
+}
+
+.cr {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cl {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    white-space: nowrap;
+    min-width: 32px;
+}
+
+.sw-row {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+}
+
+.sw {
+    width: 21px; height: 21px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    padding: 0;
+    flex-shrink: 0;
+    transition: transform 0.1s, border-color 0.1s;
+}
+
+.sw:hover { transform: scale(1.2); }
+.sw.on   { border-color: #fff; transform: scale(1.12); }
+
+.cp {
+    width: 28px; height: 21px;
+    padding: 1px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    cursor: pointer;
+    background: none;
+    flex-shrink: 0;
+}
+
+.br {
+    display: flex;
+    gap: 10px;
+    padding: 14px 18px;
+}
+
+.btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Meiryo UI', 'Yu Gothic UI', 'Segoe UI', sans-serif;
+}
+
+.bs { background: #2e6fcf; color: #fff; }
+.bs:hover { background: #3d80e0; }
+
+.bc { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.6); }
+.bc:hover { background: rgba(255,255,255,0.12); color: #eee; }

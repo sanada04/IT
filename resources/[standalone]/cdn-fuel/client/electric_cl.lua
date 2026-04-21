@@ -220,7 +220,7 @@ if Config.ElectricVehicleCharging then
                 if Config.Ox.Menu then
                     lib.registerContext({
                         id = 'electricmenu',
-                        title = Config.GasStations[FetchCurrentLocation()].label,
+                        title = GetGasStationDisplayLabel(FetchCurrentLocation()),
                         options = {
                             {
                                 title = Lang:t("menu_header_cash"),
@@ -253,7 +253,7 @@ if Config.ElectricVehicleCharging then
                 else
                     exports['qb-menu']:openMenu({
                         {
-                            header = Config.GasStations[FetchCurrentLocation()].label,
+                            header = GetGasStationDisplayLabel(FetchCurrentLocation()),
                             isMenuHeader = true,
                             icon = "fas fa-bolt",
                         },

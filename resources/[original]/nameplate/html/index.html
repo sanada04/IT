@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="np-layer"></div>
+
+<div id="ui">
+    <div id="panel">
+        <div class="ph">
+            <span class="pt">名前プレート設定</span>
+            <button id="close-btn" class="xbtn">✕</button>
+        </div>
+
+        <div class="preview">
+            <div id="pv-title"></div>
+            <div id="pv-name">プレビュー</div>
+        </div>
+
+        <div class="fg">
+            <div class="fh">
+                <label class="fl">名前</label>
+                <span id="nc" class="cnt">0 / 30</span>
+            </div>
+            <input id="ni" type="text" class="ti" maxlength="30" placeholder="名前を入力...">
+            <div class="cr">
+                <span class="cl">文字色</span>
+                <div id="ns" class="sw-row"></div>
+                <input id="ncp" type="color" class="cp">
+            </div>
+        </div>
+
+        <div class="fg">
+            <div class="fh">
+                <label class="fl">称号 <span class="opt">（空欄で非表示）</span></label>
+                <span id="tc" class="cnt">0 / 20</span>
+            </div>
+            <input id="ti" type="text" class="ti" maxlength="20" placeholder="称号を入力...">
+            <div class="cr">
+                <span class="cl">文字色</span>
+                <div id="ts" class="sw-row"></div>
+                <input id="tcp" type="color" class="cp">
+            </div>
+        </div>
+
+        <div class="br">
+            <button id="cancel-btn" class="btn bc">キャンセル</button>
+            <button id="save-btn" class="btn bs">保存する</button>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

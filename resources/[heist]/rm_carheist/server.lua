@@ -1,6 +1,29 @@
 local cars = {entity = {}, plate = {}, lock = {}}
 local lastRob = 0
 ESX, QBCore = nil
+
+local function shareGangObjective(src, objectiveType)
+    if not Config['CarHeist']['shareObjectivesWithGang'] then return end
+    if Config['CarHeist']['framework']['name'] ~= 'QB' then return end
+    if not QBCore then return end
+
+    local sourcePlayer = QBCore.Functions.GetPlayer(src)
+    if not sourcePlayer then return end
+
+    local sourceGang = sourcePlayer.PlayerData.gang and sourcePlayer.PlayerData.gang.name
+    if not sourceGang or sourceGang == 'none' then return end
+
+    local players = QBCore.Functions.GetPlayers()
+    for i = 1, #players do
+        local target = players[i]
+        if target ~= src then
+            local targetPlayer = QBCore.Functions.GetPlayer(target)
+            if targetPlayer and targetPlayer.PlayerData.gang and targetPlayer.PlayerData.gang.name == sourceGang then
+                TriggerClientEvent('carheist:client:gangObjective', target, objectiveType)
+            end
+        end
+    end
+end
 Citizen.CreateThread(function()
     if Config['CarHeist']['framework']['name'] == 'ESX' then
         pcall(function() ESX = exports[Config['CarHeist']['framework']['scriptName']]:getSharedObject() end)
@@ -196,11 +219,10 @@ AddEventHandler('carheist:server:rewardItem', function(item, count, type)
                     print('[rm_carheist] add money exploit playerID: '.. src .. ' name: ' .. GetPlayerName(src))
                 else
                     if Config['CarHeist']['black_money'] then
-                        local info = {
-                            worth = count
-                        }
-                        player.Functions.AddItem('markedbills', 1, false, info)
-                        TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add") 
+                        player.Functions.AddItem('black_money', count)
+                        if QBCore.Shared.Items['black_money'] then
+                            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['black_money'], "add")
+                        end
                         discordLog(player.PlayerData.name ..  ' - ' .. player.PlayerData.license, ' Gain ' .. count .. '$ on Car Heist!')
                     else
                         player.Functions.AddMoney('cash', count)
@@ -280,11 +302,11 @@ AddEventHandler('carheist:server:sellRewardItems', function(rewardCar)
                 if playerItem ~= nil and playerItem.amount > 0 then
                     player.Functions.RemoveItem(v['itemName'], playerItem.amount)
                     if Config['CarHeist']['black_money'] then
-                        local info = {
-                            worth = playerItem.amount * v['sellPrice']
-                        }
-                        player.Functions.AddItem('markedbills', 1, false, info)
-                        TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add") 
+                        local dirtyMoney = playerItem.amount * v['sellPrice']
+                        player.Functions.AddItem('black_money', dirtyMoney)
+                        if QBCore.Shared.Items['black_money'] then
+                            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['black_money'], "add")
+                        end
                     else
                         player.Functions.AddMoney('cash', playerItem.amount * v['sellPrice'])
                     end
@@ -294,11 +316,10 @@ AddEventHandler('carheist:server:sellRewardItems', function(rewardCar)
 
             if rewardCar then
                 if Config['CarHeist']['black_money'] then
-                    local info = {
-                        worth = Config['CarSetup']['cars'][rewardCar]['sellPrice']
-                    }
-                    player.Functions.AddItem('markedbills', 1, false, info)
-                    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add") 
+                    player.Functions.AddItem('black_money', Config['CarSetup']['cars'][rewardCar]['sellPrice'])
+                    if QBCore.Shared.Items['black_money'] then
+                        TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['black_money'], "add")
+                    end
                 else
                     player.Functions.AddMoney('cash', Config['CarSetup']['cars'][rewardCar]['sellPrice'])
                 end
@@ -378,6 +399,11 @@ end)
 RegisterServerEvent('carheist:server:sync')
 AddEventHandler('carheist:server:sync', function(type, args)
     TriggerClientEvent('carheist:client:sync', -1, type, args)
+end)
+
+RegisterServerEvent('carheist:server:shareGangObjective')
+AddEventHandler('carheist:server:shareGangObjective', function(objectiveType)
+    shareGangObjective(source, objectiveType)
 end)
 
 AddEventHandler('onResourceStop', function(name)

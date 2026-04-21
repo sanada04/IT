@@ -6,10 +6,10 @@ version '2.1.9'
 
 client_scripts {
     '@PolyZone/client.lua',
+    'client/utils.lua',
     'client/fuel_cl.lua',
     'client/electric_cl.lua',
     'client/station_cl.lua',
-    'client/utils.lua'
 }
 
 server_scripts {
@@ -23,7 +23,8 @@ shared_scripts {
     'shared/config.lua',
     '@qb-core/shared/locale.lua',
     -- '@ox_lib/init.lua', -- OX_Lib, only line this in if you have ox_lib and are using them.
-    'locales/en.lua', -- English Locales
+    -- 'locales/en.lua', -- English Locales
+    'locales/ja.lua', -- Japanese Locales
     -- 'locales/de.lua', -- German / Deutsch Locales
     -- 'locales/fr.lua', -- French / Français Locales
     -- 'locales/es.lua', -- Spanish / Español / Española Locales

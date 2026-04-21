@@ -8,19 +8,19 @@ Config['CarHeist'] = {
         eventName = 'QBCore:GetPlayerData', -- If your framework using trigger event for shared object, you can set in here.
     },
     ['bagClothesID'] = 45,
-    ["dispatch"] = "default", -- cd_dispatch | qs-dispatch | ps-dispatch | rcore_dispatch | default
+    ["dispatch"] = "ps-dispatch", -- cd_dispatch | qs-dispatch | ps-dispatch | rcore_dispatch | default
     ['requiredPoliceCount'] = 0, -- required police count for start heist
     ['dispatchJobs'] = {'police', 'sheriff'},
     ['nextRob'] = 7200, -- Seconds for next heist.
     ['requiredItems'] = { -- Add this items to database or shared. Don't change the order, you can change the item names.
         'heist_bag',
-        'laptop_h'
+        'carheist_laptop_h'
     },
     ['removeLaptopItem'] = false, -- If you change to true, item deleted after every minigame
     ['rewardItems'] = { -- Add this items to database or shared. Don't change the order, you can change the item names.
-        {itemName = 'gold',       count = 25, sellPrice = 100}, -- For stacks.
-        {itemName = 'coke_pooch', count = 25, sellPrice = 100}, -- For stacks.
-        {itemName = 'weed_pooch', count = 25, sellPrice = 100}, -- For stacks.
+        {itemName = 'carheist_gold',       count = 25, sellPrice = 100}, -- For stacks.
+        {itemName = 'carheist_coke_pooch', count = 25, sellPrice = 100}, -- For stacks.
+        {itemName = 'carheist_weed_pooch', count = 25, sellPrice = 100}, -- For stacks.
     },
     ['rewardMoneys'] = {
         ['stacks'] = function()
@@ -31,7 +31,8 @@ Config['CarHeist'] = {
         status = false,
         itemName = 'cash'
     },
-    ['black_money'] = false,  -- If change true, all moneys will convert to black.
+    ['black_money'] = true,  -- If change true, all moneys will convert to black.
+    ['shareObjectivesWithGang'] = true, -- If true, same gang members can see heist objectives.
     ['startHeist'] ={ -- Heist start coords
         pos = vector3(-1435.9, -868.28, 10.9307),
         peds = {
@@ -48,10 +49,10 @@ Config['CarHeist'] = {
 Config['CarSetup'] = {
     ['main'] = vector3(-1109.446, -3081.029, 5.3891), -- Main heist coords for some checks.
     ['cars'] = { -- You can add new car.
-        {coords = vector3(-1069.7, -3096.2, 13.9444),  heading = 293.29, model = 'osiris',   sellPrice = 120},
-        {coords = vector3(-1071.8, -3093.5, 13.9444),  heading = 289.92, model = 'zentorno', sellPrice = 120},
-        {coords = vector3(-1073.5, -3090.8, 13.9444),  heading = 287.2,  model = 't20',      sellPrice = 120},
-        {coords = vector3(-1074.9, -3088.1, 13.9444),  heading = 285.45, model = 'casco',    sellPrice = 120},
+        {coords = vector3(-1069.7, -3096.2, 13.9444),  heading = 293.29, model = 'osiris',   sellPrice = 3000000},
+        {coords = vector3(-1071.8, -3093.5, 13.9444),  heading = 289.92, model = 'zentorno', sellPrice = 3000000},
+        {coords = vector3(-1073.5, -3090.8, 13.9444),  heading = 287.2,  model = 't20',      sellPrice = 3000000},
+        {coords = vector3(-1074.9, -3088.1, 13.9444),  heading = 285.45, model = 'casco',    sellPrice = 3000000},
 
         --Dont change those and order. If you want add new car, add it top.
         {coords = vector3(-1038.50, -3081.543, 14.1635),  heading = 329.9,   model = 'tr2'},
@@ -190,6 +191,7 @@ Strings = {
     ['buyer_blip'] = 'Buyer',
     ['deliver_to_buyer_with_car'] = 'Deliver the loot to the buyer with car. Check gps.',
     ['deliver_to_buyer'] = 'Deliver the loot to the buyer. Check gps.',
+    ['gang_objective_updated'] = 'Gang objective updated. Check your gps.',
 
     --Minigame
     ['change'] = 'Change horizontal',

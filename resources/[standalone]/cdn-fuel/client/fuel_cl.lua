@@ -176,30 +176,29 @@ if Config.ShowNearestGasStationOnly then
 		local currentGasBlip = 0
 		while true do
 			local coords = GetEntityCoords(PlayerPedId())
-			local closest = 1000
+			local closest = math.huge
 			local closestCoords
 			local closestLocation
-			local location = 0
-			local label = "Gas Station" -- Prevent nil just in case, set default name.
-			for _, ourCoords in pairs(Config.GasStations) do
-				location = location + 1
-				if not (location > #Config.GasStations) then -- Make sure we are not going over the amount of locations available.
-					local gasStationCoords = vector3(Config.GasStations[location].pedcoords.x, Config.GasStations[location].pedcoords.y, Config.GasStations[location].pedcoords.z)
+			local label = GetGasStationDisplayLabel(nil)
+			for location = 1, #Config.GasStations do
+				local station = Config.GasStations[location]
+				if station and station.pedcoords then
+					local gasStationCoords = vector3(station.pedcoords.x, station.pedcoords.y, station.pedcoords.z)
 					local dstcheck = #(coords - gasStationCoords)
 					if dstcheck < closest then
 						closest = dstcheck
 						closestCoords = gasStationCoords
 						closestLocation = location
-						label = Config.GasStations[closestLocation].label
+						label = GetGasStationDisplayLabel(location)
 					end
-				else
-					break
 				end
 			end
-			if DoesBlipExist(currentGasBlip) then
-				RemoveBlip(currentGasBlip)
+			if closestCoords then
+				if DoesBlipExist(currentGasBlip) then
+					RemoveBlip(currentGasBlip)
+				end
+				currentGasBlip = CreateBlip(closestCoords, label)
 			end
-			currentGasBlip = CreateBlip(closestCoords, label)
 			Wait(10000)
 		end
 	end)
@@ -215,7 +214,9 @@ else
 	end)
 
 	CreateThread(function()
-		TriggerServerEvent('cdn-fuel:server:updatelocationlabels')
+		if Config.PlayerOwnedGasStationsEnabled then
+			TriggerServerEvent('cdn-fuel:server:updatelocationlabels')
+		end
 		Wait(1000)
 		local gasStationCoords
 		for i = 1, #Config.GasStations, 1 do
@@ -674,7 +675,7 @@ RegisterNetEvent('cdn-fuel:client:FinalMenu', function(purchasetype)
 			if ReserveLevels < maxfuel then
 				local wholetankcost = (tonumber(FuelPrice) * ReserveLevels)
 				local wholetankcostwithtax = math.ceil(tonumber(FuelPrice) * ReserveLevels + GlobalTax(wholetankcost))
-				fuel = lib.inputDialog('Gas Station', {
+				fuel = lib.inputDialog(GetGasStationDisplayLabel(CurrentLocation), {
 					{ type = "input", label = 'Gasoline Price', default = '$'.. FuelPrice .. ' Per Liter', disabled = true },
 					{ type = "input", label = 'Current Fuel', default = finalfuel .. ' Per Liter', disabled = true },
 					{ type = "input", label = 'Required Full Tank', default = maxfuel .. 'Per Liter', disabled = true },
@@ -684,7 +685,7 @@ RegisterNetEvent('cdn-fuel:client:FinalMenu', function(purchasetype)
 				if not fuel then if Config.FuelDebug then print("Fuel Is Nil! #1") end return end
 				fuelAmount = tonumber(fuel[5])
 			else
-				fuel = lib.inputDialog('Gas Station', {
+				fuel = lib.inputDialog(GetGasStationDisplayLabel(CurrentLocation), {
 					{ type = "input", label = 'Gasoline Price', default = '$'.. FuelPrice .. ' Per Liter', disabled = true },
 					{ type = "input", label = 'Current Fuel', default = finalfuel .. ' Per Liter', disabled = true },
 					{ type = "input", label = 'Required For A Full Tank', default = maxfuel, disabled = true },
@@ -694,7 +695,7 @@ RegisterNetEvent('cdn-fuel:client:FinalMenu', function(purchasetype)
 				fuelAmount = tonumber(fuel[4])
 			end
 		else
-			fuel = lib.inputDialog('Gas Station', {
+			fuel = lib.inputDialog(GetGasStationDisplayLabel(CurrentLocation), {
 				{ type = "input", label = 'Gasoline Price', default = '$'.. FuelPrice .. ' Per Liter',disabled = true },
 				{ type = "input", label = 'Current Fuel', default = finalfuel .. ' Per Liter',disabled = true },
 				{ type = "input", label = 'Required For A Full Tank', default = maxfuel, disabled = true },
@@ -816,13 +817,13 @@ RegisterNetEvent('cdn-fuel:client:SendMenuToServer', function(type)
 			header = "Refuel Vehicle"
 			RefuelingType = 'special'
 		else
-			header = Config.GasStations[CurrentLocation].label
+			header = GetGasStationDisplayLabel(CurrentLocation)
 		end
 		if CurFuel < 95 then
 			if Config.Ox.Menu then
 				lib.registerContext({
 					id = 'cdnfueldmainmenu',
-					title = 'Gas Station',
+					title = GetGasStationDisplayLabel(CurrentLocation),
 					icon = "fas fa-gas-pump",
 					options = {
 						{

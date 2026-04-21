@@ -1,8 +1,7 @@
 RegisterNetEvent('carheist:client:giveVehicleKey')
 AddEventHandler('carheist:client:giveVehicleKey', function(vehiclePlate)
     local plate = string.gsub(vehiclePlate, '^%s*(.-)%s*$', '%1')
-    --Write your give vehicle key event for cars
-    --Example: TriggerEvent('vehiclekeys:client:SetOwner', plate)
+    TriggerEvent('vehiclekeys:client:SetOwner', plate)
 end)
 
 function ShowHelpNotification(text)

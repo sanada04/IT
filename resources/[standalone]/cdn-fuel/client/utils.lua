@@ -1,4 +1,4 @@
-function GetFuel(vehicle)
+﻿function GetFuel(vehicle)
 	return DecorGetFloat(vehicle, Config.FuelDecor)
 end
 
@@ -62,8 +62,20 @@ function GetCurrentVehicleType(vehicle)
 	end
 end
 
-function CreateBlip(coords, label)
-	local blip = AddBlipForCoord(coords)
+--- ガソリンスタンドの表示名（マップ・メニュー用）。Config.GasStationDisplayName があれば常にそれを返す。
+function GetGasStationDisplayLabel(location)
+	if Config.GasStationDisplayName and Config.GasStationDisplayName ~= '' then
+		return Config.GasStationDisplayName
+	end
+	if location and Config.GasStations and Config.GasStations[location] and Config.GasStations[location].label then
+		return Config.GasStations[location].label
+	end
+	return 'Gas Station'
+end
+
+--- @param scaleOverride number|nil 指定時はこのスケールのみ使用（例: トラック受け取り用）
+function CreateBlip(coords, label, scaleOverride)
+	local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
 	local vehicle = GetCurrentVehicleType()
 	local electricbolt = Config.ElectricSprite -- Sprite
 	if vehicle == 'electricvehicle' then
@@ -73,11 +85,20 @@ function CreateBlip(coords, label)
 		SetBlipSprite(blip, 361)
 		SetBlipColour(blip, 4)
 	end
-	SetBlipScale(blip, 1.0)
+	local blipScale = tonumber(scaleOverride) or tonumber(Config.GasStationBlipScale)
+	if not blipScale or blipScale <= 0 then blipScale = 1.0 end
+	SetBlipScale(blip, blipScale)
 	SetBlipDisplay(blip, 4)
-	SetBlipAsShortRange(blip, true)
+	local gasBlipLong = Config.GasStationBlipsLongRange ~= false
+	SetBlipAsShortRange(blip, not gasBlipLong)
+	local displayLabel = label
+	if Config.GasStationDisplayName and Config.GasStationDisplayName ~= '' then
+		displayLabel = Config.GasStationDisplayName
+	elseif not displayLabel or displayLabel == '' then
+		displayLabel = 'Gas Station'
+	end
 	BeginTextCommandSetBlipName("STRING")
-	AddTextComponentString(label)
+	AddTextComponentString(displayLabel)
 	EndTextCommandSetBlipName(blip)
 	return blip
 end

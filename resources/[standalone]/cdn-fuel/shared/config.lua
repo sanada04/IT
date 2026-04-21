@@ -1,7 +1,10 @@
 Config = {}
-Config.FuelDebug = false -- Used for debugging, although there are not many areas in yet (Default: false) + Enables Setfuel Commands (0, 50, 100). 
+Config.FuelDebug = false -- Used for debugging, although there are not many areas in yet (Default: false) + Enables Setfuel Commands (0, 50, 100).
 Config.PolyDebug = false -- Enables Polyzone Debugging to see PolyZones!
-Config.ShowNearestGasStationOnly = true -- When enabled, only the nearest gas stations will be shown on the map.
+Config.ShowNearestGasStationOnly = false -- true = 最寄り1件だけマップ表示 / false = 全スタンドを常時マップ表示
+Config.GasStationBlipsLongRange = false -- false = ミニマップ端の追従なし（他リソースと同様）
+Config.GasStationBlipScale = 0.7 -- ガソリンスタンド（CreateBlip）のマップアイコンサイズ。未設定・0以下は 1.0
+Config.GasStationDisplayName = "ガソリンスタンド" -- 空文字なら各スタンドの label を使用。設定時はマップ・メニュー等の表示名を統一
 Config.LeaveEngineRunning = false -- When true, the vehicle's engine will be left running upon exit if the player *HOLDS* F.
 Config.VehicleBlowUp = true -- When true, there will be a configurable chance of the vehicle blowing up, if you fuel while the engine is on.
 Config.BlowUpChance = 5 -- Percentage for Chance of Engine Explosion (Default: 5% or 5)
@@ -101,7 +104,7 @@ Config.RefuelAnimation = "gar_ig_5_filling_can" -- This is for refueling and cha
 Config.RefuelAnimationDictionary = "timetable@gardener@filling_can" -- This is for refueling and charging.
 
 --- Player Owned Gas (Gasoline) Ergonomic Refueling Stations (Poggers) ---
-Config.PlayerOwnedGasStationsEnabled = true -- When true, peds will be located at all gas stations, and players will be able to talk with peds & purchase gas stations, having to manage fuel supplies.
+Config.PlayerOwnedGasStationsEnabled = false -- When true, peds will be located at all gas stations, and players will be able to talk with peds & purchase gas stations, having to manage fuel supplies.
 Config.StationFuelSalePercentage = 0.65 -- % of sales that the station gets. If they sell 4 Liters of Gas for $16 (not including taxes), they will get 16*Config.StationFuelSalePercentage back from the sale. Treat this as tax, also, it balances the profit margins a bit.
 Config.EmergencyShutOff = false -- When true, players can walk up to the ped and shut off the pumps at a gas station. While false, this option is disabled, because it can obviously be an issue. 
 Config.UnlimitedFuel = false -- When true, the fuel stations will not require refuelling by gas station owners, this is for the early stages of implementation.
@@ -1936,3 +1939,5 @@ Config.ProfanityList = {
     "xrated",
     "xxx",
 }
+
+

@@ -25,7 +25,7 @@ Config.Vehicleshops = {
         BlipSettings = { -- Blip settings
             Enable = true,
             Sprite = 227,
-            Scale = 0.8,
+            Scale = 0.7,
             Color = 0
         },
         SpawnCoords = vector4(-25.7236, -1082.6293, 26.6346, 66.0929), -- The place to spawn when you buy the vehicle
@@ -65,7 +65,7 @@ Config.Vehicleshops = {
         BlipSettings = {
             Enable = true,
             Sprite = 410,
-            Scale = 0.8,
+            Scale = 0.7,
             Color = 2
         },
         SpawnCoords = vector4(-727.55, -1367.86, 0.52, 136.62),
@@ -105,7 +105,7 @@ Config.Vehicleshops = {
         BlipSettings = {
             Enable = true,
             Sprite = 64,
-            Scale = 0.8,
+            Scale = 0.7,
             Color = 3
         },
         SpawnCoords = vector4(-763.14, -1452.73, 5.0, 53.69),
@@ -145,7 +145,7 @@ Config.Vehicleshops = {
         BlipSettings = {
             Enable = true,
             Sprite = 523,
-            Scale = 0.8,
+            Scale = 0.7,
             Color = 5
         },
         -- Premium Deluxe付近

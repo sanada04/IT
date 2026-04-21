@@ -1,0 +1,1465 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap");
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+    user-select: none;
+    user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    font-family: "Rubik";
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* background-image: url("/html/images/background.png"); */
+    /* background-image: url("/html/images/referenceBG.png");
+    background-repeat: no-repeat;
+    background-size: cover; */
+}
+
+.generalSection {
+    position: absolute;
+    z-index: 2;
+    height: 100%;
+    width: 100%;
+    background-image: url("/html/images/BACKGROUND.png");
+    background-size: cover;
+    display: none;
+}
+
+.progressMain {
+    position: absolute;
+    z-index: 1;
+    right: 2vw;
+    margin-top: 2vw;
+    height: 9vw;
+    width: 19vw;
+    background: radial-gradient(125.87% 125.87% at 50% 0%, rgba(255, 138, 138, 0.48) 0%, rgba(0, 0, 0, 0) 100%), rgba(58, 44, 44, 0.9);
+    background-blend-mode: lighten, normal;
+    border: 0.1vw solid rgba(255, 255, 255, 0.34);
+    box-shadow: 0px 0px 50px rgba(255, 138, 138, 0.63);
+    /* backdrop-filter: blur(2px); */
+    border-radius: 0.9vw;
+    overflow: hidden;
+    display: none;
+}
+
+.progressBarSection {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url("/html/images/gameBg.png");
+    background-size: cover;
+    display: none;
+}
+
+.progressTopArea {
+    height: 6.5vw;
+    display: flex;
+    /* background-color: rgba(255, 0, 0, 0.097); */
+}
+
+.progressImgArea {
+    /* background-color: red; */
+    position: relative;
+    z-index: 10;
+    height: 5.2vw;
+    width: 5.2vw;
+    margin-top: 0.6vw;
+    margin-left: 0.6vw;
+    overflow: hidden;
+    border-radius: 0.5vw;
+    border: 0.1vw solid rgba(255, 138, 138, 0.22);
+}
+
+.progressImgArea img {
+    height: 95%;
+    width: 95%;
+    margin-left: 2.5%;
+    margin-top: 2.5%;
+    border-radius: 0.5vw;
+    border: 0.134vw solid #ff8a8a;
+    /* border-radius: 10vw; */
+    /* object-fit: cover; */
+}
+
+.progressBarInfoArea {
+    /* background-color: rgba(255, 0, 0, 0.133); */
+    height: 5vw;
+    width: 11vw;
+
+    margin-top: 0.7vw;
+    margin-left: 1vw;
+}
+
+.progressAnimalName {
+    color: #ffbdbd;
+    font-weight: 600;
+    font-size: 0.9vw;
+}
+
+.progressBarDescription {
+    font-weight: 400;
+    font-size: 0.7vw;
+    margin-top: 0.25vw;
+    padding-right: 0.5vw;
+    /* background-color: red; */
+    height: 3.8vw;
+    overflow: auto;
+    color: rgba(248, 188, 188, 0.34);
+}
+
+.progressBarBottomArea {
+    background: rgba(255, 138, 138, 0.16);
+    background-blend-mode: lighten;
+    height: 2.5vw;
+}
+
+.progressBarTextArea {
+    /* background-color: red; */
+    height: 2vw;
+    /* line-height: 2vw; */
+    display: flex;
+    justify-content: center;
+    gap: 0.15vw;
+    /* margin-top: ; */
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.pressText {
+    font-weight: 500;
+    margin-top: 0.45vw;
+    margin-right: 0.3vw;
+}
+
+.chopText {
+    margin-top: 0.45vw;
+    margin-left: 0.3vw;
+}
+
+.progressEButton {
+    margin-top: 0.35vw;
+    position: relative;
+    z-index: 10;
+    height: 1.24vw;
+    padding-right: 0.05vw;
+    line-height: 1.05vw;
+    width: 1.2vw;
+    /* background-color: red; */
+    /* margin-top: 1vw; */
+    text-align: center;
+    border: 0.11vw solid #ff8a8a;
+    border-radius: 0.25vw;
+    font-size: 0.9vw;
+    font-weight: 500;
+    color: #ff8a8a;
+    transition-duration: 0.4s;
+}
+
+.progressEButton.clicked {
+    color: rgba(255, 255, 255, 0.681);
+    background-color: #ff8a8a;
+}
+
+.progressBeforeText {
+    display: none;
+    flex-direction: center;
+    font-size: 0.9vw;
+    /* display: none; */
+}
+
+.progressAfterText {
+    margin-top: 0.45vw;
+    font-size: 0.85vw;
+    font-weight: 500;
+    /* display: none; */
+}
+
+.progressEButton:before {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: -1;
+    top: -0.25vw;
+    left: -0.25vw;
+    right: -0.25vw;
+    bottom: -0.25vw;
+    border-radius: 0.35vw;
+    border: 0.1vw solid rgba(255, 138, 138, 0.31);
+}
+
+.progressBarFillArea {
+    height: 1vw;
+    background: #542b2b;
+    overflow: hidden;
+    /* display: none; */
+}
+
+.progressBarFill {
+    height: 100%;
+    width: 0%;
+    background: #ff8a8a;
+    border-radius: 0.5vw 0.5vw 0 0;
+}
+
+.marketSection {
+    /* background-color: rgba(255, 0, 0, 0.093); */
+    width: 63vw;
+    padding-right: 0.5vw;
+    max-height: 35vw;
+    display: flex;
+    gap: 0.7vw;
+    flex-wrap: wrap;
+    overflow: auto;
+    display: none;
+}
+
+.salesSection {
+    /* background-color: rgba(255, 0, 0, 0.093); */
+    width: 63vw;
+    padding-right: 0.5vw;
+    max-height: 35vw;
+    display: flex;
+    gap: 0.7vw;
+    flex-wrap: wrap;
+    overflow: auto;
+    display: none;
+}
+
+.purchaseSale {
+    position: absolute;
+    z-index: 2;
+    right: 2vw;
+    top: 2vw;
+    height: 5vw;
+    width: 20vw;
+    background: radial-gradient(108.33% 108.33% at 50% 100%, rgba(138, 171, 255, 0.37) 0%, rgba(0, 0, 0, 0) 100%), rgba(15, 19, 21, 0.98);
+    background-blend-mode: lighten, normal;
+    border: 0.1vw solid rgba(255, 255, 255, 0.26);
+    box-shadow: 0px 0px 87px rgba(138, 171, 255, 0.42);
+    border-radius: 1vw;
+    line-height: 5vw;
+    font-size: 1.1vw;
+    text-align: center;
+    color: #8aabff;
+    font-weight: 600;
+    /* transition-duration: 0.3s; */
+    display: none;
+}
+
+.saleText {
+    font-weight: 400;
+}
+
+.completeBuySection {
+    background: radial-gradient(108.33% 108.33% at 50% 100%, rgba(138, 255, 4, 0.541) 0%, rgba(0, 0, 0, 0) 100%), rgba(25, 31, 20, 0.98);
+    background-blend-mode: lighten, normal;
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    box-shadow: 0px 0px 87px rgba(218, 255, 138, 0.42);
+    position: absolute;
+    border-radius: 0.8vw;
+    z-index: 2;
+    top: 2vw;
+    left: 2.5vw;
+    height: 5vw;
+    line-height: 5vw;
+    color: rgb(225, 245, 196);
+    font-size: 2.5vw;
+    text-align: center;
+    width: 5vw;
+    /* transition-duration: 0.3s; */
+    display: none;
+}
+
+#checkIcon {
+    margin-top: 1.25vw;
+}
+
+.taskCompleteNotify {
+    position: absolute;
+    z-index: 2;
+    top: 1vw;
+    left: 50%;
+    margin-left: -10vw;
+    height: 5.2vw;
+    width: 20vw;
+    background: radial-gradient(108.33% 108.33% at 50% 100%, rgba(255, 138, 138, 0.4) 0%, rgba(0, 0, 0, 0) 100%), rgba(31, 20, 20, 0.98);
+    background-blend-mode: lighten, normal;
+    border: 0.1vw solid rgba(255, 255, 255, 0.26);
+    box-shadow: 0px 0px 87px rgba(255, 138, 138, 0.42);
+    border-radius: 1vw;
+    /* transition-duration: 0.3s; */
+    display: none;
+}
+
+.taskCompleteArea {
+    text-align: center;
+    margin-top: 1vw;
+    font-size: 1.3vw;
+    color: #ff8a8a;
+    font-weight: 600;
+}
+
+.receivedTextArea {
+    text-align: center;
+    margin-top: 0.3vw;
+    font-size: 1.1vw;
+    font-weight: 400;
+    /* margin-left: 1vw; */
+    color: rgba(255, 255, 255, 0.74);
+}
+
+.receivedText {
+    color: rgba(85, 219, 122, 0.79);
+    font-weight: 500;
+}
+
+.completedText {
+    font-weight: 400;
+}
+
+.purchaseNotify {
+    position: absolute;
+    z-index: 2;
+    background: radial-gradient(108.33% 108.33% at 50% 100%, rgba(255, 199, 0, 0.34) 0%, rgba(255, 199, 0, 0) 100%), rgba(16, 12, 12, 0.94);
+    background-blend-mode: lighten, normal;
+    border: 0.1vw solid rgba(255, 199, 0, 0.33);
+    box-shadow: 1vw 1vw 10vw rgba(255, 192, 71, 0.97);
+    border-radius: 1.1vw;
+    height: 13vw;
+    width: 20vw;
+    top: 50%;
+    left: 50%;
+    margin-left: -10vw;
+    margin-top: -6.5vw;
+    display: none;
+}
+
+.purchaseTitleArea {
+    text-align: center;
+    color: #ffc34c;
+    font-weight: 600;
+    margin-top: 1.5vw;
+    font-size: 1.1vw;
+}
+
+.notifyLevelCount {
+    text-align: center;
+    font-weight: 500;
+    margin-top: 1vw;
+    color: #ffc700;
+    font-size: 1.4vw;
+}
+
+.successfullText {
+    color: #ffc34ca4;
+    font-weight: 400;
+}
+
+.levelUpNotifyArea {
+    margin-top: 1vw;
+    margin-left: 3vw;
+    display: flex;
+}
+
+.addedLevelTextSection {
+    margin-top: 0.5vw;
+    text-align: center;
+    font-weight: 500;
+    font-size: 0.9vw;
+    color: rgba(255, 255, 255, 0.81);
+}
+
+.levelAddedText {
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.58);
+}
+
+.tasksSection {
+    /* background-color: rgba(255, 0, 0, 0.093); */
+    width: 63vw;
+    padding-right: 0.5vw;
+    max-height: 35vw;
+    display: flex;
+    gap: 0.7vw;
+    flex-wrap: wrap;
+    overflow: auto;
+    display: none;
+}
+
+.wikiSection {
+    /* background-color: rgba(255, 0, 0, 0.093); */
+    width: 63vw;
+    padding-right: 0.5vw;
+    max-height: 35vw;
+    display: flex;
+    gap: 0.7vw;
+    flex-wrap: wrap;
+    overflow: auto;
+    display: none;
+}
+
+.wikiItem {
+    position: relative;
+    width: 20.2vw;
+    height: 35vw;
+    background: linear-gradient(180deg, #230707 0%, rgba(255, 255, 255, 0.25) 123.88%);
+    border-radius: 0.5vw;
+    /* transform: rotate(-180deg); */
+    border: 0.07vw solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.wikiItemImgBgArea {
+    z-index: 0;
+    top: 0;
+    position: absolute;
+    opacity: 0.3;
+    /* transform: rotate(-180deg); */
+    height: 100%;
+    width: 100%;
+}
+.wikiItemImgBgArea img {
+    height: 100%;
+    width: 100%;
+}
+
+.wikiItemArea {
+    position: relative;
+    z-index: 1;
+    height: 35vw;
+    /* background-color: red; */
+}
+
+.wikiStarSection {
+    height: 2vw;
+    /* background-color: red; */
+    margin-top: 2.4vw;
+    display: flex;
+    justify-content: center;
+    gap: 0.2vw;
+}
+
+#starIcon {
+    font-size: 1.3vw;
+    color: #ffb155;
+}
+
+.wikiRegionName {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: 1.7vw;
+    font-size: 1.75vw;
+    color: #ffffff;
+}
+
+.wikiRegionAnimalsType {
+    text-align: center;
+    font-size: 1.15vw;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: #ff8a8a7b;
+}
+
+.wikiDescription {
+    height: 4.7vw;
+    overflow: auto;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    text-align: center;
+    text-overflow: ellipsis;
+    margin: auto;
+    width: 18vw;
+    padding-right: 0.5vw;
+    margin-top: 1.5vw;
+    font-weight: 200;
+    font-size: 0.8vw;
+    /* background-color: red; */
+    text-transform: uppercase;
+
+    color: rgba(255, 255, 255, 0.49);
+}
+
+.wikiWeaponTitle {
+    text-align: center;
+    background: linear-gradient(180deg, #ff8a8a -11.9%, rgba(255, 138, 138, 0) 132.14%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-size: 1.5vw;
+    margin-top: 1.5vw;
+    font-weight: 600;
+}
+
+.wikiSetGps {
+    cursor: pointer;
+    width: 15vw;
+    background: linear-gradient(180deg, #ff8a8a -13.93%, rgba(255, 138, 138, 0) 147.54%);
+    border: 0.1vw solid rgba(0, 0, 0, 0.22);
+    border-radius: 0.6vw;
+    text-align: center;
+    height: 2.5vw;
+    line-height: 2.5vw;
+    margin: auto;
+    margin-top: 1.5vw;
+    font-weight: 500;
+    font-size: 1.1vw;
+    color: rgba(0, 0, 0, 0.44);
+    transition-duration: 0.3s;
+}
+
+.wikiSetGps:hover {
+    background: linear-gradient(180deg, #ef7171 -13.93%, rgba(255, 138, 138, 0) 247.54%);
+    color: rgba(0, 0, 0, 0.64);
+}
+
+.wikiAnimalsTitle {
+    text-align: center;
+    background: linear-gradient(180deg, #ff8a8a -11.9%, rgba(255, 138, 138, 0) 132.14%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-size: 1.5vw;
+    margin-top: 1.2vw;
+    font-weight: 600;
+}
+
+.wikiRectangle {
+    background: rgba(255, 138, 138, 0.63);
+    margin: auto;
+    height: 0.01vw;
+    margin-top: 0.3vw;
+    width: 5vw;
+}
+
+.wikiWeaponArea,
+.wikiAnimalsArea {
+    /* background-color: red; */
+    height: 2.3vw;
+    overflow: auto;
+    text-align: center;
+    margin: auto;
+    margin-top: 1vw;
+    width: 15vw;
+    text-transform: uppercase;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2vw;
+    font-size: 0.85vw;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.levelBuySection {
+    /* background-color: rgba(255, 0, 0, 0.094); */
+    height: 35vw;
+    width: 63vw;
+    display: none;
+}
+
+.logoArea {
+    /* background-color: red; */
+    height: 6vw;
+    width: 28vw;
+    margin: auto;
+    margin-top: 1.5vw;
+}
+
+.logoArea img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+.generalDescription {
+    /* background-color: red; */
+    /* padding-left: 10vw;
+    padding-right: 10vw; */
+    text-align: center;
+    width: 40vw;
+    height: 2vw;
+    margin: auto;
+    font-size: 0.75vw;
+    font-weight: 400;
+
+    margin-top: 1vw;
+    /* font-weight: 400; */
+    color: rgba(255, 255, 255, 0.37);
+}
+
+.categoryButtons {
+    /* background-color: red; */
+    width: 47vw;
+    height: 5vw;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    margin-top: 1.5vw;
+    gap: 0.8vw;
+}
+
+.catButton {
+    cursor: pointer;
+    height: 2.5vw;
+    line-height: 2.35vw;
+    width: 8vw;
+    text-align: center;
+    border-radius: 0.3vw;
+    color: rgba(255, 197, 197, 0.39);
+    font-weight: 500;
+    font-size: 0.9vw;
+    position: relative;
+    z-index: 10;
+}
+
+#marketButton {
+    background: linear-gradient(180deg, #00ff94 -170%, rgba(0, 255, 148, 0) 100%);
+    border: 0.1vw solid #00ff94;
+}
+
+#salesButton {
+    background: linear-gradient(180deg, #ff8a8a -170%, rgba(255, 138, 138, 0) 100%);
+    border: 0.1vw solid #ff8a8a;
+}
+
+#tasksButton {
+    background: linear-gradient(180deg, #8ab9ff -170%, rgba(138, 185, 255, 0) 100%);
+    border: 0.1vw solid #8ab9ff;
+}
+
+#wikiButton {
+    background: linear-gradient(180deg, #b479ff -170%, rgba(180, 121, 255, 0) 100%);
+    border: 0.1vw solid #b479ff;
+}
+
+#lvlBuyButton {
+    background: linear-gradient(180deg, #fec14a -170%, rgba(254, 193, 74, 0) 100%);
+    border: 0.1vw solid #fec14a;
+}
+
+/* SELECTED SECTION */
+
+.catButton.selected {
+    color: #ffffff;
+    box-shadow: 0px 0px 55px 10px rgba(180, 121, 255, 0.22);
+}
+
+.catButton.selected:before {
+    display: block;
+    position: absolute;
+    z-index: -1;
+    top: -0.31vw;
+    left: -0.3vw;
+    right: -0.3vw;
+    bottom: -0.3vw;
+    border-radius: 0.4vw;
+    border: 0.1vw solid rgba(255, 255, 255, 0.41);
+    content: "";
+}
+
+.mainWrapper {
+    /* background-color: red; */
+    height: 40vw;
+    display: flex;
+}
+
+.leftWrapper {
+    /* background-color: blue; */
+    width: 33vw;
+}
+
+.rightWrapper {
+    /* background-color: rgba(0, 128, 0, 0.081); */
+    width: 67vw;
+}
+
+.charInfoContainer {
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.41), rgba(0, 0, 0, 0.3)) padding-box,
+        linear-gradient(to bottom, rgba(255, 138, 138, 0.55), rgba(255, 138, 138, 0.05)) border-box;
+    border-radius: 10px;
+    border: 0.13vw solid transparent;
+    width: 28vw;
+    margin-left: 3vw;
+    height: 35vw;
+    border-radius: 1vw;
+}
+
+.profileImageSection {
+    /* background-color: red; */
+    position: relative;
+    z-index: 10;
+    height: 10vw;
+    width: 10vw;
+    margin: auto;
+    margin-top: -4vw;
+    border-radius: 10vw;
+    overflow: hidden;
+    /* padding: 1vw; */
+    border: 0.1vw solid rgba(255, 138, 138, 0.22);
+}
+
+.profileImageSection img {
+    height: 95%;
+    width: 95%;
+    margin-left: 2.5%;
+    margin-top: 2.5%;
+    border: 0.134vw solid #ff8a8a;
+    border-radius: 10vw;
+    /* object-fit: cover; */
+}
+
+.helloTextArea {
+    /* background-color: red; */
+    /* height: 2vw; */
+    width: 20vw;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    margin-top: 1.5vw;
+}
+
+.helloRectangle {
+    background-color: rgba(255, 255, 255, 0.37);
+    width: 0.6vw;
+    margin: 0.4vw;
+    margin-top: 0.7vw;
+    height: 0.09vw;
+}
+
+.helloText {
+    font-weight: 400;
+    font-size: 1.1vw;
+    color: rgba(255, 255, 255, 0.37);
+}
+
+.charNameArea {
+    text-transform: capitalize;
+    display: flex;
+    /* background-color: red; */
+    width: 27.5vw;
+    margin: auto;
+    /* margin-top: 0.2vw; */
+    font-size: 1.7vw;
+    font-weight: 500;
+    justify-content: center;
+    color: #ffffff;
+    /* height: 2vw; */
+}
+
+.lastName {
+    margin-left: 0.4vw;
+    font-weight: 400;
+    color: #ffffff97;
+}
+
+.levelTextArea {
+    display: flex;
+    /* background-color: red; */
+    width: 27.5vw;
+    margin: auto;
+    margin-top: 2.5vw;
+    font-size: 1.7vw;
+    font-weight: 400;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.bigCurrentMyLevel {
+    margin-left: 0.4vw;
+    color: #ff8a8a;
+    font-weight: 700;
+}
+
+.miniExperienceInfoArea {
+    display: flex;
+    /* background-color: red; */
+    width: 27.5vw;
+    margin: auto;
+    /* margin-top: 0.1vw; */
+    font-size: 0.8vw;
+    font-weight: 400;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.myCurrentExperience {
+    color: #ffffff;
+    margin-right: 0.4vw;
+}
+
+.experienceFillSection {
+    width: 20vw;
+    height: 2.5vw;
+    margin: auto;
+    margin-top: 1vw;
+    border-radius: 0.3vw;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.expFill {
+    background: linear-gradient(180deg, rgba(184, 102, 102, 0.712) 0%, #ff8a8adb 100%);
+    height: 100%;
+    width: 40%;
+    border-top-right-radius: 0.2vw;
+    border-bottom-right-radius: 0.2vw;
+    transition-duration: 0.4s;
+}
+
+.experienceInfoSecondArea {
+    /* background-color: red; */
+    /* height: 1vw; */
+    width: 20vw;
+    margin: auto;
+    margin-top: 0.2vw;
+    font-size: 0.7vw;
+    color: rgba(255, 255, 255, 0.44);
+    display: flex;
+    font-weight: 600;
+
+    justify-content: center;
+}
+
+.leftExperience {
+    display: flex;
+    /* background-color: blue; */
+    width: 10vw;
+    text-align: left;
+}
+
+.rightExperience {
+    display: flex;
+    /* background-color: green; */
+    width: 10vw;
+    /* text-align: end; */
+    justify-content: end;
+}
+
+.expText {
+    font-size: 0.6vw;
+    margin-top: 0.1vw;
+    font-weight: 400;
+
+    margin-left: 0.03vw;
+}
+
+.reqExpCount {
+    margin-left: 0.2vw;
+}
+
+.buyinLevelTextArea {
+    /* margin: auto; */
+    text-align: center;
+    margin-top: 3.5vw;
+    font-size: 1.1vw;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+#upIcon {
+    font-size: 0.7vw;
+    margin-top: 0.165vw;
+}
+
+.spawnBuyingSecond {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.levelBuyButton {
+    text-align: center;
+    height: 3vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    width: fit-content;
+    /* min-width: 10vw; */
+    margin: auto;
+    margin-top: 2vw;
+    color: #ffc047;
+    line-height: 2.8vw;
+    font-size: 1.2vw;
+    font-weight: 500;
+    background-color: rgba(0, 0, 0, 0.003);
+    border: 0.14vw solid #ffc047;
+    filter: drop-shadow(0px 0px 23px rgba(255, 192, 71, 0.47));
+    border-radius: 0.3vw;
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+
+.levelBuyButton:hover {
+    color: rgb(62, 62, 62);
+    background-color: ffc047;
+}
+
+.marketItem {
+    background: radial-gradient(108.33% 108.33% at 50% 100%, rgba(255, 138, 138, 0.156) 0%, rgba(0, 0, 0, 0) 100%), rgba(0, 0, 0, 0.27);
+    background-blend-mode: lighten, normal;
+    border: 0.1vw solid rgba(255, 255, 255, 0.26);
+    border-radius: 0.5vw;
+    height: 17vw;
+    overflow: hidden;
+    width: 15vw;
+}
+
+*::-webkit-scrollbar {
+    width: 0.25vw;
+}
+
+*::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.09);
+}
+
+*::-webkit-scrollbar-thumb {
+    border-radius: 0.2vw;
+    background: #ff8a8a;
+}
+
+.marketItemName {
+    /* background-color: red; */
+    height: 1.3vw;
+    margin-top: 1vw;
+    margin-left: 1vw;
+    color: #ff8a8a;
+    font-weight: 600;
+    font-size: 1.1vw;
+}
+
+.marketItemImgArea {
+    /* background-color: red; */
+    width: 8vw;
+    height: 9vw;
+    margin-top: 1vw;
+    margin-left: 3.5vw;
+}
+
+.marketItemImgArea img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+.marketItemCount {
+    margin-left: 1vw;
+    font-weight: 400;
+    font-size: 0.8vw;
+    height: 1.6vw;
+    /* margin-top: 0.5vw; */
+    color: rgba(255, 255, 255, 0.46);
+}
+
+.marketItemBottomSection {
+    background: rgba(255, 138, 138, 0.15);
+    height: 2.6vw;
+    margin-top: 0.3vw;
+    display: flex;
+}
+
+.marketItemMoneyArea {
+    width: 7vw;
+    /* background-color: red; */
+    height: 2vw;
+    line-height: 2vw;
+    margin-top: 0.35vw;
+    margin-left: 1vw;
+    font-size: 1vw;
+    color: #30ff83e7;
+}
+
+.marketItemDollarIcon {
+    font-weight: 500;
+}
+
+.marketItemPrice {
+    margin-left: -0.25vw;
+    font-weight: 400;
+}
+
+.marketItemBuyButton {
+    cursor: pointer;
+    width: 5.5vw;
+    height: 1.6vw;
+    line-height: 1.5vw;
+    margin-top: 0.5vw;
+    text-align: center;
+    margin-left: 0.8vw;
+    font-weight: 600;
+    font-size: 0.8vw;
+    color: rgba(0, 0, 0, 0.42);
+    background: linear-gradient(180deg, #30ff83 -36.88%, rgba(48, 255, 131, 0) 149.94%);
+    border: 0.13vw solid rgba(22, 52, 3, 0.56);
+    border-radius: 0.35vw;
+}
+
+.marketItemBuyButton:hover {
+    background: linear-gradient(180deg, #00ff66 -36.88%, rgba(48, 255, 131, 0.239) 149.94%);
+    border: 0.13vw solid rgba(22, 52, 3, 0.76);
+}
+
+.salesItem {
+    position: relative;
+    background: radial-gradient(108.33% 108.33% at 50% 100%, rgba(255, 138, 138, 0.156) 0%, rgba(0, 0, 0, 0) 100%), rgba(0, 0, 0, 0.27);
+    background-blend-mode: lighten, normal;
+    border: 0.1vw solid rgba(255, 255, 255, 0.26);
+    border-radius: 0.5vw;
+    height: 17vw;
+    overflow: hidden;
+    width: 15vw;
+}
+
+.salesItemName {
+    /* background-color: red; */
+    margin-top: 1vw;
+    margin-left: 1vw;
+    height: 1.3vw;
+    /* overflow: hidden; */
+    text-overflow: ellipsis;
+    color: #ff8a8a;
+    width: 11vw;
+    font-weight: 600;
+    font-size: 1vw;
+}
+
+.salesItemImgArea {
+    /* background-color: red; */
+    width: 8vw;
+    height: 9vw;
+    margin-top: 1vw;
+    margin-left: 3.5vw;
+}
+
+.salesItemImgArea img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+.salesItemStarSection {
+    position: absolute;
+    /* background-color: red; */
+    width: 1.2vw;
+    top: 1vw;
+    left: 13vw;
+    font-size: 0.9vw;
+    /* transform: rotate(90deg); */
+    height: 5.7vw;
+    overflow: hidden;
+    gap: 0.25vw;
+    display: flex;
+    /* border: 1px solid black; */
+    flex-direction: column;
+    color: rgba(255, 138, 138, 0.5);
+}
+
+.salesItemCount {
+    margin-left: 1vw;
+    font-weight: 400;
+    font-size: 0.8vw;
+    margin-top: 0.3vw;
+    color: rgba(255, 255, 255, 0.46);
+}
+
+.salesItemInfoArea {
+    /* margin-top: 0.5vw; */
+    /* background-color: red; */
+    height: 1.6vw;
+    display: flex;
+    justify-content: center;
+}
+
+.salesItemBottomSection {
+    background: rgba(255, 138, 138, 0.15);
+    height: 2.6vw;
+    margin-top: 0.3vw;
+    display: flex;
+}
+
+.salesInfoLeftWrapper {
+    /* background-color: blue; */
+    width: 50%;
+    font-size: 0.9vw;
+}
+
+.salesInfoRightWrapper {
+    /* background-color: green; */
+    width: 50%;
+    font-size: 0.9vw;
+    text-align: end;
+}
+
+.salesItemPrice {
+    margin-top: 0.3vw;
+    margin-right: 1vw;
+    color: rgba(91, 255, 137, 0.62);
+}
+
+.salesItemRealPrice {
+    margin-left: -0.2vw;
+    font-weight: 400;
+}
+
+.marketItemDollarIcon {
+    font-weight: 500;
+}
+
+.salesItemBuyButton {
+    cursor: pointer;
+    width: 5.5vw;
+    height: 1.6vw;
+    line-height: 1.5vw;
+    margin-top: 0.5vw;
+    text-align: center;
+    margin-left: 0.8vw;
+    font-weight: 600;
+    font-size: 0.8vw;
+    color: rgba(0, 0, 0, 0.42);
+    background: linear-gradient(180deg, #f55757 -56.06%, rgba(245, 87, 87, 0) 143.94%);
+    border: 0.13vw solid rgba(119, 52, 52, 0.66);
+    border-radius: 0.35vw;
+}
+
+.salesItemBuyButton:hover {
+    background: linear-gradient(180deg, #f55757 -56.06%, rgba(245, 87, 87, 0) 143.94%);
+    border: 0.1vw solid rgba(119, 52, 52, 0.76);
+}
+
+.amountInput {
+    background: rgba(0, 0, 0, 0.33);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.35vw;
+    height: 1.75vw;
+    margin-top: 0.45vw;
+    width: 6.9vw;
+    padding-left: 0.5vw;
+    font-size: 0.7vw;
+    padding-right: 0.5vw;
+    color: rgba(255, 255, 255, 0.26);
+    text-align: center;
+    margin-left: 0.8vw;
+    font-weight: 400;
+    outline: none;
+}
+
+.taskItem {
+    position: relative;
+    background: radial-gradient(108.33% 108.33% at 50% 100%, rgba(255, 138, 138, 0.116) 0%, rgba(0, 0, 0, 0) 100%), rgba(0, 0, 0, 0.27);
+    background-blend-mode: lighten, normal;
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    border-radius: 0.5vw;
+    width: 30.7vw;
+    height: 8.2vw;
+    overflow: hidden;
+}
+
+.taskItem.completed {
+    cursor: pointer;
+    cursor: pointer;
+    background: radial-gradient(108.33% 108.33% at 50% 100%, rgba(255, 138, 138, 0.116) 0%, rgba(0, 0, 0, 0) 100%), rgba(0, 0, 0, 0.27);
+    background-blend-mode: lighten, normal;
+    border: 0.1vw solid #ff8a8a;
+    box-shadow: 0px 0px 66px rgba(255, 138, 138, 0.31);
+}
+
+.taskCompletedText {
+    background-color: rgba(0, 0, 0, 0.444);
+    height: 100%;
+    line-height: 8.2vw;
+    color: white;
+    width: 100%;
+    text-align: center;
+    font-size: 1.3vw;
+    font-weight: 600;
+    position: absolute;
+    top: 0;
+}
+
+.taskItemTopArea {
+    display: flex;
+    justify-content: center;
+    /* background-color: red; */
+    width: 100%;
+    height: 1.5vw;
+    margin-top: 1vw;
+}
+
+.taskTopLeftWrapper {
+    /* background-color: green; */
+    width: 75%;
+}
+
+.taskTopRightWrapper {
+    display: flex;
+    justify-content: end;
+    margin-right: 1vw;
+    color: rgba(255, 255, 255, 0.7);
+    width: 25%;
+}
+
+.taskTitle {
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 0.95vw;
+    margin-left: 1vw;
+    color: #ffffff;
+}
+
+#clockIcon {
+    margin-top: 0.1vw;
+    font-size: 0.8vw;
+    margin-right: 0.2vw;
+}
+
+.taskRemainingTime {
+    font-size: 0.8vw;
+}
+
+.taskItemDescription {
+    /* background-color: red; */
+    /* text-transform: uppercase; */
+    font-size: 0.6vw;
+    width: 25vw;
+    margin-top: 0.1vw;
+    height: 2.6vw;
+    font-weight: 400;
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.44);
+    text-overflow: ellipsis;
+    margin-left: 1vw;
+}
+
+.taskItemRewardArea {
+    display: flex;
+    /* background-color: red; */
+    width: 15vw;
+    margin-top: 0.25vw;
+    height: 2vw;
+    margin-left: 1vw;
+    color: #ffc047;
+}
+
+.taskInfoSection {
+    /* background-color: red; */
+    height: 2.2vw;
+    width: 100%;
+    display: flex;
+}
+
+.taskCountArea {
+    color: rgba(255, 255, 255, 0.46);
+    font-size: 0.7vw;
+    display: flex;
+    margin-top: 0.8vw;
+    /* background-color: green; */
+    width: 15vw;
+    padding-right: 1vw;
+    justify-content: end;
+}
+
+#giftIcon {
+    font-size: 1vw;
+}
+
+.rewardTextArea {
+    /* background-color: red; */
+    width: 10vw;
+    margin-top: -0.2vw;
+    height: 1.55vw;
+    margin-left: 0.3vw;
+    overflow: hidden;
+}
+
+.rewardText {
+    text-transform: uppercase;
+
+    font-size: 0.55vw;
+    color: rgba(255, 255, 255, 0.53);
+}
+
+.rewardItemName {
+    font-size: 0.75vw;
+}
+
+.taskItemFillArea {
+    background: rgba(0, 0, 0, 0.47);
+    height: 0.6vw;
+    margin-top: 0.1vw;
+    overflow: hidden;
+}
+
+.taskItemFill {
+    background: linear-gradient(90deg, #ff8a8a 0%, rgba(255, 138, 138, 0) 163.73%);
+    height: 100%;
+    width: 60%;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.levelRedeemSection {
+    background: radial-gradient(108.33% 108.33% at 50% 100%, rgba(255, 199, 0, 0.116) 0%, rgba(255, 199, 0, 0) 100%), rgba(0, 0, 0, 0.27);
+    background-blend-mode: lighten, normal;
+    border: 0.12vw solid rgba(255, 199, 0, 0.33);
+    border-radius: 0.7vw;
+    height: 6vw;
+    width: 63vw;
+    display: flex;
+}
+
+.redeemInput {
+    background: rgba(255, 255, 255, 0.04);
+    border: 2px solid rgba(255, 255, 255, 0.07);
+    border-radius: 0.5vw;
+    height: 3vw;
+    width: 45vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    margin-top: 1.5vw;
+    font-weight: 400;
+    font-size: 0.9vw;
+    margin-left: 1.5vw;
+    color: rgba(255, 255, 255, 0.35);
+    outline: none;
+}
+
+.redeemAcceptButton {
+    position: relative;
+    cursor: pointer;
+    margin-top: 1.5vw;
+    height: 3vw;
+    margin-left: 2.2vw;
+    background: linear-gradient(180deg, #ffb800 -50.69%, rgba(255, 184, 0, 0) 207.22%);
+    border: 0.12vw solid rgba(0, 0, 0, 0.43);
+    box-shadow: 0px 0px 37px rgba(255, 184, 0, 0.3);
+    border-radius: 0.7vw;
+    width: 11.9vw;
+    text-align: center;
+    line-height: 3vw;
+    font-weight: 600;
+    font-size: 1.4vw;
+    color: rgba(0, 0, 0, 0.46);
+    transition-duration: 0.4s;
+}
+
+.redeemAcceptButton:hover {
+    background: linear-gradient(180deg, #efdc0b -50.69%, rgba(165, 127, 30, 0) 207.22%);
+    color: rgba(0, 0, 0, 0.66);
+}
+
+.levelPackageItemArea {
+    /* background-color: rgba(255, 0, 0, 0.112); */
+    max-height: 28vw;
+    width: 64vw;
+    padding-right: 0.5vw;
+    overflow: auto;
+    margin-top: 1vw;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5vw;
+}
+
+.levelPackage {
+    overflow: hidden;
+    background: radial-gradient(108.33% 108.33% at 50% 100%, rgba(255, 138, 138, 0.116) 0%, rgba(0, 0, 0, 0) 100%), rgba(0, 0, 0, 0.27);
+    background-blend-mode: lighten, normal;
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    border-radius: 0.5vw;
+    height: 13.72vw;
+    width: 20.7vw;
+}
+
+.levelPackageNameArea {
+    /* background-color: red; */
+    margin-top: 1vw;
+    height: 2vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    font-size: 30px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.4vw;
+}
+
+.itemLevelPackageTag {
+    margin-left: 0.3vw;
+    color: #ffc700;
+}
+
+.levelPackageMiddleSection {
+    /* background-color: rgba(255, 0, 0, 0.144); */
+    height: 6vw;
+    margin-top: 0.6vw;
+    display: flex;
+    justify-content: center;
+}
+
+#bigUpIcon {
+    margin-top: 1.5vw;
+    font-size: 3.3vw;
+    color: #ffc700;
+    text-shadow: 0px 0px 42px rgba(255, 199, 0, 0.67);
+}
+
+.levelSectionUpInfoArea {
+    width: 5.5vw;
+    height: 5.5vw;
+    margin-top: 0.3vw;
+    margin-left: 1.7vw;
+    margin-right: 1.7vw;
+    background: linear-gradient(180deg, rgba(255, 199, 0, 0.2) 0%, rgba(255, 199, 0, 0.031) 100%);
+    border: 0.827778px solid #ffc700;
+    box-shadow: 0px 0px 59px rgba(255, 199, 0, 0.3);
+    border-radius: 1.8vw;
+}
+
+.itemUpLevelCount {
+    text-align: center;
+    font-weight: 500;
+    margin-top: 1vw;
+    color: #ffc700;
+    font-size: 1.4vw;
+}
+
+.itemMiddleLevelText {
+    font-size: 0.75vw;
+    font-weight: 400;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.58);
+}
+
+.itemMiddleUPText {
+    font-weight: 400;
+    font-size: 0.75vw;
+    text-align: center;
+    margin-top: -0.2vw;
+    color: rgba(255, 255, 255, 0.58);
+}
+
+.levelItemBuyButton {
+    cursor: pointer;
+    background: linear-gradient(180deg, #63ff85 -114.42%, rgba(99, 255, 133, 0) 167.31%);
+    height: 2.6vw;
+    line-height: 2.65vw;
+    font-size: 1.5vw;
+    text-align: center;
+    margin-top: 1.4vw;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.52);
+    transition-duration: 0.3s;
+}
+
+.levelItemBuyText {
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.28);
+}
+
+.levelItemBuyButton:hover {
+    background: linear-gradient(180deg, #2dee57df -114.42%, rgba(99, 255, 133, 0) 167.31%);
+}

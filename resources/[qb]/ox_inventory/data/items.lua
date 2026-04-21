@@ -649,4 +649,119 @@ return {
         label = 'Gold Bar',
         weight = 160,
     },
+
+    -- ak4y-advancedHunting（tebexInfo 準拠・鶏エサは admin_commands 用）
+    ['hunting_knife'] = {
+        label = '狩猟ナイフ',
+        description = '狩りで獲物をさばくのに使う。',
+        weight = 50,
+        stack = false,
+        close = true,
+        degrade = 40320,
+        client = {
+            event = 'ak4y-advancedHunting:useHuntingKnife'
+        }
+    },
+    ['deer_bait'] = {
+        label = '鹿用エサ（低品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+        client = {
+            event = 'ak4y-advancedHunting:useDeerBait'
+        }
+    },
+    ['deer_bait2'] = {
+        label = '鹿用エサ（高品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+        client = {
+            event = 'ak4y-advancedHunting:useDeerBaitHigh'
+        }
+    },
+    ['pig_bait'] = {
+        label = '豚用エサ（低品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+        client = {
+            event = 'ak4y-advancedHunting:usePigBait'
+        }
+    },
+    ['pig_bait2'] = {
+        label = '豚用エサ（高品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+        client = {
+            event = 'ak4y-advancedHunting:usePigBaitHigh'
+        }
+    },
+    ['chicken_bait'] = {
+        label = '鶏用エサ（低品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+        client = {
+            event = 'ak4y-advancedHunting:useChickenBait'
+        }
+    },
+    ['chicken_bait2'] = {
+        label = '鶏用エサ（高品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+        client = {
+            event = 'ak4y-advancedHunting:useChickenBaitHigh'
+        }
+    },
+    ['deer_meat'] = {
+        label = '鹿肉（低品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+    },
+    ['deer_meat2'] = {
+        label = '鹿肉（高品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+    },
+    ['pig_meat'] = {
+        label = '豚肉（低品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+    },
+    ['pig_meat2'] = {
+        label = '豚肉（高品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+    },
+    ['chicken_meat'] = {
+        label = '鶏肉（低品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+    },
+    ['chicken_meat2'] = {
+        label = '鶏肉（高品質）',
+        weight = 50,
+        stack = true,
+        close = true,
+        degrade = 40320,
+    },
 }
