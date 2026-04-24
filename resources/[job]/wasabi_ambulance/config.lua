@@ -112,7 +112,7 @@ Config.Locations = {
             Cost = 3000, -- Cost of using hospital check-in. Set to false for free
             MaxOnDuty = 3, -- If this amount or less you can use, otherwise it will tell you that EMS is avaliable(Set to false to always enable check-in)
             PayAccount = 'bank', -- Account dead player pays from to check-in
-            Label = '[E] - Check In'
+            Label = '[E] - チェックインする'
         },
 
         Cloakroom = {
@@ -164,13 +164,13 @@ Config.Locations = {
             Coords = vec3(306.63, -601.44, 43.28-0.95), -- Coords of ped/target
             Heading = 337.64, -- Heading of ped
             Supplies = { -- Supplies
-                { item = 'medbag', label = 'Medical Bag', price = 1000 }, -- Pretty self explanatory, price may be set to 'false' to make free
-                { item = 'medikit', label = 'First-Aid Kit', price = 150 },
+                { item = 'medbag', label = '救急バッグ', price = 1000 }, -- Pretty self explanatory, price may be set to 'false' to make free
+                { item = 'medikit', label = '救急キット', price = 150 },
             }
         },
 
         Vehicles = { -- Vehicle Garage
-            Enabled = true, -- Enable? False if you have you're own way for medics to obtain vehicles.
+            Enabled = false, -- jg-advancedgarages を使うため無効化
             Zone = {
                 coords = vec3(298.54, -606.79, 43.27), -- Area to prompt vehicle garage
                 range = 5.5, -- Range it will prompt from coords above

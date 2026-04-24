@@ -80,7 +80,7 @@ Config.DisableTransfersToUnregisteredGarages = false -- Potential hacking protec
 -- Prevent vehicle duplication
 -- Learn more: https://docs.jgscripts.com/advanced-garages/vehicle-duplication-prevention
 Config.AllowInfiniteVehicleSpawns = false -- Public & private garages
-Config.JobGaragesAllowInfiniteVehicleSpawns = false -- Job garages
+Config.JobGaragesAllowInfiniteVehicleSpawns = true -- Job garages
 Config.GangGaragesAllowInfiniteVehicleSpawns = false -- Gang garages
 Config.GarageVehicleReturnCost = 2500 -- "towing" tax if not placed back in garage after server restart; or if destroyed or underwater while left out
 Config.GarageVehicleReturnCostSocietyFund = false -- Job name of society fund to pay return fees into (optional)
@@ -373,17 +373,10 @@ Config.JobGarageLocations = { -- IMPORTANT - Every garage name must be unique
       }
     }
   },
-   ["Ambulance"] = {
-    coords = vec3(334.22, -589.56, 27.8),
+  ["Ambulance"] = {
+    coords = vec3(-485.1102, -973.7770, 23.5519),
     spawn = {
-      vec4(330.34, -587.43, 27.47, 339.43),
-      vec4(327.02, -586.24, 27.47, 341.04),
-      vec4(323.88, -585.11, 27.47, 340.47),
-      vec4(320.21, -583.78, 27.47, 338.39),
-      vec4(316.75, -578.59, 27.47, 252.14),
-      vec4(318.86, -573.98, 27.47, 253.05),
-      vec4(320.01, -569.5, 27.47, 247.25),
-      vec4(321.95, -565.22, 27.47, 249.81)
+      vec4(-471.5244, -962.9816, 23.5547, 87.0807),
     },
     distance = 15,
     job = {"ambulance"},
@@ -395,77 +388,28 @@ Config.JobGarageLocations = { -- IMPORTANT - Every garage name must be unique
       scale = 0.7
     },
     hideMarkers = false,
-    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 55, b = 55, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
     vehiclesType = "spawner",
     vehicles = {
       [1] = {
-        model = "dc_mdalamo", 
+        model = "hvemsbuff4",
         plate = "false",
         minJobGrade = 0,
-        nickname = "alamo", 
+        nickname = "EMS buffalo",
         maxMods = true
       },
       [2] = {
-        model = "dc_mdbuffalo", 
+        model = "hvemsscout",
         plate = "false",
         minJobGrade = 0,
-        nickname = "buffalo", 
+        nickname = "EMS Scout",
         maxMods = true
       },
       [3] = {
-        model = "dc_mdcaracara", 
+        model = "hvemsgrang",
         plate = "false",
         minJobGrade = 0,
-        nickname = "caracara", 
-        maxMods = true
-      },
-      [4] = {
-        model = "dc_mddominator", 
-        plate = "false",
-        minJobGrade = 0,
-        nickname = "dominator", 
-        maxMods = true
-      },
-      [5] = {
-        model = "dc_mddubsta", 
-        plate = "false",
-        minJobGrade = 0,
-        nickname = "dubsta", 
-        maxMods = true
-      },
-      [6] = {
-        model = "dc_mdg4m82", 
-        plate = "false",
-        minJobGrade = 0,
-        nickname = "g4m82", 
-        maxMods = true
-      },
-      [7] = {
-        model = "dc_mdobey", 
-        plate = "false",
-        minJobGrade = 0,
-        nickname = "obey", 
-        maxMods = true
-      },
-      [8] = {
-        model = "dc_mdoracle", 
-        plate = "false",
-        minJobGrade = 0,
-        nickname = "oracle", 
-        maxMods = true
-      },
-      [9] = {
-        model = "dc_mdranger", 
-        plate = "false",
-        minJobGrade = 0,
-        nickname = "ranger", 
-        maxMods = true
-      },
-      [10] = {
-        model = "dc_mdsandstorm", 
-        plate = "false",
-        minJobGrade = 0,
-        nickname = "sandstorm", 
+        nickname = "EMS Granger",
         maxMods = true
       },
     }

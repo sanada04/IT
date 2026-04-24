@@ -31,7 +31,7 @@ local function getVehicleTypeFromModel(modelHash)
     return vehicleType
 end
 
-function applyVehicleData(vehicle, vehicleData)
+function applyVehicleData(vehicle, vehicleData, garageType)
     if not vehicleData or type(vehicleData) ~= "table" then
         return false
     end
@@ -45,6 +45,9 @@ function applyVehicleData(vehicle, vehicleData)
     local engineHealth = vehicleData.engineHealth or vehicleData.engine or 1000.0
     local bodyHealth = vehicleData.bodyHealth or vehicleData.body or 1000.0
     local fuelLevel = vehicleData.fuel or 100.0
+    if garageType == "job" then
+        fuelLevel = 100.0
+    end
     
     -- Set the actual damage values - DO NOT fix the vehicle after this!
     SetVehicleEngineHealth(vehicle, engineHealth + 0.0) -- Ensure float
@@ -167,7 +170,7 @@ function finalizeVehicleSpawn(vehicle, vehicleId, warpIntoVehicle, plate, vehicl
     end
     
     if vehicleData and type(vehicleData) == "table" then
-        applyVehicleData(vehicle, vehicleData)
+        applyVehicleData(vehicle, vehicleData, garageType)
     end
     
     if GetResourceState("brazzers-fakeplates") == "started" then

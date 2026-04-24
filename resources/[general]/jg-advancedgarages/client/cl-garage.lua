@@ -268,7 +268,9 @@ function insertVehicle(garageId, vehicleType)
     end
     TriggerEvent("jg-advancedgarages:client:InsertVehicle:config", vehicle, vehicleData, garageType)
     if GetResourceState("wasabi_ambulance") == "started" and garageType == "job" then
-        exports.wasabi_ambulance:deleteStretcherFromVehicle(vehicle)
+        pcall(function()
+            exports.wasabi_ambulance:deleteStretcherFromVehicle(vehicle)
+        end)
     end
     Framework.Client.Notify(Locale.vehicleParkedSuccess, "success")
     isGarageOpen = false

@@ -44,7 +44,7 @@ local function removeZone(name)
 end
 
 -- ox_lib の第2引数は待ち時間(ms)。100 だとストリーミング負荷で即タイムアウトする。
-local function loadAnimDict(dict, timeoutMs)
+function loadAnimDict(dict, timeoutMs)
     timeoutMs = timeoutMs or 15000
     if lib and lib.requestAnimDict then
         local ok = pcall(function()
@@ -67,7 +67,7 @@ local function loadAnimDict(dict, timeoutMs)
     return true
 end
 
-local function loadModel(modelNameOrHash, timeoutMs)
+function loadModel(modelNameOrHash, timeoutMs)
     timeoutMs = timeoutMs or 15000
     local model = type(modelNameOrHash) == 'string' and joaat(modelNameOrHash) or modelNameOrHash
     if lib and lib.requestModel then
@@ -720,6 +720,22 @@ end)
 
 RegisterNetEvent('wasabi_ambulance:treatPatient', function(injury)
     treatPatient(injury)
+end)
+
+RegisterNetEvent('wasabi_ambulance:useTweezers', function()
+    treatPatient('shot')
+end)
+
+RegisterNetEvent('wasabi_ambulance:useSuturekit', function()
+    treatPatient('stabbed')
+end)
+
+RegisterNetEvent('wasabi_ambulance:useIcepack', function()
+    treatPatient('beat')
+end)
+
+RegisterNetEvent('wasabi_ambulance:useBurncream', function()
+    treatPatient('burned')
 end)
 
 AddEventHandler('wasabi_ambulance:buyItem', function(data)

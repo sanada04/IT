@@ -772,7 +772,7 @@ return {
 		stack = true,
 		close = true,
 		consume = 0,
-		client = { image = 'burncream.png' },
+		client = { image = 'burncream.png', event = 'wasabi_ambulance:useBurncream' },
 	},
 	['defib'] = {
 		label = '除細動器',
@@ -780,7 +780,7 @@ return {
 		stack = true,
 		close = true,
 		consume = 0,
-		client = { image = 'defib.png' },
+		client = { image = 'defib.png', event = 'wasabi_ambulance:reviveTarget' },
 	},
 	['icepack'] = {
 		label = 'アイスパック',
@@ -788,7 +788,7 @@ return {
 		stack = true,
 		close = true,
 		consume = 0,
-		client = { image = 'icepack.png' },
+		client = { image = 'icepack.png', event = 'wasabi_ambulance:useIcepack' },
 	},
 	['medbag'] = {
 		label = '救急バッグ',
@@ -796,7 +796,7 @@ return {
 		stack = true,
 		close = true,
 		consume = 0,
-		client = { image = 'medbag.png' },
+		client = { image = 'medbag.png', event = 'wasabi_ambulance:useMedbag' },
 	},
 	['medikit'] = {
 		label = '救急キット',
@@ -804,7 +804,7 @@ return {
 		stack = true,
 		close = true,
 		consume = 0,
-		client = { image = 'medikit.png' },
+		client = { image = 'medikit.png', event = 'wasabi_ambulance:healTarget' },
 	},
 	['sedative'] = {
 		label = '鎮静剤',
@@ -812,7 +812,7 @@ return {
 		stack = true,
 		close = true,
 		consume = 0,
-		client = { image = 'sedative.png' },
+		client = { image = 'sedative.png', event = 'wasabi_ambulance:useSedative' },
 	},
 	['suturekit'] = {
 		label = '縫合キット',
@@ -820,7 +820,7 @@ return {
 		stack = true,
 		close = true,
 		consume = 0,
-		client = { image = 'suturekit.png' },
+		client = { image = 'suturekit.png', event = 'wasabi_ambulance:useSuturekit' },
 	},
 	['tweezers'] = {
 		label = 'ピンセット',
@@ -828,7 +828,7 @@ return {
 		stack = true,
 		close = true,
 		consume = 0,
-		client = { image = 'tweezers.png' },
+		client = { image = 'tweezers.png', event = 'wasabi_ambulance:useTweezers' },
 	},
 	['stretcher'] = {
 		label = '折りたたみストレッチャー',
@@ -836,6 +836,6 @@ return {
 		stack = true,
 		close = true,
 		consume = 0,
-		client = { image = 'stretcher.png' },
+		client = { image = 'stretcher.png', event = 'wasabi_ambulance:useStretcher' },
 	},
 }
