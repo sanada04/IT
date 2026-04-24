@@ -259,6 +259,20 @@ Config.GarageLocations = { -- IMPORTANT - Every garage name must be unique
     hideMarkers = true,
     markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
   },
+  ["EMS前"] = {
+    coords = vector3(-494.5430, -962.7453, 23.5547),
+    spawn = vector4(-494.6219, -953.5332, 23.2944, 180.7386),
+    distance = 15,
+    type = "car",
+    hideBlip = false,
+    blip = {
+      id = 357,
+      color = 0,
+      scale = 0.7
+    },
+    hideMarkers = true,
+    markers = { id = 36, size = { x = 1.0, y = 1.0, z = 1.0 }, color = { r = 255, g = 255, b = 255, a = 120 }, bobUpAndDown = 0, faceCamera = 0, rotate = 1, drawOnEnts = 0 },
+  },
   ["Boats"] = {
     coords = vector3(-795.15, -1510.79, 1.6),
     spawn = vector4(-798.66, -1507.73, -0.47, 102.23),

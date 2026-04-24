@@ -9,8 +9,12 @@ let notifyTimer   = null;
 let pendingBuyVehicle = null;
 
 // ===== NUI ヘルパー =====
+const resourceName = (typeof GetParentResourceName === 'function')
+    ? GetParentResourceName()
+    : 'it_car_dealer';
+
 function nuiPost(action, data = {}) {
-    return fetch(`https://car-dealer/${action}`, {
+    return fetch(`https://${resourceName}/${action}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
@@ -19,7 +23,7 @@ function nuiPost(action, data = {}) {
 
 // ===== 価格フォーマット =====
 function formatPrice(price) {
-    return '¥' + Number(price).toLocaleString('ja-JP') + '円';
+    return '¥ ' + Number(price).toLocaleString('ja-JP');
 }
 
 // ===== 通知 =====
@@ -97,7 +101,6 @@ function openModal(vehicle) {
 
     document.getElementById('modal-img').src             = vehicle.img;
     document.getElementById('modal-vehicle-name').textContent = vehicle.label;
-    document.getElementById('modal-model-name').textContent   = vehicle.model;
     document.getElementById('modal-price').textContent        = formatPrice(vehicle.price);
     document.getElementById('modal-category-tag').textContent = catLabel;
 
