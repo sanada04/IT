@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Sell</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app" class="hidden">
+
+    <!-- メインパネル -->
+    <div id="sell-panel">
+        <div class="panel-header">
+            <div class="header-left">
+                <div class="header-icon">¥</div>
+                <div>
+                    <div class="header-title">車両売却</div>
+                    <div class="header-sub">売却する車両を選択してください（複数選択可）</div>
+                </div>
+            </div>
+            <button class="btn-close" id="btn-close">✕</button>
+        </div>
+
+        <div class="panel-body">
+            <div class="list-meta">
+                <span id="vehicle-count-label">0台の車両</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-hint">売却価格 = 市場価格の 1/3</span>
+            </div>
+
+            <div class="vehicle-list" id="vehicle-list">
+                <!-- JSで生成 -->
+            </div>
+
+            <!-- 選択バー -->
+            <div class="selection-bar" id="selection-bar">
+                <div class="sel-info">
+                    <span id="sel-count">0台選択中</span>
+                    <span class="sel-sep">—</span>
+                    <span class="sel-label">合計受取額</span>
+                    <span id="sel-total" class="sel-total">¥ 0</span>
+                </div>
+                <button class="btn-sell-selected" id="btn-sell-selected" disabled>
+                    選択した車両を売却する
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 確認ダイアログ -->
+    <div id="confirm-dialog" class="dialog-overlay hidden">
+        <div class="dialog-box">
+            <button class="dialog-close" id="dialog-close">✕</button>
+            <div class="dialog-title">売却確認</div>
+            <div class="dialog-subtitle">以下の車両を売却します。この操作は取り消せません。</div>
+
+            <div class="confirm-list" id="confirm-list"></div>
+
+            <div class="confirm-total-row">
+                <span class="confirm-total-label">合計受取額</span>
+                <span id="confirm-total" class="confirm-total-price"></span>
+            </div>
+
+            <div class="dialog-actions">
+                <button class="btn-cancel" id="btn-confirm-cancel">キャンセル</button>
+                <button class="btn-sell" id="btn-confirm-sell">売却する</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- インタラクトヒント（左上固定） -->
+<div id="interact-hint" class="hidden">
+    <div class="hint-key">E</div>
+    <span class="hint-text">車両を売却する</span>
+</div>
+
+<!-- 通知 -->
+<div id="notification" class="notification hidden">
+    <span class="notify-icon" id="notify-icon"></span>
+    <span class="notify-text" id="notify-text"></span>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
