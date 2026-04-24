@@ -93,6 +93,9 @@ RegisterNetEvent('qb-cityhall:server:requestId', function(item, hall)
 end)
 
 RegisterNetEvent('qb-cityhall:server:sendDriverTest', function(instructors)
+    if not Config.DrivingSchools then
+        return TriggerClientEvent('QBCore:Notify', source, 'DrivingSchools は無効化されています', 'error', 5000)
+    end
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end
@@ -142,6 +145,9 @@ end)
 -- Commands
 
 QBCore.Commands.Add('drivinglicense', 'Give a drivers license to someone', { { 'id', 'ID of a person' } }, true, function(source, args)
+    if not Config.DrivingSchools then
+        return TriggerClientEvent('QBCore:Notify', source, 'DrivingSchools は無効化されています', 'error', 5000)
+    end
     local Player = QBCore.Functions.GetPlayer(source)
     local SearchedPlayer = QBCore.Functions.GetPlayer(tonumber(args[1]))
     if SearchedPlayer then

@@ -71,7 +71,7 @@ Config.Locations = {
             {
                 label = "スクーター",
                 model = `gcscoot`,
-                price = 75,
+                price = 0,
                 groups = nil -- {["police"] = 4}
             },
         },

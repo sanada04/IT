@@ -1,14 +1,20 @@
-local playerNames = {}
-local myServerId  = nil
+local playerNames    = {}
+local myServerId     = nil
+local myEarnedTitles = {}
+local hasSpawned     = false
 
--- ネームプレートをNUIに送信するスレッド
+-- ── ネームプレート送信スレッド (毎フレーム実行で頭に追従) ────────
 CreateThread(function()
     while true do
-        Wait(50)
+        Wait(0)
+
+        local canShow = hasSpawned
+                     and not IsPauseMenuActive()
+                     and not IsNuiFocused()
 
         local plates = {}
 
-        if myServerId then
+        if canShow and myServerId then
             local myPed    = PlayerPedId()
             local myCoords = GetEntityCoords(myPed)
 
@@ -16,8 +22,11 @@ CreateThread(function()
                 local ped      = GetPlayerPed(playerId)
                 local serverId = GetPlayerServerId(playerId)
 
-                -- ShowSelf=falseのとき自分をスキップ
-                if (serverId ~= myServerId or Config.ShowSelf) and not IsEntityDead(ped) then
+                -- 自分のスキップ / 死亡 / 乗り物乗車中はスキップ
+                if (serverId ~= myServerId or Config.ShowSelf)
+                    and not IsEntityDead(ped)
+                    and not IsPedInAnyVehicle(ped, false) then
+
                     local pedCoords = GetEntityCoords(ped)
                     local dist      = #(myCoords - pedCoords)
 
@@ -49,7 +58,7 @@ CreateThread(function()
     end
 end)
 
--- イベント受信
+-- ── イベント受信 ─────────────────────────────────────────────────
 RegisterNetEvent('nameplate:sync', function(data)
     playerNames = data
 end)
@@ -67,33 +76,55 @@ RegisterNetEvent('nameplate:remove', function(serverId)
     playerNames[serverId] = nil
 end)
 
--- 同期リクエスト
+RegisterNetEvent('nameplate:earnedTitles', function(titles)
+    myEarnedTitles = titles or {}
+end)
+
+-- ── 同期リクエスト ────────────────────────────────────────────────
 local function requestSync()
     myServerId = GetPlayerServerId(PlayerId())
     TriggerServerEvent('nameplate:requestSync')
 end
 
--- リソース開始時 (2秒待ってから同期)
-AddEventHandler('onClientResourceStart', function(resourceName)
-    if resourceName == GetCurrentResourceName() then
-        CreateThread(function()
-            Wait(2000)
-            requestSync()
-        end)
-    end
-end)
-
--- QBCore: キャラ読み込み完了時
+-- ── スポーン管理 ─────────────────────────────────────────────────
 if Config.UseQBCore then
     AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+        hasSpawned = true
         requestSync()
+    end)
+
+    AddEventHandler('QBCore:Client:OnPlayerUnload', function()
+        hasSpawned = false
+        playerNames = {}
     end)
 end
 
--- /name コマンド: 設定UIを開く
+-- リソース再起動時: すでにインゲームなら即時有効化
+AddEventHandler('onClientResourceStart', function(resourceName)
+    if resourceName ~= GetCurrentResourceName() then return end
+
+    CreateThread(function()
+        Wait(2000)
+        requestSync()
+        if Config.UseQBCore then
+            local ok, QBCore = pcall(function() return exports['qb-core']:GetCoreObject() end)
+            if ok and QBCore then
+                local pd = QBCore.Functions.GetPlayerData()
+                if pd and pd.citizenid then
+                    hasSpawned = true
+                end
+            end
+        else
+            hasSpawned = true
+        end
+    end)
+end)
+
+-- ── /name コマンド ────────────────────────────────────────────────
 RegisterCommand('name', function()
     myServerId = myServerId or GetPlayerServerId(PlayerId())
     local d = playerNames[myServerId] or {}
+
     SetNuiFocus(true, true)
     SendNUIMessage({
         action = 'open',
@@ -102,13 +133,19 @@ RegisterCommand('name', function()
             title      = d.title      or '',
             nameColor  = d.nameColor  or Config.DefaultNameColor,
             titleColor = d.titleColor or Config.DefaultTitleColor,
+            titles     = myEarnedTitles,
         }
     })
 end, false)
 
 RegisterNUICallback('save', function(data, cb)
     SetNuiFocus(false, false)
-    TriggerServerEvent('nameplate:saveAll', data.name, data.title, data.nameColor, data.titleColor)
+    TriggerServerEvent('nameplate:saveAll',
+        data.name,
+        data.titleId or '',
+        data.nameColor,
+        data.titleColor
+    )
     cb('ok')
 end)
 

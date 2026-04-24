@@ -20,10 +20,11 @@
             <div id="pv-name">プレビュー</div>
         </div>
 
+        <!-- 名前 -->
         <div class="fg">
             <div class="fh">
                 <label class="fl">名前</label>
-                <span id="nc" class="cnt">0 / 30</span>
+                <span id="name-cnt" class="cnt">0 / 30</span>
             </div>
             <input id="ni" type="text" class="ti" maxlength="30" placeholder="名前を入力...">
             <div class="cr">
@@ -33,12 +34,15 @@
             </div>
         </div>
 
+        <!-- 称号 -->
         <div class="fg">
             <div class="fh">
-                <label class="fl">称号 <span class="opt">（空欄で非表示）</span></label>
-                <span id="tc" class="cnt">0 / 20</span>
+                <label class="fl">称号</label>
+                <span class="opt">保有している称号から選択</span>
             </div>
-            <input id="ti" type="text" class="ti" maxlength="20" placeholder="称号を入力...">
+            <div id="title-list" class="title-list">
+                <!-- JSで生成 -->
+            </div>
             <div class="cr">
                 <span class="cl">文字色</span>
                 <div id="ts" class="sw-row"></div>
@@ -48,7 +52,7 @@
 
         <div class="br">
             <button id="cancel-btn" class="btn bc">キャンセル</button>
-            <button id="save-btn" class="btn bs">保存する</button>
+            <button id="save-btn"   class="btn bs">保存する</button>
         </div>
     </div>
 </div>

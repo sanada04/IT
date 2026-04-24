@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── Lobby Menu ── -->
+<div id="ui">
+    <div id="panel">
+        <div class="ph">
+            <span class="pt">🛸 EDF ミッション</span>
+            <button id="close-btn" class="xbtn">✕</button>
+        </div>
+
+        <!-- Difficulty -->
+        <div class="fg">
+            <div class="fl">難易度</div>
+            <div id="diff-row" class="diff-row">
+                <button class="dbtn" data-d="easy">イージー<span class="dbtn-sub">3波 / 3体</span></button>
+                <button class="dbtn sel" data-d="normal">ノーマル<span class="dbtn-sub">5波 / 5体</span></button>
+                <button class="dbtn" data-d="hard">ハード<span class="dbtn-sub">7波 / 8体</span></button>
+                <button class="dbtn" data-d="extra">エクストラ<span class="dbtn-sub">10波 / 12体</span></button>
+            </div>
+        </div>
+
+        <!-- Party actions -->
+        <div class="fg">
+            <div class="party-action-row">
+                <button id="create-btn" class="btn bs">パーティ作成</button>
+                <button id="leave-btn"  class="btn bd">離脱</button>
+            </div>
+        </div>
+
+        <!-- Nearby players (invite) -->
+        <div class="fg">
+            <div class="fl">近くにいるプレイヤー <span id="nearby-count" class="fl-sub"></span></div>
+            <div id="nearby-list" class="nearby-list">
+                <div class="no-nearby">範囲内にプレイヤーがいません</div>
+            </div>
+        </div>
+
+        <!-- Member list -->
+        <div class="fg">
+            <div class="fl">パーティメンバー <span id="member-count" class="fl-sub">0 / 8</span></div>
+            <div id="member-list" class="member-list">
+                <div class="no-member">パーティなし</div>
+            </div>
+            <div id="party-id-display" class="party-id-disp"></div>
+        </div>
+
+        <!-- Start -->
+        <div class="br">
+            <button id="start-btn" class="btn bs wide">ミッション開始</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Result Overlay ── -->
+<div id="result">
+    <div id="result-panel">
+        <div id="result-title" class="result-title">ミッション完了！</div>
+        <div class="result-sub">キルランキング</div>
+        <table id="ranking-table">
+            <thead>
+                <tr>
+                    <th>順位</th>
+                    <th>プレイヤー</th>
+                    <th>キル数</th>
+                </tr>
+            </thead>
+            <tbody id="ranking-body"></tbody>
+        </table>
+        <button id="result-close" class="btn bc wide">閉じる</button>
+    </div>
+</div>
+
+<!-- ── Wave Countdown ── -->
+<div id="countdown-overlay">
+    <div id="countdown-wave-label"></div>
+    <div id="countdown-number">3</div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

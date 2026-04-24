@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Dealer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== メインショップ ===== -->
+<div id="app" class="hidden">
+
+    <div id="shop-view">
+        <!-- サイドバー -->
+        <aside class="sidebar">
+            <div class="dealer-brand">
+                <div class="brand-logo">A</div>
+                <div class="brand-text">
+                    <span class="brand-name">AUTO DEALER</span>
+                    <span class="brand-sub">プレミアムカーディーラー</span>
+                </div>
+            </div>
+
+            <nav class="category-nav" id="category-nav">
+                <!-- JSで生成 -->
+            </nav>
+
+            <button class="btn-close-shop" id="btn-close-shop">✕ 閉じる</button>
+        </aside>
+
+        <!-- メインコンテンツ -->
+        <main class="content">
+            <div class="content-header">
+                <h2 class="content-title" id="content-title">全車種</h2>
+                <span class="vehicle-count" id="vehicle-count">0台</span>
+            </div>
+            <div class="vehicle-grid" id="vehicle-grid">
+                <!-- JSで生成 -->
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== 車両詳細モーダル ===== -->
+    <div id="vehicle-modal" class="modal hidden">
+        <div class="modal-backdrop" id="modal-backdrop"></div>
+        <div class="modal-box">
+            <button class="modal-close-btn" id="modal-close-btn">✕</button>
+
+            <div class="modal-left">
+                <div class="modal-img-wrap">
+                    <img id="modal-img" src="" alt="">
+                </div>
+                <div class="modal-stats">
+                    <div class="stat-row">
+                        <span class="stat-name">最高速度</span>
+                        <div class="stat-track"><div class="stat-fill" id="stat-speed"></div></div>
+                        <span class="stat-val" id="stat-speed-val"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-name">加速</span>
+                        <div class="stat-track"><div class="stat-fill" id="stat-accel"></div></div>
+                        <span class="stat-val" id="stat-accel-val"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-name">ブレーキ</span>
+                        <div class="stat-track"><div class="stat-fill" id="stat-brake"></div></div>
+                        <span class="stat-val" id="stat-brake-val"></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-name">ハンドリング</span>
+                        <div class="stat-track"><div class="stat-fill" id="stat-handling"></div></div>
+                        <span class="stat-val" id="stat-handling-val"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-right">
+                <span class="modal-category-tag" id="modal-category-tag"></span>
+                <h2 class="modal-vehicle-name" id="modal-vehicle-name"></h2>
+                <span class="modal-model-name" id="modal-model-name"></span>
+                <div class="modal-price" id="modal-price"></div>
+
+                <div class="modal-actions">
+                    <button class="btn-preview" id="btn-3d-preview">
+                        <span class="btn-icon">⟳</span> 3Dプレビュー
+                    </button>
+                    <button class="btn-buy" id="btn-buy">
+                        購入する
+                    </button>
+                </div>
+
+                <p class="modal-note">※ 購入後、ガレージに格納されます</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== 3Dプレビューオーバーレイ ===== -->
+<div id="preview-overlay" class="hidden">
+    <div class="preview-panel">
+        <div class="preview-vehicle-label" id="preview-vehicle-label"></div>
+        <div class="preview-vehicle-price" id="preview-vehicle-price"></div>
+        <div class="preview-hint">車が自動回転中</div>
+        <div class="preview-actions">
+            <button class="btn-preview-back" id="btn-preview-back">← ショップへ戻る</button>
+            <button class="btn-preview-buy" id="btn-preview-buy">購入する</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== 通知 ===== -->
+<div id="notification" class="notification hidden">
+    <div class="notification-icon" id="notification-icon"></div>
+    <div class="notification-text" id="notification-text"></div>
+</div>
+
+<!-- ===== 購入確認ダイアログ ===== -->
+<div id="confirm-dialog" class="modal hidden">
+    <div class="modal-backdrop" id="confirm-backdrop"></div>
+    <div class="confirm-box">
+        <h3 class="confirm-title">購入確認</h3>
+        <p class="confirm-message" id="confirm-message"></p>
+        <div class="confirm-actions">
+            <button class="btn-cancel" id="btn-cancel">キャンセル</button>
+            <button class="btn-confirm" id="btn-confirm">購入する</button>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

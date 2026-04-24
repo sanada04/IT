@@ -1,37 +1,35 @@
 var COLORS = ['#ffffff','#ff5555','#ff9933','#ffdd22','#44ee66','#33ccff','#bb55ff','#ff44bb'];
 var state  = { nc: '#ffffff', tc: '#ffd700' };
 
+var selTitleId    = '';
+var selTitleLabel = '';
+
 // ── ネームプレート描画 ────────────────────────────────────────────
 
 function esc(s) {
-    return String(s)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;');
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function toRgba(a) {
     if (!a || a.length < 3) return '#fff';
-    return 'rgba(' + a[0] + ',' + a[1] + ',' + a[2] + ',' + ((a[3] != null ? a[3] : 255) / 255).toFixed(2) + ')';
+    return 'rgba('+a[0]+','+a[1]+','+a[2]+','+(((a[3]!=null?a[3]:255)/255).toFixed(2))+')';
 }
 
 function renderPlates(list) {
     var layer = document.getElementById('np-layer');
     if (!list || list.length === 0) { layer.innerHTML = ''; return; }
-
+    var shadow = '1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000';
     var html = '';
     for (var i = 0; i < list.length; i++) {
         var p  = list[i];
         var sc = Math.max(0.45, 1.0 - p.dist * 0.035);
         var fs = Math.round(15 * sc);
-        var ts = Math.round(13 * sc);
-        var shadow = '1px 1px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000';
-
-        html += '<div style="position:absolute;left:' + (p.x * 100).toFixed(2) + '%;top:' + (p.y * 100).toFixed(2) + '%;transform:translate(-50%,-100%);text-align:center;white-space:nowrap;">';
+        var ts = Math.round(12 * sc);
+        html += '<div style="position:absolute;left:'+(p.x*100).toFixed(2)+'%;top:'+(p.y*100).toFixed(2)+'%;transform:translate(-50%,-100%);text-align:center;white-space:nowrap;">';
         if (p.title) {
-            html += '<div style="font-size:' + ts + 'px;font-weight:600;color:' + toRgba(p.tc) + ';text-shadow:' + shadow + ';">【' + esc(p.title) + '】</div>';
+            html += '<div style="font-size:'+ts+'px;font-weight:600;color:'+toRgba(p.tc)+';text-shadow:'+shadow+';">【'+esc(p.title)+'】</div>';
         }
-        html += '<div style="font-size:' + fs + 'px;font-weight:700;color:' + toRgba(p.nc) + ';text-shadow:' + shadow + ';">' + esc(p.name) + '</div>';
+        html += '<div style="font-size:'+fs+'px;font-weight:700;color:'+toRgba(p.nc)+';text-shadow:'+shadow+';">'+esc(p.name)+'</div>';
         html += '</div>';
     }
     layer.innerHTML = html;
@@ -66,24 +64,64 @@ function buildSwatches(rowId, key, pickerId) {
     });
 }
 
+function buildTitleList(titles, currentLabel) {
+    var list = document.getElementById('title-list');
+    list.innerHTML = '';
+
+    if (!titles || titles.length === 0) {
+        var msg = document.createElement('div');
+        msg.className = 'no-title-msg';
+        msg.textContent = '称号を保有していません（管理者から付与されます）';
+        list.appendChild(msg);
+        return;
+    }
+
+    // 「称号なし」ボタン
+    var noneBtn = document.createElement('button');
+    noneBtn.className = 'tbtn none-btn' + (currentLabel === '' ? ' sel' : '');
+    noneBtn.textContent = '称号なし';
+    noneBtn.dataset.id    = '';
+    noneBtn.dataset.label = '';
+    noneBtn.addEventListener('click', onTitleClick);
+    list.appendChild(noneBtn);
+
+    // 保有称号ボタン
+    titles.forEach(function(t) {
+        var btn = document.createElement('button');
+        btn.className = 'tbtn' + (currentLabel === t.label ? ' sel' : '');
+        btn.textContent = t.label;
+        btn.dataset.id    = t.id;
+        btn.dataset.label = t.label;
+        btn.addEventListener('click', onTitleClick);
+        list.appendChild(btn);
+    });
+}
+
+function onTitleClick() {
+    selTitleId    = this.dataset.id;
+    selTitleLabel = this.dataset.label;
+    document.getElementById('title-list').querySelectorAll('.tbtn').forEach(function(b) {
+        b.classList.toggle('sel', b === this);
+    }.bind(this));
+    updatePreview();
+}
+
 function updatePreview() {
-    var name  = document.getElementById('ni').value || '（名前未設定）';
-    var title = document.getElementById('ti').value;
-    var pn = document.getElementById('pv-name');
-    var pt = document.getElementById('pv-title');
-    pn.textContent = name;
-    pn.style.color = state.nc;
-    if (title.trim()) {
-        pt.textContent = '【' + title + '】';
-        pt.style.color = state.tc;
+    var nameEl  = document.getElementById('pv-name');
+    var titleEl = document.getElementById('pv-title');
+    nameEl.textContent = document.getElementById('ni').value || '（名前未設定）';
+    nameEl.style.color = state.nc;
+    if (selTitleLabel) {
+        titleEl.textContent = '【' + selTitleLabel + '】';
+        titleEl.style.color = state.tc;
     } else {
-        pt.textContent = '';
+        titleEl.textContent = '';
     }
 }
 
-function updCnt(inId, cntId) {
-    var el = document.getElementById(inId);
-    document.getElementById(cntId).textContent = el.value.length + ' / ' + el.maxLength;
+function updCnt() {
+    var el = document.getElementById('ni');
+    document.getElementById('name-cnt').textContent = el.value.length + ' / ' + el.maxLength;
 }
 
 function openUI(data) {
@@ -92,17 +130,28 @@ function openUI(data) {
     state.tc = Array.isArray(data.titleColor) ? rgbaToHex(data.titleColor) : '#ffd700';
 
     document.getElementById('ni').value  = data.name  || '';
-    document.getElementById('ti').value  = data.title || '';
     document.getElementById('ncp').value = state.nc;
     document.getElementById('tcp').value = state.tc;
+    updCnt();
 
-    updCnt('ni','nc'); updCnt('ti','tc');
-    buildSwatches('ns','nc','ncp');
-    buildSwatches('ts','tc','tcp');
+    // 現在の称号ラベルから選択状態を復元
+    var currentLabel = data.title || '';
+    selTitleLabel = currentLabel;
+    selTitleId    = '';
+    var titles = data.titles || [];
+    for (var i = 0; i < titles.length; i++) {
+        if (titles[i].label === currentLabel) {
+            selTitleId = titles[i].id;
+            break;
+        }
+    }
+
+    buildSwatches('ns', 'nc', 'ncp');
+    buildSwatches('ts', 'tc', 'tcp');
+    buildTitleList(titles, currentLabel);
     updatePreview();
 
-    var ui = document.getElementById('ui');
-    ui.style.display = 'flex';
+    document.getElementById('ui').style.display = 'flex';
     document.getElementById('ni').focus();
 }
 
@@ -112,8 +161,7 @@ function closeUI() {
 }
 
 function saveUI() {
-    var name  = document.getElementById('ni').value.trim();
-    var title = document.getElementById('ti').value.trim();
+    var name = document.getElementById('ni').value.trim();
     if (!name) {
         var el = document.getElementById('ni');
         el.classList.add('err');
@@ -123,17 +171,30 @@ function saveUI() {
     fetch('https://nameplate/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name, title: title, nameColor: hexToRgba(state.nc), titleColor: hexToRgba(state.tc) })
+        body: JSON.stringify({
+            name:       name,
+            titleId:    selTitleId,
+            nameColor:  hexToRgba(state.nc),
+            titleColor: hexToRgba(state.tc),
+        })
     });
     document.getElementById('ui').style.display = 'none';
 }
 
 // ── イベント ──────────────────────────────────────────────────────
 
-document.getElementById('ni').addEventListener('input',  function(){ updCnt('ni','nc'); updatePreview(); });
-document.getElementById('ti').addEventListener('input',  function(){ updCnt('ti','tc'); updatePreview(); });
-document.getElementById('ncp').addEventListener('input', function(){ state.nc = this.value; document.getElementById('ns').querySelectorAll('.sw').forEach(function(s){ s.classList.remove('on'); }); updatePreview(); });
-document.getElementById('tcp').addEventListener('input', function(){ state.tc = this.value; document.getElementById('ts').querySelectorAll('.sw').forEach(function(s){ s.classList.remove('on'); }); updatePreview(); });
+document.getElementById('ni').addEventListener('input', function(){ updCnt(); updatePreview(); });
+document.getElementById('ncp').addEventListener('input', function(){
+    state.nc = this.value;
+    document.getElementById('ns').querySelectorAll('.sw').forEach(function(s){ s.classList.remove('on'); });
+    updatePreview();
+});
+document.getElementById('tcp').addEventListener('input', function(){
+    state.tc = this.value;
+    document.getElementById('ts').querySelectorAll('.sw').forEach(function(s){ s.classList.remove('on'); });
+    updatePreview();
+});
+
 document.getElementById('save-btn').addEventListener('click',   saveUI);
 document.getElementById('cancel-btn').addEventListener('click', closeUI);
 document.getElementById('close-btn').addEventListener('click',  closeUI);

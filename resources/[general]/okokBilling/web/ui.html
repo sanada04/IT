@@ -1,333 +1,314 @@
 <!DOCTYPE html>
-<html>
-	<meta charset="UTF-8">
-	<head>
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-		<link href="https://cdn.jsdelivr.net/npm/simple-datatables@5.0/dist/style.css" rel="stylesheet">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-		<link href="styles.css" rel="stylesheet">
-	</head>
+<html lang="ja">
+<meta charset="UTF-8">
+<head>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/simple-datatables@5.0/dist/style.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+	<link href="styles.css" rel="stylesheet">
+</head>
+<body>
 
-	<body>
-		<div class="selection_menu">
-			<div class="card selection_card">
-				<div class="card-body selection_card-body">
-					<span class="close-button" id="closeSelectionMenu"><i class="fas fa-times"></i></span>
-					<div class="row h-100">
-						<div class="col-md-12 section">
-							<span class="text-center page-title">請求書メニュー</span>
-							<hr>
-							<div id="normalMenu">
-								<div class="row" id="menu"></div>
+<!-- ── Main App Shell ── -->
+<div class="app" id="app">
+
+	<!-- Sidebar -->
+	<aside class="sidebar">
+		<div class="sidebar-brand">
+			<div class="sidebar-brand-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+			<div class="sidebar-brand-text">請求書<br><span>システム</span></div>
+		</div>
+		<nav class="sidebar-nav" id="sidebarNav"></nav>
+		<button class="sidebar-close" id="appClose">
+			<i class="fas fa-times"></i>
+			<span>閉じる</span>
+		</button>
+	</aside>
+
+	<!-- Content Area -->
+	<main class="app-content">
+
+		<!-- Loading State -->
+		<div class="panel" id="panel-loading">
+			<div class="panel-center">
+				<span class="load"></span>
+				<div class="loading-text">読み込み中...</div>
+			</div>
+		</div>
+
+		<!-- Home Panel -->
+		<div class="panel active" id="panel-home">
+			<div class="panel-center">
+				<div class="home-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+				<div class="home-title">請求書システム</div>
+				<div class="home-sub">左のメニューから項目を選択してください</div>
+			</div>
+		</div>
+
+		<!-- My Invoices Panel -->
+		<div class="panel" id="panel-myinvoices">
+			<div class="panel-head">
+				<div class="panel-head-left">
+					<div class="panel-icon"><i class="fas fa-receipt"></i></div>
+					<h2 class="panel-title">個人請求書</h2>
+				</div>
+				<button class="btn-payall" id="view_invoice_payall">
+					<i class="fas fa-yen-sign"></i> 全て支払う (0円)
+				</button>
+			</div>
+			<div class="panel-body">
+				<table id="invoicesTable">
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>ステータス</th>
+							<th>発行者</th>
+							<th>金額</th>
+							<th>内容</th>
+						</tr>
+					</thead>
+					<tbody id="invoicesTableData"></tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Society Invoices Panel -->
+		<div class="panel" id="panel-societyinvoices">
+			<div class="panel-head">
+				<div class="panel-head-left">
+					<div class="panel-icon"><i class="fas fa-building"></i></div>
+					<h2 class="panel-title">組織請求書</h2>
+				</div>
+				<div class="pending-chip">
+					<i class="fas fa-exclamation-circle"></i>
+					未払い: <span id="totalpending_value">0</span>円
+				</div>
+			</div>
+			<div class="panel-body">
+				<table id="societyInvoicesTable">
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>ステータス</th>
+							<th>発行者</th>
+							<th>金額</th>
+							<th>内容</th>
+						</tr>
+					</thead>
+					<tbody id="societyInvoicesTableData"></tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Create Invoice Panel -->
+		<div class="panel" id="panel-createinvoice">
+			<div class="panel-head">
+				<div class="panel-head-left">
+					<div class="panel-icon"><i class="fas fa-plus"></i></div>
+					<h2 class="panel-title">請求書作成</h2>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="create-layout">
+
+					<!-- Left: Type + Form -->
+					<div class="create-form-col">
+						<div class="type-switch">
+							<button class="type-btn active" id="typeJobBtn">
+								<i class="fas fa-briefcase"></i> 仕事
+							</button>
+							<button class="type-btn" id="typePersonalBtn">
+								<i class="fas fa-user"></i> 個人
+							</button>
+						</div>
+
+						<!-- Job mode -->
+						<div id="jobMode">
+							<div class="field-section-label">請求項目を選択</div>
+							<div class="bill-grid" id="billGrid">
+								<div class="bill-empty">請求項目がありません</div>
 							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="loading_menu">
-			<div class="card loading_card">
-				<div class="card-body loading_card-body d-flex justify-content-center flex-column align-items-center">
-					<span class="load"></span>
-					<br>
-					<div class="ldata-txt">読み込み中...</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="invoices_menu">
-			<div class="card invoices_card">
-				<div class="card-body invoices_card-body">
-					<span class="close-button" id="closeInvoicesMenu"><i class="fas fa-times"></i></span>
-					<div class="row h-100">
-						<div class="col-md-12 section">
-							<span class="text-center page-title">自分の請求書</span>
-							<hr>
-							<table id="invoicesTable">
-								<thead>
-									<tr>
-										<th class="text-center">No</th>
-										<th class="text-center">ステータス</th>
-										<th class="text-center">発行者</th>
-										<th class="text-center">金額</th>
-										<th class="text-center">内容</th>
-									</tr>
-								</thead>
-								<tbody id="invoicesTableData"></tbody>
-							</table>
-							<button type="button" class="btn btn-blue" id="view_invoice_payall" data-bs-dismiss="modal">全て支払う (812.600円)</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="societyinvoices_menu">
-			<div class="card societyinvoices_card">
-				<div class="card-body societyinvoices_card-body">
-					<span class="close-button" id="closeSocietyInvoicesMenu"><i class="fas fa-times"></i></span>
-					<div class="row h-100">
-						<div class="col-md-12 section">
-							<span class="text-center page-title">協会の請求書</span>
-							<hr>
-							<div class="pendingdiv">
-								未払い: <span id="totalpending_value">0</span>円</span>
-							</div>
-							<table id="societyInvoicesTable">
-								<thead>
-									<tr>
-										<th class="text-center">No</th>
-										<th class="text-center">ステータス</th>
-										<th class="text-center">発行者</th>
-										<th class="text-center">金額</th>
-										<th class="text-center">内容</th>
-									</tr>
-								</thead>
-								<tbody id="societyInvoicesTableData">
-									
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="cityinvoices_menu">
-			<div class="card cityinvoices_card">
-				<div class="card-body cityinvoices_card-body">
-					<span class="close-button" id="closeCityInvoicesMenu"><i class="fas fa-times"></i></span>
-					<div class="row h-100">
-						<div class="col-md-12 section">
-							<span class="text-center page-title">市の請求書</span>
-							<hr>
-							<table id="courtTable">
-								<thead>
-									<tr>
-										<th class="text-center">No</th>
-										<th class="text-center">ステータス</th>
-										<th class="text-center">発行者</th>
-										<th class="text-center">金額</th>
-										<th class="text-center">内容</th>
-									</tr>
-								</thead>
-								<tbody id="courtTableData">
-									
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="createinvoice_menu">
-			<div class="card createinvoice_card">
-				<div class="card-body createinvoice_card-body">
-					<span class="close-button" id="closeCreateInvoiceMenu"><i class="fas fa-times"></i></span>
-					<div class="row h-100">
-						<div class="col-md-12 section">
-							<span class="text-center page-title">請求書の作成</span>
-							<hr>
-							<div id="invoiceBillsList">
-								<div class="d-flex" id="invoicesFirstMenu">
-									<button type="button" class="btn btn-blue w-50 me-2 ci-option">仕事</button>
-									<button type="button" id="openCustomInvoice" class="btn btn-odark w-50 ms-2 ci-option">個人</button>
+							<!-- hidden select for compat -->
+							<select id="normal_bill_select" style="display:none"></select>
+							<div class="fields-stack">
+								<div class="field-wrap">
+									<label class="field-label">項目</label>
+									<input type="text" id="normal_createinvoice_item" class="field-input" placeholder="項目を選択するか入力" onkeyup="checkIfEmpty()">
 								</div>
-								<div id="createinvoice_options" class="mt-3">
-									<select id="normal_bill_select" class="form-select mb-3" style="display:none;"></select>
-									<input type="text" id="normal_createinvoice_item" class="form-control" placeholder="項目" onkeyup="checkIfEmpty()">
-									<input type="number" id="normal_createinvoice_price" class="form-control mt-3" placeholder="金額" onkeyup="checkIfEmpty()">
-									<input type="text" id="normal_createinvoice_note" maxlength="255" class="form-control mt-3" placeholder="備考" onkeyup="checkIfEmpty()">
+								<div class="field-wrap">
+									<label class="field-label">金額</label>
+									<div class="field-input-row">
+										<input type="number" id="normal_createinvoice_price" class="field-input" placeholder="0" onkeyup="checkIfEmpty()">
+										<span class="field-unit">円</span>
+									</div>
 								</div>
-							</div>
-							<div id="invoiceCustom">
-								<div class="d-flex" id="invoicesSecondMenu">
-									<button type="button" id="openBillsListInvoice" class="btn btn-odark w-50 me-2 ci-option">仕事</button>
-									<button type="button" class="btn btn-blue w-50 ms-2 ci-option">個人</button>
-								</div>
-								<div id="createinvoice_options" class="mt-3">
-									<input type="text" id="custom_createinvoice_item" class="form-control" placeholder="項目" onkeyup="checkIfEmpty()">
-									<input type="text" id="custom_createinvoice_price" class="form-control mt-3" placeholder="金額" onkeyup="checkIfEmpty()">
-									<input type="text" id="custom_createinvoice_note" maxlength="255" class="form-control mt-3" placeholder="備考" onkeyup="checkIfEmpty()">
+								<div class="field-wrap">
+									<label class="field-label">備考 <span class="field-label-opt">任意</span></label>
+									<input type="text" id="normal_createinvoice_note" maxlength="255" class="field-input" placeholder="例: 速度超過50km/h" onkeyup="checkIfEmpty()">
 								</div>
 							</div>
-							<div class="d-flex justify-content-center mt-2">
-								<button type="button" class="btn btn-odark w-100" id="openTargetSelector">送信先を選択（複数可）</button>
-							</div>
-							<div class="text-center mt-2" id="selectedTargetsLabel">送信先: 未選択</div>
-							<div class="d-flex justify-content-center mt-3">
-								<button type="button" class="btn btn-blue w-100" disabled id="createinvoice">作成</button>
-							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 
-		<div class="payreference_menu">
-			<div class="card payreference_card">
-				<div class="card-body payreference_card-body">
-					<span class="close-button" id="closePayReferenceMenu"><i class="fas fa-times"></i></span>
-					<div class="row h-100">
-						<div class="col-md-12 section">
-							<span class="text-center page-title">給料明細</span>
-							<hr>
-							<div class="d-flex">
-								<input type="text" id="payreference_search" class="form-control me-1" placeholder="リファレンスID">
-								<button type="button" onclick="checkReference()" class="btn btn-blue ms-1" id="payreference_lookup"><i class="fa-solid fa-magnifying-glass"></i> 検索</button>
-							</div>
-							<hr class="mt-3">
-							<div class="text-center payreference_receiver">受け手</div>
-							<div class="text-center mt-1 w-100 payreference_noinfo" id="payreference_receiver">情報はありません</div>
-							<div class="text-center payreference_amount">金額</div>
-							<div class="text-center mt-1 w-100 payreference_noinfo" id="payreference_amount">情報はありません</div>
-							<div class="d-flex justify-content-center mt-3">
-								<button type="button" class="btn btn-blue w-100" id="payreference" disabled>支払い</button>
+						<!-- Personal mode -->
+						<div id="personalMode" style="display:none">
+							<div class="fields-stack">
+								<div class="field-wrap">
+									<label class="field-label">項目</label>
+									<input type="text" id="custom_createinvoice_item" class="field-input" placeholder="請求する内容を入力" onkeyup="checkIfEmpty()">
+								</div>
+								<div class="field-wrap">
+									<label class="field-label">金額</label>
+									<div class="field-input-row">
+										<input type="text" id="custom_createinvoice_price" class="field-input" placeholder="0" onkeyup="checkIfEmpty()">
+										<span class="field-unit">円</span>
+									</div>
+								</div>
+								<div class="field-wrap">
+									<label class="field-label">備考 <span class="field-label-opt">任意</span></label>
+									<input type="text" id="custom_createinvoice_note" maxlength="255" class="field-input" placeholder="備考を入力" onkeyup="checkIfEmpty()">
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
 
-		<div class="police_menu">
-			<div class="card police_card">
-				<div class="card-body police_card-body">
-					<span class="close-button" id="closePoliceMenu"><i class="fas fa-times"></i></span>
-					<div class="row h-100">
-						<div class="col-md-12 section">
-							<span class="text-center page-title">市民を検査</span>
-							<hr>
-							<div class="d-flex">
-								<input type="number" id="police_search" class="form-control me-1" placeholder="プレイヤーID" onkeyup="checkIfEmpty()">
-								<button type="button" onclick="lookcitizen()" class="btn btn-blue ms-1" id="police_lookup"><i class="fa-solid fa-magnifying-glass"></i> 検索</button>
-							</div>
-							<hr class="mt-3">
-							<div class="text-center police_unpaidinvoices">未払いの請求書</div>
-							<div class="text-center mt-1 w-100 police_noinfo" id="police_unpaidinvoices">情報はありません</div>
-							<div class="text-center police_unpaidamount">未払い金額</div>
-							<div class="text-center mt-1 w-100 police_noinfo" id="police_unpaidamount">情報はありません</div>
+					<!-- Right: Target + Send -->
+					<div class="create-target-col">
+						<div class="field-section-label">送信先</div>
+						<div class="target-display" id="selectedTargetsLabel">
+							<i class="fas fa-user-slash"></i> 送信先: 未選択
+						</div>
+						<button class="btn-pick-players" id="openTargetSelector">
+							<i class="fas fa-users"></i>
+							プレイヤーを選択
+						</button>
+						<div class="create-send-wrap">
+							<button class="btn-send" id="createinvoice" disabled>
+								<i class="fas fa-paper-plane"></i>
+								請求書を送信
+							</button>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>
 
-		<div class="modal fade" id="paidviewInvoiceModal">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-body">
-						<div class="view_invoice_title">請求書 #<span id="paid_view_invoice_number">372</span></div>
-						<div class="badge bg-success view_invoice_status"><i class="fas fa-check-circle"></i> 支払い済み</div>
-						<div class="view_invoice_sdtf mt-m07">リファレンスID: <span id="paid_view_invoice_id">OK5D72W3E7</span></div>
-						<div class="view_invoice_sdtf">送信日: <span id="paid_view_invoice_sent">26-06-2022 02:17:35</span></div>
-						<div class="view_invoice_sdtf">期限: <span id="paid_view_invoice_due">30-06-2022 02:17:35</span></div>
-						<div class="view_invoice_sdtf mt-3">宛先: <span id="paid_view_invoice_to">Arthur James</span></div>
-						<div class="view_invoice_sdtf">差出人: <span id="paid_view_invoice_from">Tommy Champion</span></div>
-						<hr>
-						<div class="d-flex justify-content-between">
-							<span id="paid_view_invoice_item">駐車禁止</span> <span id="paid_view_invoice_item_price">385 円</span>
-						</div>
-						<hr>
-						<div class="d-flex justify-content-between">
-							<span class="subtotal">小計</span> <span id="paid_view_invoice_subtotal_price">385 円</span>
-						</div>
-						<div class="d-flex justify-content-between">
-							<span class="vat">消費税 (<span id="paid_view_invoice_vat_percentage">23</span>%)</span> <span id="paid_view_invoice_vat_price">115 円</span>
-						</div>
-						<div class="d-flex justify-content-between mt-3">
-							<span class="total">合計</span> <span id="paid_view_invoice_total_price">500 円</span>
-						</div>
-						<div class="d-flex justify-content-center mt-3">
-							<span class="view_invoice_paid">支払い日: <span id="paid_view_invoice_paid_date">27-06-2022 02:18:15</span></span>
-						</div>
-						<div id="paid_view_invoice_note" class="notes-window mt-3">備考: 次はもっと注意を払うべきだ</div>
-					</div>
-				</div>
+	</main><!-- /app-content -->
+
+	<!-- Player Picker Overlay (inside app, slides over content) -->
+	<div class="player-picker-overlay" id="playerPickerOverlay">
+		<div class="player-picker">
+			<div class="picker-top">
+				<span class="picker-title"><i class="fas fa-users"></i> 送信先を選択</span>
+				<button class="picker-close" id="pickerClose"><i class="fas fa-times"></i></button>
+			</div>
+			<div class="picker-toolbar">
+				<button class="picker-tool-btn" id="selectAllTargets"><i class="fas fa-check-double"></i> 全員選択</button>
+				<button class="picker-tool-btn picker-tool-clear" id="clearAllTargets"><i class="fas fa-ban"></i> 全解除</button>
+				<span class="picker-count" id="pickerCount">0人選択中</span>
+			</div>
+			<div class="player-grid" id="playerGrid"></div>
+			<div class="picker-bottom">
+				<button class="btn-confirm-pick" id="confirmTargetSelection">
+					<i class="fas fa-check"></i> 選択を確定
+				</button>
 			</div>
 		</div>
+	</div>
 
-		<div class="modal fade" id="unpaidviewInvoiceModal">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-body">
-						<div class="view_invoice_title">請求書 #<span id="unpaid_view_invoice_number">372</span></div>
-						<div class="badge bg-danger view_invoice_status"><i class="fas fa-times-circle"></i> 未払い</div>
-						<div class="view_invoice_sdtf mt-m07">リファレンスID: <span id="unpaid_view_invoice_id">OK5D72W3E7</span></div>
-						<div class="view_invoice_sdtf">送信日: <span id="unpaid_view_invoice_sent">26-06-2022 02:17:35</span></div>
-						<div class="view_invoice_sdtf">期限: <span id="unpaid_view_invoice_due">30-06-2022 02:17:35</span></div>
-						<div class="view_invoice_sdtf mt-3">宛先: <span id="unpaid_view_invoice_to">Tommy Champion</span></div>
-						<div class="view_invoice_sdtf">差出人: <span id="unpaid_view_invoice_from">ロスサントス警察署</span></div>
-						<hr>
-						<div class="d-flex justify-content-between">
-							<span id="unpaid_view_invoice_item">駐車禁止</span> <span id="unpaid_view_invoice_item_price">385 円</span>
-						</div>
-						<hr>
-						<div class="d-flex justify-content-between">
-							<span class="subtotal">小計</span> <span id="unpaid_view_invoice_subtotal_price">385 円</span>
-						</div>
-						<div class="d-flex justify-content-between">
-							<span class="vat">消費税 (<span id="unpaid_view_invoice_vat_percentage">23</span>%)</span> <span id="unpaid_view_invoice_vat_price">115 円</span>
-						</div>
-						<div class="d-flex justify-content-between mt-3">
-							<span class="total">合計</span> <span id="unpaid_view_invoice_total_price">500 円</span>
-						</div>
-						<div class="d-flex justify-content-center mt-3" id="pay_button">
-							<button type="button" class="btn btn-blue w-100" id="unpaid_view_invoice_pay" data-bs-dismiss="modal">支払い</button>
-						</div>
-						<div id="unpaid_view_invoice_note" class="notes-window mt-3">備考: 次はもっと注意を払うべきだ</div>
-					</div>
+</div><!-- /app -->
+
+<!-- ── Invoice Detail Modals (Bootstrap) ── -->
+<div class="modal fade" id="paidviewInvoiceModal">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="modal-invoice-header">
+					<div class="view_invoice_title">請求書 #<span id="paid_view_invoice_number">372</span></div>
+					<span class="badge bg-success"><i class="fas fa-check-circle"></i> 支払い済み</span>
 				</div>
+				<div class="modal-meta-grid">
+					<div class="modal-meta-item"><span class="meta-key">リファレンスID</span><span class="meta-val" id="paid_view_invoice_id">—</span></div>
+					<div class="modal-meta-item"><span class="meta-key">送信日</span><span class="meta-val" id="paid_view_invoice_sent">—</span></div>
+					<div class="modal-meta-item"><span class="meta-key">期限</span><span class="meta-val" id="paid_view_invoice_due">—</span></div>
+					<div class="modal-meta-item"><span class="meta-key">宛先</span><span class="meta-val" id="paid_view_invoice_to">—</span></div>
+					<div class="modal-meta-item"><span class="meta-key">差出人</span><span class="meta-val" id="paid_view_invoice_from">—</span></div>
+				</div>
+				<div class="modal-amount-block">
+					<div class="modal-amount-row"><span>項目</span><span id="paid_view_invoice_item">—</span></div>
+					<div class="modal-amount-row sub"><span>小計</span><span id="paid_view_invoice_subtotal_price">—</span></div>
+					<div class="modal-amount-row sub"><span>消費税 (<span id="paid_view_invoice_vat_percentage">23</span>%)</span><span id="paid_view_invoice_vat_price">—</span></div>
+					<div class="modal-amount-row total"><span>合計</span><span id="paid_view_invoice_total_price">—</span></div>
+				</div>
+				<div class="modal-paid-date">支払い日: <span id="paid_view_invoice_paid_date">—</span></div>
+				<div id="paid_view_invoice_note" class="modal-note"></div>
 			</div>
 		</div>
+	</div>
+</div>
 
-		<div class="modal fade" id="unpaid2viewInvoiceModal">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-body">
-						<div class="view_invoice_title">請求書 #<span id="view_invoice_id">372</span></div>
-						<div class="badge bg-danger view_invoice_status"><i class="fas fa-times-circle"></i> 未払い</div>
-						<div class="view_invoice_sdtf mt-m07">リファレンスID: <span id="view_invoice_sent">OK5D72W3E7</span></div>
-						<div class="view_invoice_sdtf">送信日: <span id="view_invoice_sent">26-06-2022 02:17:35</span></div>
-						<div class="view_invoice_sdtf">期限: <span id="view_invoice_due">30-06-2022 02:17:35</span></div>
-						<div class="view_invoice_sdtf mt-3">宛先: <span id="view_invoice_to">Tommy Champion</span></div>
-						<div class="view_invoice_sdtf">差出人: <span id="view_invoice_from">ロスサントス警察署</span></div>
-						<hr>
-						<div class="d-flex justify-content-between">
-							<span id="view_invoice_item">駐車禁止</span> <span id="view_invoice_item_price">385円</span>
-						</div>
-						<hr>
-						<div class="d-flex justify-content-between">
-							<span class="subtotal">小計</span> <span id="view_invoice_subtotal_price">385 円</span>
-						</div>
-						<div class="d-flex justify-content-between">
-							<span class="vat">消費税 (<span id="view_invoice_vat_percentage">23</span>%)</span> <span id="view_invoice_vat_price">115円</span>
-						</div>
-						<div class="d-flex justify-content-between mt-3">
-							<span class="total">合計</span> <span id="view_invoice_total_price">500円</span>
-						</div>
-						<div class="d-flex justify-content-center mt-3">
-							<button type="button" class="btn btn-red w-100" id="view_invoice_cancel" data-bs-dismiss="modal">キャンセル</button>
-						</div>
-						<div class="notes-window mt-3">備考: 次はもっと注意を払うべきだ</div>
-					</div>
+<div class="modal fade" id="unpaidviewInvoiceModal">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="modal-invoice-header">
+					<div class="view_invoice_title">請求書 #<span id="unpaid_view_invoice_number">372</span></div>
+					<span class="badge bg-danger"><i class="fas fa-times-circle"></i> 未払い</span>
 				</div>
+				<div class="modal-meta-grid">
+					<div class="modal-meta-item"><span class="meta-key">リファレンスID</span><span class="meta-val" id="unpaid_view_invoice_id">—</span></div>
+					<div class="modal-meta-item"><span class="meta-key">送信日</span><span class="meta-val" id="unpaid_view_invoice_sent">—</span></div>
+					<div class="modal-meta-item"><span class="meta-key">期限</span><span class="meta-val" id="unpaid_view_invoice_due">—</span></div>
+					<div class="modal-meta-item"><span class="meta-key">宛先</span><span class="meta-val" id="unpaid_view_invoice_to">—</span></div>
+					<div class="modal-meta-item"><span class="meta-key">差出人</span><span class="meta-val" id="unpaid_view_invoice_from">—</span></div>
+				</div>
+				<div class="modal-amount-block">
+					<div class="modal-amount-row"><span>項目</span><span id="unpaid_view_invoice_item">—</span></div>
+					<div class="modal-amount-row sub"><span>小計</span><span id="unpaid_view_invoice_subtotal_price">—</span></div>
+					<div class="modal-amount-row sub"><span>消費税 (<span id="unpaid_view_invoice_vat_percentage">23</span>%)</span><span id="unpaid_view_invoice_vat_price">—</span></div>
+					<div class="modal-amount-row total"><span>合計</span><span id="unpaid_view_invoice_total_price">—</span></div>
+				</div>
+				<div id="pay_button" class="mt-3">
+					<button type="button" class="btn-modal-pay w-100" id="unpaid_view_invoice_pay" data-bs-dismiss="modal">
+						<i class="fas fa-yen-sign"></i> 支払い
+					</button>
+				</div>
+				<div id="unpaid_view_invoice_note" class="modal-note mt-2"></div>
 			</div>
 		</div>
+	</div>
+</div>
 
-		<div class="modal fade" id="selectPlayerToSendInvoiceModal">
-			<div class="modal-dialog modal-dialog-centered selectPlayerToSendInvoice_modal-dialog">
-				<div class="modal-content">
-					<div class="modal-body p-1111" id="nearPlayersDiv"></div>
+<div class="modal fade" id="unpaid2viewInvoiceModal">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="modal-invoice-header">
+					<div class="view_invoice_title">請求書 #<span id="view_invoice_id">372</span></div>
+					<span class="badge bg-danger"><i class="fas fa-times-circle"></i> 未払い</span>
 				</div>
+				<div class="modal-meta-grid">
+					<div class="modal-meta-item"><span class="meta-key">リファレンスID</span><span class="meta-val" id="view_invoice_sent">—</span></div>
+					<div class="modal-meta-item"><span class="meta-key">宛先</span><span class="meta-val" id="view_invoice_to">—</span></div>
+					<div class="modal-meta-item"><span class="meta-key">差出人</span><span class="meta-val" id="view_invoice_from">—</span></div>
+				</div>
+				<div class="modal-amount-block">
+					<div class="modal-amount-row"><span>項目</span><span id="view_invoice_item">—</span></div>
+					<div class="modal-amount-row sub"><span>小計</span><span id="view_invoice_subtotal_price">—</span></div>
+					<div class="modal-amount-row sub"><span>消費税 (<span id="view_invoice_vat_percentage">23</span>%)</span><span id="view_invoice_vat_price">—</span></div>
+					<div class="modal-amount-row total"><span>合計</span><span id="view_invoice_total_price">—</span></div>
+				</div>
+				<button type="button" class="btn-modal-cancel w-100 mt-3" id="view_invoice_cancel" data-bs-dismiss="modal">
+					<i class="fas fa-ban"></i> キャンセル
+				</button>
 			</div>
 		</div>
+	</div>
+</div>
 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-		<script src="https://kit.fontawesome.com/de03e13cb2.js" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/simple-datatables@5.0" crossorigin="anonymous"></script>
-		<script src="scripts.js" type="text/javascript"></script>
-	</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@5.0" crossorigin="anonymous"></script>
+<script src="scripts.js" type="text/javascript"></script>
+</body>
 </html>
