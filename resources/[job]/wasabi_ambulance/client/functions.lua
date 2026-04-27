@@ -672,57 +672,57 @@ interactBag = function()
 			title = Strings.medbag,
 			options = {
 				{
-					title = Strings.medbag_tweezers,
-					description = Strings.medbag_tweezers_desc,
+					title = 'ピンセット',
+					description = '銃弾を取り除くために使用',
 					arrow = false,
 					event = 'wasabi_ambulance:gItem',
 					args = {item = Config.TreatmentItems.shot}
 				},
 				{
-					title = Strings.medbag_suture,
-					description = Strings.medbag_suture_desc,
+					title = '縫合キット',
+					description = '傷口を縫合するために使用',
 					arrow = false,
 					event = 'wasabi_ambulance:gItem',
 					args = {item = Config.TreatmentItems.stabbed}
 				},
 				{
-					title = Strings.medbag_icepack,
-					description = Strings.medbag_icepack_desc,
+					title = 'アイスパック',
+					description = '腫れを抑えるために使用',
 					arrow = false,
 					event = 'wasabi_ambulance:gItem',
 					args = {item = Config.TreatmentItems.beat}
 				},
 				{
-					title = Strings.medbag_burncream,
-					description = Strings.medbag_burncream_desc,
+					title = '火傷治療クリーム',
+					description = '火傷の治療に使用',
 					arrow = false,
 					event = 'wasabi_ambulance:gItem',
 					args = {item = Config.TreatmentItems.burncream}
 				},
 				{
-					title = Strings.medbag_defib,
-					description = Strings.medbag_defib_desc,
+					title = '除細動器',
+					description = '患者を蘇生するために使用',
 					arrow = false,
 					event = 'wasabi_ambulance:gItem',
 					args = {item = Config.EMSItems.revive.item}
 				},
 				{
-					title = Strings.medbag_medikit,
-					description = Strings.medbag_medikit_desc,
+					title = '救急キット',
+					description = '患者を治療するために使用',
 					arrow = false,
 					event = 'wasabi_ambulance:gItem',
 					args = {item = Config.EMSItems.heal.item}
 				},
 				{
-					title = Strings.medbag_sedative,
-					description = Strings.medbag_sedative_desc,
+					title = '鎮静剤',
+					description = '患者を一時的に鎮静するために使用',
 					arrow = false,
 					event = 'wasabi_ambulance:gItem',
 					args = {item = Config.EMSItems.sedate.item}
 				},
 				{
-					title = Strings.medbag_stretcher,
-					description = Strings.medbag_stretcher_desc,
+					title = '折りたたみ担架',
+					description = '患者を搬送するために使用',
 					arrow = false,
 					event = 'wasabi_ambulance:gItem',
 					args = {item = Config.EMSItems.stretcher}
