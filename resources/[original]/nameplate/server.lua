@@ -30,17 +30,10 @@ local function GetEarnedIds(src)
     return {}
 end
 
-local function IsAdmin(src)
+local function HasFullPermission(src)
     if src == 0 then return true end
-    if not QBCore then return false end
-    local ok, p = pcall(function() return QBCore.Functions.GetPlayer(src) end)
-    if ok and p then
-        local g = p.PlayerData.group
-        for _, ag in ipairs(Config.AdminGroups) do
-            if g == ag then return true end
-        end
-    end
-    return false
+    -- `command` ACEを持つプレイヤーのみ許可 (実質フル権限者)
+    return IsPlayerAceAllowed(src, 'command')
 end
 
 local function Broadcast(src)
@@ -172,8 +165,8 @@ end)
 -- ─── 称号付与コマンド (/givetitle [serverID] [titleId]) ──────────
 RegisterCommand('givetitle', function(source, args)
     local src = source
-    if not IsAdmin(src) then
-        if src ~= 0 then Notify(src, '権限がありません', 'error') end; return
+    if not HasFullPermission(src) then
+        if src ~= 0 then Notify(src, 'このコマンドはフル権限ユーザーのみ実行できます', 'error') end; return
     end
 
     local targetSrc = tonumber(args[1])
@@ -213,8 +206,8 @@ end, false)
 -- ─── 称号削除コマンド (/removetitle [serverID] [titleId]) ────────
 RegisterCommand('removetitle', function(source, args)
     local src = source
-    if not IsAdmin(src) then
-        if src ~= 0 then Notify(src, '権限がありません', 'error') end; return
+    if not HasFullPermission(src) then
+        if src ~= 0 then Notify(src, 'このコマンドはフル権限ユーザーのみ実行できます', 'error') end; return
     end
 
     local targetSrc = tonumber(args[1])

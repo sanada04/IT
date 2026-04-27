@@ -26,7 +26,7 @@ Config.AdminGroups = { 'admin', 'superadmin', 'god' }
 -- /givetitle [playerID] [id] で付与する
 -- ─────────────────────────────────────────────────────────────────
 Config.Titles = {
-    { id = 'newcomer',   label = '新人'         },
+    { id = 'newcomer',   label = '新人'          },
     { id = 'veteran',    label = 'ベテラン'      },
     { id = 'legend',     label = '伝説'          },
     { id = 'outlaw',     label = 'アウトロー'    },
@@ -38,4 +38,5 @@ Config.Titles = {
     { id = 'boss',       label = 'ボス'          },
     { id = 'gangster',   label = 'ギャング'      },
     { id = 'millionaire',label = '億万長者'      },
+    { id = 'admin'      ,label = '管理者'        },
 }

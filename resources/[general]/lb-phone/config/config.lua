@@ -404,8 +404,8 @@ Config.Locales = { -- If your desired language isn't here, you may contribute at
     },
 }
 
-Config.DefaultLocale = "pt-br"
-Config.DateLocale = "pt-BR" -- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat
+Config.DefaultLocale = "ja"
+Config.DateLocale = "ja-JP" -- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat
 Config.DateFormat = "auto" -- auto: use the date format from the locale, or set a custom format (e.g. "DDDD, MMMM DD")
 
 Config.FrameColor = "#39334d" -- This is the color of the phone frame. Default (#39334d) is SILVER.
