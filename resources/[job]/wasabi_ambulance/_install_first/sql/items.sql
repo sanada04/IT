@@ -9,12 +9,12 @@ DELETE FROM items WHERE name = 'tweezers';
 
 
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
-	('burncream', 'Burn Cream', 1),
-	('defib', 'Defibrillator', 1),
-	('icepack', 'Ice Pack', 1),
-	('medbag', 'Medical Bag', 1),
-	('medikit', 'Medkit', 1),
-	('sedative', 'Sedative', 1),
-	('suturekit', 'Suture Kit', 1),
-	('tweezers', 'Tweezers', 1)
+	('burncream', '火傷治療クリーム', 1),
+	('defib', '除細動器', 1),
+	('icepack', 'アイスパック', 1),
+	('medbag', '救急バッグ', 1),
+	('medikit', '救急キット', 1),
+	('sedative', '鎮静剤', 1),
+	('suturekit', '縫合キット', 1),
+	('tweezers', 'ピンセット', 1)
 ;
