@@ -128,7 +128,7 @@ elseif GetResourceState('qb-core') == 'started' then
         return closest, closestDist
     end
 end
-isDead, disableKeys, inMenu, stretcher, stretcherMoving, isBusy = nil, nil, nil, nil, nil, nil
+isDead, disableKeys, inMenu, isBusy = nil, nil, nil, nil
 local playerLoaded, injury
 plyRequests = {}
 
@@ -284,6 +284,7 @@ end)
 
 AddEventHandler('esx:onPlayerSpawn', function()
     isDead = false
+    SendNUIMessage({ action = 'hideAll' })
     local ped = cache.ped
     SetEntityMaxHealth(ped, 200)
     SetEntityHealth(ped, 200)
@@ -614,8 +615,13 @@ RegisterNetEvent('wasabi_ambulance:revivePlayer', function()
         FreezeEntityPosition(ped, false)
         DoScreenFadeIn(800)
         AnimpostfxStopAll()
-        TriggerServerEvent('esx:onPlayerSpawn')
-        TriggerEvent('esx:onPlayerSpawn')
+        if framework == 'esx' then
+            TriggerServerEvent('esx:onPlayerSpawn')
+            TriggerEvent('esx:onPlayerSpawn')
+        else
+            TriggerServerEvent('hospital:server:SetDeathStatus', false)
+            TriggerEvent('hospital:client:Revive')
+        end
         ClearPedTasks(ped)
         if not injury then
             SetEntityHealth(ped, 200)
@@ -643,8 +649,13 @@ RegisterNetEvent('wasabi_ambulance:revive',function()
     end
     DoScreenFadeIn(800)
     AnimpostfxStopAll()
-    TriggerServerEvent('esx:onPlayerSpawn')
-    TriggerEvent('esx:onPlayerSpawn')
+    if framework == 'esx' then
+        TriggerServerEvent('esx:onPlayerSpawn')
+        TriggerEvent('esx:onPlayerSpawn')
+    else
+        TriggerServerEvent('hospital:server:SetDeathStatus', false)
+        TriggerEvent('hospital:client:Revive')
+    end
 end)
 
 RegisterNetEvent('wasabi_ambulance:heal', function(full, quiet)
@@ -740,10 +751,6 @@ end)
 
 AddEventHandler('wasabi_ambulance:buyItem', function(data)
     TriggerServerEvent('wasabi_ambulance:restock', data)
-end)
-
-RegisterNetEvent('wasabi_ambulance:placeOnStretcher', function()
-    placeOnStretcher()
 end)
 
 AddEventHandler('wasabi_ambulance:openBossMenu', function()
@@ -853,23 +860,6 @@ end)
 
 AddEventHandler('wasabi_ambulance:diagnosePatient', function()
     diagnosePatient()
-end)
-
-AddEventHandler('wasabi_ambulance:loadStretcher', function()
-    loadStretcher()
-end)
-
-RegisterNetEvent('wasabi_ambulance:useStretcher')
-AddEventHandler('wasabi_ambulance:useStretcher', function()
-    useStretcher()
-end)
-
-AddEventHandler('wasabi_ambulance:pickupStretcher', function()
-    pickupStretcher()
-end)
-
-AddEventHandler('wasabi_ambulance:moveStretcher', function()
-    moveStretcher()
 end)
 
 AddEventHandler('wasabi_ambulance:addTarget', function(d)

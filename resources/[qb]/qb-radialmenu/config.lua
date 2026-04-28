@@ -569,68 +569,68 @@ Config.JobInteractions = {
     ['police'] = {
         {
             id = 'emergencybutton',
-            title = 'Emergency button',
+            title = '緊急ボタン',
             icon = 'bell',
             type = 'client',
             event = 'police:client:SendPoliceEmergencyAlert',
             shouldClose = true
         }, {
         id = 'checkvehstatus',
-        title = 'Check Tune Status',
+        title = 'チューン状態確認',
         icon = 'circle-info',
         type = 'client',
         event = 'qb-tunerchip:client:TuneStatus',
         shouldClose = true
     }, {
         id = 'resethouse',
-        title = 'Reset house lock',
+        title = '家のロックをリセット',
         icon = 'key',
         type = 'client',
         event = 'qb-houses:client:ResetHouse',
         shouldClose = true
     }, {
         id = 'takedriverlicense',
-        title = 'Revoke Drivers License',
+        title = '運転免許を没収',
         icon = 'id-card',
         type = 'client',
         event = 'police:client:SeizeDriverLicense',
         shouldClose = true
     }, {
         id = 'policeinteraction',
-        title = 'Police Actions',
+        title = '警察アクション',
         icon = 'list-check',
         items = {
             {
                 id = 'statuscheck',
-                title = 'Check Health Status',
+                title = '健康状態確認',
                 icon = 'heart-pulse',
                 type = 'client',
                 event = 'hospital:client:CheckStatus',
                 shouldClose = true
             }, {
             id = 'checkstatus',
-            title = 'Check status',
+            title = '状態確認',
             icon = 'question',
             type = 'client',
             event = 'police:client:CheckStatus',
             shouldClose = true
         }, {
             id = 'escort',
-            title = 'Escort',
+            title = '護送',
             icon = 'user-group',
             type = 'client',
             event = 'police:client:EscortPlayer',
             shouldClose = true
         }, {
             id = 'searchplayer',
-            title = 'Search',
+            title = '所持品検査',
             icon = 'magnifying-glass',
             type = 'server',
             event = 'police:server:SearchPlayer',
             shouldClose = true
         }, {
             id = 'jailplayer',
-            title = 'Jail',
+            title = '収監',
             icon = 'user-lock',
             type = 'client',
             event = 'police:client:JailPlayer',
@@ -639,54 +639,54 @@ Config.JobInteractions = {
         }
     }, {
         id = 'policeobjects',
-        title = 'Objects',
+        title = '設置物',
         icon = 'road',
         items = {
             {
                 id = 'spawnpion',
-                title = 'Cone',
+                title = 'コーン',
                 icon = 'triangle-exclamation',
                 type = 'client',
                 event = 'police:client:spawnCone',
                 shouldClose = false
             }, {
             id = 'spawnhek',
-            title = 'Gate',
+            title = 'バリケード',
             icon = 'torii-gate',
             type = 'client',
             event = 'police:client:spawnBarrier',
             shouldClose = false
         }, {
             id = 'spawnschotten',
-            title = 'Speed Limit Sign',
+            title = '速度標識',
             icon = 'sign-hanging',
             type = 'client',
             event = 'police:client:spawnRoadSign',
             shouldClose = false
         }, {
             id = 'spawntent',
-            title = 'Tent',
+            title = 'テント',
             icon = 'campground',
             type = 'client',
             event = 'police:client:spawnTent',
             shouldClose = false
         }, {
             id = 'spawnverlichting',
-            title = 'Lighting',
+            title = '照明',
             icon = 'lightbulb',
             type = 'client',
             event = 'police:client:spawnLight',
             shouldClose = false
         }, {
             id = 'spikestrip',
-            title = 'Spike Strips',
+            title = 'スパイクストリップ',
             icon = 'caret-up',
             type = 'client',
             event = 'police:client:SpawnSpikeStrip',
             shouldClose = false
         }, {
             id = 'deleteobject',
-            title = 'Remove object',
+            title = '設置物を回収',
             icon = 'trash',
             type = 'client',
             event = 'police:client:deleteObject',

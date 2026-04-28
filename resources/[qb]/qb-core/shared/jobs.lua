@@ -12,7 +12,7 @@ QBShared.Jobs = {
 	vineyard = { label = 'Vineyard', defaultDuty = true, offDutyPay = false, grades = { ['0'] = { name = 'Picker', payment = 50000 } } },
 	hotdog = { label = 'Hotdog', defaultDuty = true, offDutyPay = false, grades = { ['0'] = { name = 'Sales', payment = 50000 } } },
 	burgershot = {
-		label = 'Burger Shot',
+		label = 'バーガーショット',
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
@@ -25,16 +25,21 @@ QBShared.Jobs = {
 	},
 
 	police = {
-		label = 'Law Enforcement',
+		label = '警察',
 		type = 'leo',
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-			['0'] = { name = 'Recruit', payment = 50 },
-			['1'] = { name = 'Officer', payment = 75 },
-			['2'] = { name = 'Sergeant', payment = 100 },
-			['3'] = { name = 'Lieutenant', payment = 125 },
-			['4'] = { name = 'Chief', isboss = true, payment = 150 },
+			['0'] = { name = '巡査', payment = 50 },
+			['1'] = { name = '巡査長', payment = 75 },
+			['2'] = { name = '巡査部長', payment = 100 },
+			['3'] = { name = '警部補', payment = 125 },
+			['4'] = { name = '警部', payment = 150 },
+			['5'] = { name = '警視', payment = 150 },
+			['6'] = { name = '警視正', payment = 150 },
+			['7'] = { name = '警視長', payment = 150 },
+			['8'] = { name = '警視監', payment = 150 },
+			['9'] = { name = '警視総監', isboss = true, payment = 150 },
 		},
 	},
 	ambulance = {
@@ -43,7 +48,7 @@ QBShared.Jobs = {
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
-			['0'] = { name = 'Recruit', payment = 50 },
+			['0'] = { name = '研修医', payment = 50 },
 			['1'] = { name = 'Paramedic', payment = 75 },
 			['2'] = { name = 'Doctor', payment = 100 },
 			['3'] = { name = 'Surgeon', payment = 125 },
@@ -63,7 +68,7 @@ QBShared.Jobs = {
 		},
 	},
 	taxi = {
-		label = 'Taxi',
+		label = 'タクシー',
 		defaultDuty = true,
 		offDutyPay = false,
 		grades = {
@@ -87,7 +92,7 @@ QBShared.Jobs = {
 		},
 	},
 	mechanic = {
-		label = 'LS Customs',
+		label = 'LSメカニック',
 		type = 'mechanic',
 		defaultDuty = true,
 		offDutyPay = false,

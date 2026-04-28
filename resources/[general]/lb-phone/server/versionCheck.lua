@@ -1,3 +1,6 @@
+-- Disabled remote version warning output.
+return
+
 local Config = {}
 
 Config.Debug = false

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        html, body {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0);
+            overflow: hidden;
+        }
+
+        /* ──────────── HUD wrapper ──────────── */
+        #death-hud {
+            display: none;
+            position: fixed;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        /* ──────────── Timer card ──────────── */
+        #timer-card {
+            background: rgba(8, 8, 12, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 10px;
+            padding: 18px 52px 18px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-width: 220px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5),
+                        inset 0 1px 0 rgba(255,255,255,0.05);
+            transition: border-color 0.6s ease;
+        }
+
+        /* 上部アクセントライン */
+        #timer-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #5b9fff, transparent);
+            transition: background 0.6s ease;
+        }
+        #timer-card.bleedout::after {
+            background: linear-gradient(90deg, transparent, #ff6b4a, transparent);
+            animation: accentPulse 1.4s ease-in-out infinite;
+        }
+        @keyframes accentPulse {
+            0%, 100% { opacity: 0.6; }
+            50%       { opacity: 1.0; }
+        }
+
+        /* フェーズラベル */
+        #timer-phase {
+            font-family: 'Meiryo UI', 'Meiryo', 'Yu Gothic UI', 'Yu Gothic', sans-serif;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: rgba(90, 155, 255, 0.75);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            transition: color 0.6s ease;
+        }
+        #timer-card.bleedout #timer-phase {
+            color: rgba(255, 120, 80, 0.85);
+        }
+
+        /* タイム表示 */
+        #timer-display {
+            font-family: 'Meiryo UI', 'Meiryo', 'Yu Gothic UI', 'Yu Gothic', sans-serif;
+            font-size: 46px;
+            font-weight: 200;
+            color: #ffffff;
+            letter-spacing: 6px;
+            line-height: 1;
+            text-shadow: 0 0 28px rgba(80, 140, 255, 0.35);
+            transition: text-shadow 0.6s ease, color 0.6s ease;
+        }
+        #timer-card.bleedout #timer-display {
+            color: #ffe8dc;
+            text-shadow: 0 0 28px rgba(255, 100, 60, 0.4);
+        }
+
+        #timer-sep {
+            display: inline-block;
+            animation: blink 1s step-start infinite;
+            margin: 0 2px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0.8; }
+            50%       { opacity: 0.1; }
+        }
+
+        /* リスポーンヒント（失血死フェーズのみ） */
+        #hint-respawn {
+            display: none;
+            margin-top: 14px;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-family: 'Meiryo UI', 'Meiryo', 'Yu Gothic UI', 'Yu Gothic', sans-serif;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        /* ──────────── 救難信号ヒント ──────────── */
+        #distress-pill {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            background: rgba(8, 8, 12, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            padding: 7px 18px;
+            font-family: 'Meiryo UI', 'Meiryo', 'Yu Gothic UI', 'Yu Gothic', sans-serif;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.45);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+        }
+
+        /* キーバッジ共通 */
+        .key {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 1px 7px;
+            font-size: 10px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.5px;
+        }
+
+        /* ──────────── フェードイン ──────────── */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0);    }
+        }
+        .anim-in {
+            animation: fadeSlideUp 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+        }
+    </style>
+</head>
+<body>
+    <div id="death-hud">
+
+        <div id="timer-card">
+            <div id="timer-phase">リスポーン待機中</div>
+            <div id="timer-display">
+                <span id="t-mins">00</span>
+                <span id="timer-sep">:</span>
+                <span id="t-secs">00</span>
+            </div>
+            <div id="hint-respawn">
+                <span class="key">E</span>
+                <span>長押しでリスポーン</span>
+            </div>
+        </div>
+
+        <div id="distress-pill">
+            <span class="key">G</span>
+            <span>EMSへ救難信号を送信</span>
+        </div>
+
+    </div>
+
+    <script>
+        var hud          = document.getElementById('death-hud');
+        var card         = document.getElementById('timer-card');
+        var phaseEl      = document.getElementById('timer-phase');
+        var minsEl       = document.getElementById('t-mins');
+        var secsEl       = document.getElementById('t-secs');
+        var hintRespawn  = document.getElementById('hint-respawn');
+        var distressPill = document.getElementById('distress-pill');
+
+        var hudVisible      = false;
+        var distressVisible = false;
+
+        function showHud() {
+            if (!hudVisible) {
+                hud.style.display = 'flex';
+                hud.classList.remove('anim-in');
+                void hud.offsetWidth;
+                hud.classList.add('anim-in');
+                hudVisible = true;
+            }
+        }
+
+        window.addEventListener('message', function(event) {
+            var d;
+            try {
+                d = (typeof event.data === 'string') ? JSON.parse(event.data) : event.data;
+            } catch(e) { return; }
+            if (!d || !d.action) return;
+
+            if (d.action === 'updateDeathTimer') {
+                minsEl.textContent = d.mins || '00';
+                secsEl.textContent = d.secs || '00';
+                if (d.phase === 'bleedout') {
+                    card.classList.add('bleedout');
+                    phaseEl.textContent = '失血死まで';
+                    hintRespawn.style.display = 'flex';
+                } else {
+                    card.classList.remove('bleedout');
+                    phaseEl.textContent = 'リスポーン待機中';
+                    hintRespawn.style.display = 'none';
+                }
+                showHud();
+
+            } else if (d.action === 'showDistress') {
+                distressPill.style.display = 'flex';
+                distressPill.style.visibility = 'visible';
+                distressVisible = true;
+                showHud();
+
+            } else if (d.action === 'hideDistress') {
+                distressPill.style.visibility = 'hidden';
+                distressVisible = false;
+
+            } else if (d.action === 'hideDeathTimer') {
+                hud.style.display = 'none';
+                distressPill.style.display = 'none';
+                distressPill.style.visibility = 'visible';
+                hudVisible = false;
+                distressVisible = false;
+
+            } else if (d.action === 'hideAll') {
+                hud.style.display = 'none';
+                distressPill.style.display = 'none';
+                distressPill.style.visibility = 'visible';
+                hudVisible = false;
+                distressVisible = false;
+            }
+        });
+    </script>
+</body>
+</html>

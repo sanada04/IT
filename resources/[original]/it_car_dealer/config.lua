@@ -203,4 +203,7 @@ Config.Vehicles = {
     { model = 'reaper',   label = 'Dewbauchee Reaper',  price = 7800000, category = 'supercar', shop = 'luxury',
       img = 'https://docs.fivem.net/vehicles/reaper.webp',
       stats = { speed = 98, accel = 96, brake = 92, handling = 94 } },
+    { model = 'ignus',   label = 'Pegassi Ignus',  price = 7800000, category = 'supercar', shop = 'luxury',
+      img = 'https://docs.fivem.net/vehicles/ignus.webp',
+      stats = { speed = 98, accel = 96, brake = 92, handling = 94 } },
 }

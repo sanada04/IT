@@ -125,6 +125,14 @@ AddEventHandler('esx:playerDropped', function(playerId, reason)
     end
 end)
 
+AddEventHandler('playerDropped', function(reason)
+    local playerId = source
+    if plyRequests[playerId] then
+        plyRequests[playerId] = nil
+        TriggerClientEvent('wasabi_ambulance:syncRequests', -1, plyRequests, true)
+    end
+end)
+
 sqlSetStatus = function(id, isDead)
     if framework ~= 'esx' then return end
     local xPlayer = ESX.GetPlayerFromId(id)
@@ -294,11 +302,6 @@ AddEventHandler('wasabi_ambulance:removeObj', function(netObj)
     TriggerClientEvent('wasabi_ambulance:syncObj', -1, netObj)
 end)
 
-RegisterServerEvent('wasabi_ambulance:placeOnStretcher')
-AddEventHandler('wasabi_ambulance:placeOnStretcher', function(target)
-    TriggerClientEvent('wasabi_ambulance:placeOnStretcher', target)
-end)
-
 RegisterServerEvent('wasabi_ambulance:putInVehicle')
 AddEventHandler('wasabi_ambulance:putInVehicle', function(target)
     if target > 0 then
@@ -382,6 +385,14 @@ ESX.RegisterServerCallback('wasabi_ambulance:gItem', function(source, cb, item)
     local xPlayer = ESX.GetPlayerFromId(source)
     local xJob = xPlayer.job.name
     if xJob == 'ambulance' or xJob == 'police' then
+        -- Prevent duplication when deployable items are picked up repeatedly.
+        if item == Config.EMSItems.medbag then
+            local xItem = xPlayer.getInventoryItem(item)
+            if xItem and (xItem.count or 0) > 0 then
+                cb(true)
+                return
+            end
+        end
         xPlayer.addInventoryItem(item, 1)
         cb(true)
     else
@@ -408,12 +419,6 @@ ESX.RegisterUsableItem(Config.EMSItems.sedate.item, function(source)
     TriggerClientEvent('wasabi_ambulance:useSedative', source)
 end)
 
-ESX.RegisterUsableItem(Config.EMSItems.stretcher, function(source)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    xPlayer.removeInventoryItem(Config.EMSItems.stretcher, 1)
-    TriggerClientEvent('wasabi_ambulance:useStretcher', source)
-end)
-
 CreateThread(function()
     for k,v in pairs(Config.TreatmentItems) do
         ESX.RegisterUsableItem(v, function(source)
@@ -435,13 +440,26 @@ AddEventHandler('txAdmin:events:healedPlayer', function(eventData)
         return
     end
 
+    local function restoreNeeds(playerId)
+        if framework ~= 'qb' then return end
+        local player = QBCore.Functions.GetPlayer(playerId)
+        if not player then return end
+
+        -- txAdmin heal does not touch QB metadata needs by default.
+        player.Functions.SetMetaData('hunger', 100)
+        player.Functions.SetMetaData('thirst', 100)
+        TriggerClientEvent('hud:client:UpdateNeeds', playerId, 100, 100)
+    end
+
     if eventData.id == -1 then
         for _, playerId in ipairs(GetPlayers()) do
+            restoreNeeds(playerId)
             if Player(playerId).state.dead then
                 TriggerClientEvent('wasabi_ambulance:revive', playerId)
             end
         end
     else
+        restoreNeeds(eventData.id)
         if Player(eventData.id).state.dead then
             TriggerClientEvent('wasabi_ambulance:revive', eventData.id)
         end

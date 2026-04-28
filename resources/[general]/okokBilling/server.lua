@@ -11,7 +11,13 @@ end
 
 local function notifyPlayer(target, message, nType, length)
 	if not target then return end
-	if GetResourceState('okokNotify') == 'started' and (Config.UseOKOKNotify == nil or Config.UseOKOKNotify) then
+	if GetResourceState('lb-phone') == 'started' then
+		exports['lb-phone']:SendNotification(target, {
+			app = 'billing',
+			title = '請求書',
+			content = message
+		})
+	elseif GetResourceState('okokNotify') == 'started' and (Config.UseOKOKNotify == nil or Config.UseOKOKNotify) then
 		TriggerClientEvent('okokNotify:Alert', target, "請求書", message, length or 10000, nType or 'primary')
 	else
 		TriggerClientEvent('QBCore:Notify', target, message, nType or 'primary', length or 10000)
@@ -41,14 +47,16 @@ local function getOnlinePlayerByName(name)
 	return nil
 end
 
-local function addSocietyMoney(societyAccount, amount)
-	local jobName = tostring(societyAccount or ''):gsub('^society_', '')
-	if jobName == '' then return false end
-	if GetResourceState('qb-management') ~= 'started' then return false end
-	local ok = pcall(function()
-		exports['qb-management']:AddMoney(jobName, amount)
-	end)
-	return ok
+local function addSocietyMoney(societyAccount, amount, cb)
+	local society = tostring(societyAccount or ''):gsub('^%s*(.-)%s*$', '%1')
+	if society == '' then cb(true) return end
+	MySQL.Async.execute(
+		'UPDATE okokBanking_societies SET value = value + @value WHERE society = @society',
+		{ ['@value'] = amount, ['@society'] = society },
+		function()
+			cb(true)
+		end
+	)
 end
 
 local function addMoneyToCitizen(citizenId, amount, reason, cb, fallbackName)
@@ -163,22 +171,24 @@ local function distributePayment(invoice, amount, cb)
 			return
 		end
 
-		local societyOk = true
+		local function onSocietyResult(societyOk)
+			if not societyOk then
+				removeMoneyFromCitizen(invoice.author_identifier, authorShare, function()
+					cb(false)
+				end)
+				return
+			end
+			if authorSource then
+				notifyPlayer(authorSource, ("組織請求の個人取り分: %s￥"):format(authorShare), 'success', 8000)
+			end
+			cb(true)
+		end
+
 		if societyShare > 0 then
-			societyOk = addSocietyMoney(invoice.society, societyShare)
+			addSocietyMoney(invoice.society, societyShare, onSocietyResult)
+		else
+			onSocietyResult(true)
 		end
-
-		if not societyOk then
-			removeMoneyFromCitizen(invoice.author_identifier, authorShare, function()
-				cb(false)
-			end)
-			return
-		end
-
-		if authorSource then
-			notifyPlayer(authorSource, ("組織請求の個人取り分: %s￥"):format(authorShare), 'success', 8000)
-		end
-		cb(true)
 	end, invoice.author_name)
 end
 
@@ -266,8 +276,7 @@ AddEventHandler("okokBilling:CreateInvoice", function(data)
 		['@notes'] = data.invoice_notes or '',
 		['@limit_pay_date'] = limitDate
 	}, function()
-		-- Use QBCore notify for invoice receive to avoid low-contrast overlays.
-		TriggerClientEvent('QBCore:Notify', target.PlayerData.source, "新しい請求書を受け取りました。", 'success', 10000)
+		notifyPlayer(target.PlayerData.source, "新しい請求書を受け取りました。", 'success', 10000)
 	end)
 end)
 

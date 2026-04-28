@@ -2,12 +2,16 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = {}
 
 local function notify(message, nType, length)
-	local duration = length or 10000
-	local alertType = nType or 'primary'
-	if GetResourceState('okokNotify') == 'started' and (Config.UseOKOKNotify == nil or Config.UseOKOKNotify) then
-		exports['okokNotify']:Alert("請求書", message, duration, alertType)
+	if GetResourceState('lb-phone') == 'started' then
+		TriggerEvent('phone:sendNotification', {
+			app = 'billing',
+			title = '請求書',
+			content = message
+		})
+	elseif GetResourceState('okokNotify') == 'started' and (Config.UseOKOKNotify == nil or Config.UseOKOKNotify) then
+		exports['okokNotify']:Alert("請求書", message, length or 10000, nType or 'primary')
 	else
-		QBCore.Functions.Notify(message, alertType, duration)
+		QBCore.Functions.Notify(message, nType or 'primary', length or 10000)
 	end
 end
 

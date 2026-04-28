@@ -248,7 +248,25 @@ local function GetSocietyMoney(job)
         return res
     end
 
-    return exports["qb-banking"]:GetAccountBalance(job)
+    local society = job:sub(1, 8) == "society_" and job or ("society_" .. job)
+    local okokBalance = MySQL.scalar.await(
+        "SELECT value FROM okokBanking_societies WHERE society = ? LIMIT 1",
+        { society }
+    )
+
+    if okokBalance ~= nil then
+        return tonumber(okokBalance) or 0
+    end
+
+    local qbSuccess, qbBalance = pcall(function()
+        return exports["qb-banking"]:GetAccountBalance(job)
+    end)
+
+    if qbSuccess then
+        return qbBalance
+    end
+
+    return 0
 end
 
 RegisterLegacyCallback("services:getAccount", function(source, cb)
@@ -268,7 +286,24 @@ RegisterLegacyCallback("services:addMoney", function(source, cb, amount)
         return exports["qb-management"]:AddMoney(job, amount)
     end)
 
-    if success or exports["qb-banking"]:AddMoney(job, amount) then
+    local added = success
+    if not added then
+        local society = job:sub(1, 8) == "society_" and job or ("society_" .. job)
+        local changed = MySQL.update.await(
+            "UPDATE okokBanking_societies SET value = value + ? WHERE society = ?",
+            { amount, society }
+        )
+        added = (changed or 0) > 0
+    end
+
+    if not added then
+        local qbSuccess, qbResult = pcall(function()
+            return exports["qb-banking"]:AddMoney(job, amount)
+        end)
+        added = qbSuccess and qbResult
+    end
+
+    if added then
         RemoveMoney(source, amount)
     end
 
@@ -287,7 +322,19 @@ RegisterLegacyCallback("services:removeMoney", function(source, cb, amount)
     end)
 
     if not success then
-        res = exports["qb-banking"]:RemoveMoney(job, amount)
+        local society = job:sub(1, 8) == "society_" and job or ("society_" .. job)
+        local changed = MySQL.update.await(
+            "UPDATE okokBanking_societies SET value = value - ? WHERE society = ? AND value >= ?",
+            { amount, society, amount }
+        )
+        res = (changed or 0) > 0
+    end
+
+    if not res then
+        local qbSuccess, qbResult = pcall(function()
+            return exports["qb-banking"]:RemoveMoney(job, amount)
+        end)
+        res = qbSuccess and qbResult
     end
 
     if res then

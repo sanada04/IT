@@ -50,8 +50,7 @@ Config.EMSItems = {
         duration = 8 * seconds, -- Time sedative effects last
         remove = true -- Remove item when using?
     },
-    medbag = 'medbag', -- Medbag item name used for getting supplies to treat patient
-    stretcher = 'stretcher' -- Item used for stretcher
+    medbag = 'medbag' -- Medbag item name used for getting supplies to treat patient
 }
 
 Config.ReviveRewards = {

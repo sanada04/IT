@@ -9,6 +9,12 @@ description 'Wasabi ESX Ambulance Job Replacement'
 author 'wasabirobby#5110'
 version '1.0.8'
 
+ui_page 'html/index.html'
+
+files {
+  'html/index.html'
+}
+
 client_scripts {
   'client/client.lua',
   'client/functions.lua',

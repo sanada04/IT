@@ -60,6 +60,7 @@ DrawGenericTextThisFrame = function()
 end
 
 RespawnPed = function(ped, coords, heading)
+	SendNUIMessage({ action = 'hideAll' })
 	SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
 	NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, heading, true, false)
 	SetPlayerInvincible(ped, false)
@@ -97,7 +98,6 @@ StartRPDeath = function()
 		loadAnimDict('missarmenian2', 15000)
 		disableKeys = true
 		TaskPlayAnim(cache.ped, 'missarmenian2', 'corpse_search_exit_ped', 8.0, 8.0, -1, 3, 0, 0, 0, 0)
-		StopScreenEffect('DeathFailOut')
 		DoScreenFadeIn(800)
 		while IsScreenFadedOut() do
 			Wait(100)
@@ -118,34 +118,47 @@ startDeathTimer = function()
 	SetGameplayCamRelativeHeading(-360)
 	local earlySpawnTimer = math.floor(Config.RespawnTimer / 1000)
 	local bleedoutTimer = math.floor(Config.BleedoutTimer / 1000)
+
+	local function sendTimerUpdate(phase, seconds)
+		local m, s = secondsToClock(seconds)
+		SendNUIMessage({
+			action = 'updateDeathTimer',
+			phase  = phase,
+			mins   = tostring(m),
+			secs   = tostring(s)
+		})
+	end
+
+	sendTimerUpdate('respawn', earlySpawnTimer)
+
 	CreateThread(function()
 		while earlySpawnTimer > 0 and isDead do
 			Wait(1000)
 			if earlySpawnTimer > 0 then
 				earlySpawnTimer = earlySpawnTimer - 1
 			end
+			sendTimerUpdate('respawn', earlySpawnTimer)
+		end
+		if isDead then
+			sendTimerUpdate('bleedout', bleedoutTimer)
 		end
 		while bleedoutTimer > 0 and isDead do
 			Wait(1000)
-
 			if bleedoutTimer > 0 then
 				bleedoutTimer = bleedoutTimer - 1
 			end
+			sendTimerUpdate('bleedout', bleedoutTimer)
 		end
+		SendNUIMessage({ action = 'hideDeathTimer' })
 	end)
+
 	CreateThread(function()
-		local text, timeHeld
+		local timeHeld = 0
 		while earlySpawnTimer > 0 and isDead do
 			Wait(0)
-			text = (Strings.respawn_available_in):format(secondsToClock(earlySpawnTimer))
-			DrawGenericTextThisFrame()
-			SetTextEntry('STRING')
-			AddTextComponentString(text)
-			DrawText(0.5, 0.8)
 		end
 		while bleedoutTimer > 0 and isDead do
 			Citizen.Wait(0)
-			text = (Strings.respawn_bleedout_in):format(secondsToClock(bleedoutTimer)) .. Strings.respawn_bleedout_prompt
 			if IsControlPressed(0, 38) and timeHeld > 60 then
 				StartRPDeath()
 				break
@@ -155,10 +168,6 @@ startDeathTimer = function()
 			else
 				timeHeld = 0
 			end
-			DrawGenericTextThisFrame()
-			SetTextEntry('STRING')
-			AddTextComponentString(text)
-			DrawText(0.5, 0.8)
 		end
 		if bleedoutTimer < 1 and isDead then
 			StartRPDeath()
@@ -167,25 +176,25 @@ startDeathTimer = function()
 end
 
 startDistressSignal = function()
+	SendNUIMessage({ action = 'showDistress' })
 	CreateThread(function()
 		local timer = Config.BleedoutTimer
+		local tick = 0
 		while timer > 0 and isDead do
 			Wait(0)
 			timer = timer - 30
-			SetTextFont(4)
-			SetTextScale(0.45, 0.45)
-			SetTextColour(185, 185, 185, 255)
-			SetTextDropshadow(0, 0, 0, 0, 255)
-			SetTextDropShadow()
-			SetTextOutline()
-			BeginTextCommandDisplayText('STRING')
-			AddTextComponentSubstringPlayerName(Strings.distress_send)
-			EndTextCommandDisplayText(0.175, 0.805)
-			if IsControlJustReleased(0, 47) then --Old 47
+			tick = tick + 1
+			if tick >= 60 then
+				tick = 0
+				SendNUIMessage({ action = 'showDistress' })
+			end
+			if IsControlJustReleased(0, 47) then
+				SendNUIMessage({ action = 'hideDistress' })
 				SendDistressSignal()
 				break
 			end
 		end
+		SendNUIMessage({ action = 'hideDistress' })
 	end)
 end
 
@@ -236,7 +245,7 @@ startDeathAnimation = function()
             else
                 if not IsEntityPlayingAnim(ped, 'mini@cpr@char_b@cpr_def', 'cpr_pumpchest_idle', 3) then
 					if not IsEntityPlayingAnim(ped, 'nm', 'firemans_carry', 33) 
-					and not IsEntityPlayingAnim(ped, 'anim@gangops@morgue@table@', 'body_search', 33) -- If on the stretcher
+					and not IsEntityPlayingAnim(ped, 'anim@gangops@morgue@table@', 'body_search', 33)
 					and not IsEntityPlayingAnim(ped, 'anim@arena@celeb@flat@paired@no_props@', 'piggyback_c_player_b', 33) then -- If being /piggyback
 						sleep = 0
 						ClearPedTasks(ped)
@@ -258,7 +267,6 @@ OnPlayerDeath = function()
 	startDeathTimer()
 	startDistressSignal()
 	startDeathAnimation()
-	AnimpostfxPlay('DeathFailOut', 0, true)
 end
 
 setRoute = function(data)
@@ -413,89 +421,12 @@ placeInVehicle = function()
 	local player, dist = ESX.Game.GetClosestPlayer()
 	if player == -1 or dist > 7.5 then
 		TriggerEvent('wasabi_ambulance:notify', Strings.no_nearby, Strings.no_nearby_desc, 'error')
-	else
-		local playerPed = GetPlayerPed(player)
-		if not IsPedInAnyVehicle(playerPed) then
-			if DoesEntityExist(stretcher) then
-				SetEntityAsMissionEntity(stretcher)
-				TriggerServerEvent('wasabi_ambulance:removeObj', ObjToNet(stretcher))
-			end
+		else
+			TriggerServerEvent('wasabi_ambulance:putInVehicle', GetPlayerServerId(player))
 		end
-		TriggerServerEvent('wasabi_ambulance:putInVehicle', GetPlayerServerId(player))
-	end
 end
 
 exports('placeInVehicle', placeInVehicle)
-
-local placedOnStretcher
-local stretcherObj
-placeOnStretcher = function()
-	if LocalPlayer.state.dead and not placedOnStretcher then
-		local coords = GetEntityCoords(cache.ped)
-		local objHash = `prop_ld_binbag_01`
-		local stretcherObj = GetClosestObjectOfType(coords, 1.5, objHash, false)
-		local objCoords = GetEntityCoords(stretcherObj)
-		loadAnimDict('anim@gangops@morgue@table@', 15000)
-		TaskPlayAnim(cache.ped, "anim@gangops@morgue@table@", "body_search", 8.0, 8.0, -1, 33, 0, 0, 0, 0)
-		AttachEntityToEntity(cache.ped, stretcherObj, 0, 0, 0.0, 1.0, 195.0, 0.0, 180.0, 0.0, false, false, false, false, 2, true)
-		placedOnStretcher = true
-	elseif placedOnStretcher then
-		RemoveAnimDict('anim@gangops@morgue@table@')
-		loadAnimDict('mini@cpr@char_b@cpr_def', 15000)
-		DetachEntity(cache.ped)
-		ClearPedTasks(cache.ped)
-		placedOnStretcher = false
-		stretcherObj = nil
-	end
-end
-
-loadStretcher = function()
-	local player, dist = ESX.Game.GetClosestPlayer()
-	if player ~= -1 and dist < 4 then
-		if Player(GetPlayerServerId(player)).state.dead then
-			TriggerServerEvent('wasabi_ambulance:placeOnStretcher', GetPlayerServerId(player))
-		else
-			TriggerEvent('wasabi_ambulance:notify', Strings.player_not_unconcious, Strings.player_not_unconcious_desc, 'error')
-		end
-	else
-		TriggerEvent('wasabi_ambulance:notify', Strings.no_nearby, Strings.no_nearby_desc, 'error')
-	end
-end
-
-exports('loadStretcher', loadStretcher)
-
-moveStretcher = function()
-	local ped = cache.ped
-	stretcherMoving = true
-	local textUI
-	loadAnimDict('anim@heists@box_carry@', 15000)
-	AttachEntityToEntity(stretcher, ped, GetPedBoneIndex(ped,  28422), 0.0, -0.9, -0.52, 195.0, 180.0, 180.0, 0.0, false, false, true, false, 2, true)
-    while IsEntityAttachedToEntity(stretcher, ped) do
-        Wait(0)
-        if not IsEntityPlayingAnim(ped, 'anim@heists@box_carry@', 'idle', 3) then
-            TaskPlayAnim(ped, 'anim@heists@box_carry@', 'idle', 8.0, 8.0, -1, 50, 0, false, false, false)
-        end
-		if not textUI then
-			lib.showTextUI(Strings.drop_stretch_ui)
-			textUI = true
-		end
-        if IsPedDeadOrDying(ped) then
-            DetachEntity(stretcher, true, true)
-			lib.hideTextUI()
-			textUI = false
-        end
-        if IsControlJustPressed(0, 38) then
-            DetachEntity(stretcher, true, true)
-            ClearPedTasks(ped)
-            stretcherMoving = false
-			lib.hideTextUI()
-			textUI = false
-            stretcherPlaced(stretcher)
-        end
-    end
-    RemoveAnimDict('anim@heists@box_carry@')
-
-end
 
 openOutfits = function(hospital)
 	local data = Config.Locations[hospital].Cloakroom.Uniforms
@@ -526,103 +457,6 @@ openOutfits = function(hospital)
 end
 
 exports('openOutfits', openOutfits)
-
-pickupStretcher = function()
-	local ped = cache.ped
-	local coords = GetEntityCoords(ped)
-	local stretchHash = `prop_ld_binbag_01`
-	local obj = GetClosestObjectOfType(coords, 3.0, stretchHash, false)
-	local objCoords = GetEntityCoords(obj)
-	TaskTurnPedToFaceCoord(ped, objCoords.x, objCoords.y, objCoords.z, 2000)
-	ESX.TriggerServerCallback('wasabi_ambulance:gItem', function(cb, item)
-		if cb then
-			TriggerEvent('wasabi_ambulance:notify', Strings.successful, Strings.stretcher_pickup, 'success')
-		end
-	end, Config.EMSItems.stretcher)
-	TriggerServerEvent('wasabi_ambulance:removeObj', ObjToNet(obj))
-end
-
-stretcherPlaced = function(obj)
-	local coords = GetEntityCoords(obj)
-	local heading = GetEntityHeading(obj)
-	local targetPlaced = false
-	CreateThread(function()
-		while true do
-			if DoesEntityExist(obj) and not targetPlaced then
-				local data = {
-					identifier = 'stretcherzone',
-					coords = coords,
-					width = 2.5,
-					length = 2.5,
-					heading = heading,
-					minZ = coords.z-5,
-					maxZ = coords.z+5,
-					options = {
-						{
-							event = 'wasabi_ambulance:pickupStretcher',
-							icon = 'fas fa-ambulance',
-							label = Strings.pickup_bag_target,
-						},
-						{
-							event = 'wasabi_ambulance:moveStretcher',
-							icon = 'fas fa-ambulance',
-							label = Strings.move_target
-						},
-						{
-							event = 'wasabi_ambulance:loadStretcher',
-							icon = 'fas fa-ambulance',
-							label = Strings.place_stretcher_target
-						},
-					},
-					job = "ambulance",
-					distance = 2.5
-				}
-				TriggerEvent('wasabi_ambulance:addTarget', data)
-				targetPlaced = true
-			elseif not DoesEntityExist(obj) or stretcherMoving then
-				TriggerEvent('wasabi_ambulance:removeTarget', 'stretcherzone')
-				targetPlaced = false
-				break
-			end
-			Wait(1500)
-		end
-	end)
-end
-
-useStretcher = function()
-	local ped = cache.ped
-	local x, y, z = table.unpack(GetOffsetFromEntityInWorldCoords(ped,0.0,2.0,0.5))
-	local textUI = false
-	loadModel('prop_ld_binbag_01', 15000)
-	loadAnimDict('anim@heists@box_carry@', 15000)
-	stretcher = CreateObjectNoOffset('prop_ld_binbag_01', x, y, z, true, false)
-	SetModelAsNoLongerNeeded('prop_ld_binbag_01')
-	AttachEntityToEntity(stretcher, ped, GetPedBoneIndex(ped,  28422), 0.0, -0.9, -0.52, 195.0, 180.0, 180.0, 0.0, false, false, true, false, 2, true)
-	while IsEntityAttachedToEntity(stretcher, ped) do
-		Wait(0)
-		if not IsEntityPlayingAnim(ped, 'anim@heists@box_carry@', 'idle', 3) then
-			TaskPlayAnim(ped, 'anim@heists@box_carry@', 'idle', 8.0, 8.0, -1, 50, 0, false, false, false)
-		end
-		if not textUI then
-			lib.showTextUI(Strings.drop_stretch_ui)
-			textUI = true
-		end
-		if IsPedDeadOrDying(ped) then
-			RemoveAnimDict('anim@heists@box_carry@')
-			DetachEntity(stretcher, true, true)
-			lib.hideTextUI()
-			textUI = false
-		end
-		if IsControlJustPressed(0, 38) then
-            DetachEntity(stretcher, true, true)
-            ClearPedTasks(ped)
-			RemoveAnimDict('anim@heists@box_carry@')
-			lib.hideTextUI()
-			textUI = false
-            stretcherPlaced(stretcher)
-        end
-	end
-end
 
 treatPatient = function(injury)
 	local player, dist = ESX.Game.GetClosestPlayer()
@@ -719,13 +553,6 @@ interactBag = function()
 					arrow = false,
 					event = 'wasabi_ambulance:gItem',
 					args = {item = Config.EMSItems.sedate.item}
-				},
-				{
-					title = '折りたたみ担架',
-					description = '患者を搬送するために使用',
-					arrow = false,
-					event = 'wasabi_ambulance:gItem',
-					args = {item = Config.EMSItems.stretcher}
 				},
 			}
 		})

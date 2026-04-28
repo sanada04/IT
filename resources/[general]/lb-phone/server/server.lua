@@ -268,14 +268,8 @@ RegisterLegacyCallback("getCharacterName", function(source, cb)
     cb({firstname = firstname, lastname = lastname})
 end)
 
--- Version check
-PerformHttpRequest("https://loaf-scripts.com/versions/phone/version.json", function(status, body, headers, error)
-    if status ~= 200 then
-        debugprint("Failed to get latest script version", "Status:", status, "Body:", body, "Headers:", headers, "Error:", error)
-        return
-    end
-    latestVersion = json.decode(body).latest
-end, "GET")
+-- Version check disabled: keep latestVersion equal to local version to suppress update warning.
+latestVersion = GetResourceMetadata(GetCurrentResourceName(), "version", 0)
 
 RegisterCallback("getLatestVersion", function()
     return latestVersion

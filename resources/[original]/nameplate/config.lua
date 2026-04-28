@@ -39,4 +39,6 @@ Config.Titles = {
     { id = 'gangster',   label = 'ギャング'      },
     { id = 'millionaire',label = '億万長者'      },
     { id = 'admin'      ,label = '管理者'        },
+    { id = 'sanada'     ,label = 'たまたま現場にいた'        },
+    { id = 'gotou'      ,label = '軟弱なる腹痛の伝道師'        },
 }
